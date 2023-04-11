@@ -1,0 +1,29 @@
+{
+  "name": "cs-546-final-project",
+  "version": "1.0.0",
+  "description": "Developed by David Cruz, Eric Park, Kimberly Tsang, and Thomas Wang for S23-CS546-WS: Web Programming I for Patrick Hill at Stevens Institute of Technology",
+  "main": "app.js",
+  "type": "module",
+  "keywords": ["cs-546", "Patrick", "Hill"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "seed": "node seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twang1905/CS-546-Final-Project.git"
+  },
+  "author": "David Cruz, Eric Park, Kimberly Tsang, & Thomas Wang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/twang1905/CS-546-Final-Project/issues"
+  },
+  "homepage": "https://github.com/twang1905/CS-546-Final-Project#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.5",
+    "handlebars": "^4.7.7",
+    "mongodb": "^5.2.0"
+  }
+}
