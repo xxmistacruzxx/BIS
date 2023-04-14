@@ -1,4 +1,4 @@
-import { dbConnection } from './mongoConnection.js';
+import { dbConnection } from "./mongoConnection.js";
 
 const getCollectionFn = (collection) => {
   let _col = undefined;
@@ -13,5 +13,8 @@ const getCollectionFn = (collection) => {
   };
 };
 
-// Note: You will need to change the code below to have the collection required by the assignment!
-export const bands = getCollectionFn('bands');
+export const users = getCollectionFn("users");
+export const buildings = getCollectionFn("buildings");
+export const rooms = getCollectionFn("rooms");
+export const containers = getCollectionFn("containers");
+export const items = getCollectionFn("items");
