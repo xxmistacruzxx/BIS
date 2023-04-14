@@ -13,7 +13,8 @@ buildingViewAccess : ["string", ...] -- default is empty, arr can be empty
 buildingFavorites : ["string", ...] -- default is empty, arr can be empty
 */
 import { ObjectId } from "mongodb";
-import { users, buildings } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js";
+import { getDocById, getAllDocs } from "./databaseHelpers.js";
 import buildingDataFunctions from "./buildings.js";
 import validator from "../validator.js";
 const userProperties = [
@@ -31,6 +32,10 @@ export const userBuildingRelations = [
   "buildingFavorites",
 ];
 
+/**
+ * @param {string} userName
+ * @returns true if the userName does not exist in users collection
+ */
 async function userNameUnique(userName) {
   let usersCollection = await users();
   if (
@@ -41,6 +46,11 @@ async function userNameUnique(userName) {
     throw `a user already exists with the username ${userName}`;
   return true;
 }
+
+/**
+ * @param {string} email - an email in a string
+ * @returns true if the email does not exist in users collection
+ */
 async function emailUnique(email) {
   let usersCollection = await users();
   if (
@@ -52,18 +62,26 @@ async function emailUnique(email) {
   return true;
 }
 
+/**
+ * @param {string} userName - username of new user
+ * @param {string} hashedPassword - hashed password of new user
+ * @param {string} email - email of new user
+ * @param {string} firstName - first name of new user
+ * @param {string} lastName - last name of new user
+ * @returns object with keys & values of the newly added user
+ */
 async function create(userName, hashedPassword, email, firstName, lastName) {
-  // INITIAL ERROR CHECK
+  // basic error check
   userName = validator.checkString(userName, "userName").toLowerCase();
   hashedPassword = validator.checkString(hashedPassword, "hashedPassword");
   email = validator.checkEmail(email, "email").toLowerCase();
   firstName = validator.checkString(firstName, "firstName");
   lastName = validator.checkString(lastName, "lastName");
-  // CHECK IF USERNAME AND EMAIL ARE UNIQUE
+  // check if userName and email are unique
   await userNameUnique(userName);
   await emailUnique(email);
 
-  // LOGIC
+  // add user to users collection
   let newUser = {
     userName: userName,
     hashedPassword: hashedPassword,
@@ -88,32 +106,30 @@ async function create(userName, hashedPassword, email, firstName, lastName) {
   return user;
 }
 
+/**
+ * @returns an array of all user docs from users collection
+ */
 async function getAll() {
-  // LOGIC
-  let usersCollection = await users();
-  let allUsers = await usersCollection.find({}).toArray();
-
-  for (let i = 0; i < allUsers.length; i++) {
-    allUsers[i]["_id"] = allUsers[i]["_id"].toString();
-  }
-  return allUsers;
+  return getAllDocs(users);
 }
 
+/**
+ * @param {string} id - id of the user to fetch from users collection
+ * @returns an object with keys & values the user fetched from users collection
+ */
 async function get(id) {
-  // INITIAL ERROR CHECK
-  id = validator.checkId(id, "id");
-
-  // LOGIC
-  let usersCollection = await users();
-  let user = await usersCollection.findOne({ _id: new ObjectId(id) });
-  if (user === null) throw `no user with that id`;
-  user._id = user._id.toString();
-  return user;
+  return getDocById(users, id, "user");
 }
 
+/**
+ * @param {string} id - id of user to remove from users collection
+ * @returns a string saying the user has been deleted
+ */
 async function remove(id) {
+  // basic error check
   id = validator.checkId(id, "id");
 
+  // remove user from users collection
   let userCollection = await users();
   let user = await get(id);
   let ownedBuildingIds = user["buildingOwnership"];
@@ -125,25 +141,38 @@ async function remove(id) {
     throw `could not delete user with id of ${id}`;
   }
 
+  // remove buildings the user owned
   for (let i = 0; i < ownedBuildingIds.length; i++) {
     await buildingDataFunctions.remove(ownedBuildingIds[i]);
   }
+
   return `${deletionInfo.value.name} has been successfully deleted!`;
 }
 
+/**
+ * @param {string} userName - username of user to be fetched from users collection
+ * @returns an object with keys & values the user fetched from users collection
+ */
 async function getByUserName(userName) {
-  // INITIAL ERROR CHECK
+  // basic error check
   userName = validator.checkString(userName, "userName").toLowerCase();
 
+  // get user from users collection
   let usersCollection = await users();
   let user = await usersCollection.findOne({ userName: userName });
   if (user === null) throw `no user with that id`;
   user._id = user._id.toString();
+
   return user;
 }
 
+/**
+ * @param {string} userId - the userid of the user to update
+ * @param {object} propertiesAndValues - an object with keys being elems of @const userProperties and of proper values
+ * @returns an object with keys & new values the updated user in users collection
+ */
 async function updateUserProperties(userId, propertiesAndValues) {
-  // INITIAL ERROR CHECK
+  // basic error check
   userId = validator.checkId(userId, "userId");
   if (!validator.isObject(propertiesAndValues))
     throw `propertiesAndValues must be an object`;
@@ -167,7 +196,6 @@ async function updateUserProperties(userId, propertiesAndValues) {
   if (propertiesAndValues["email"])
     propertiesAndValues["email"] = propertiesAndValues["email"].toLowerCase();
 
-  let usersCollection = await users();
   if (keys.includes("userName")) {
     await userNameUnique(propertiesAndValues["userName"]);
   }
@@ -175,7 +203,8 @@ async function updateUserProperties(userId, propertiesAndValues) {
     await emailUnique(propertiesAndValues["email"]);
   }
 
-  // LOGIC
+  // update user properties
+  let usersCollection = await users();
   let user = await get(userId);
   delete user._id;
   for (let i = 0; i < keys.length; i++) {
@@ -201,6 +230,7 @@ async function updateUserProperties(userId, propertiesAndValues) {
  * @param {string} buildingId - the building id to relate to
  */
 async function addBuildingRelation(userId, relation, buildingId) {
+  // basic error check
   userId = validator.checkId(userId, "userId");
   relation = validator.checkString(relation, "relation");
   buildingId = validator.checkId(buildingId, "buildingId");
@@ -209,6 +239,7 @@ async function addBuildingRelation(userId, relation, buildingId) {
     throw `${relation} is not a building relation. Possible relations are: ${userBuildingRelations}`;
   await buildingDataFunctions.get(buildingId);
 
+  // add relation to user
   let usersCollection = await users();
   let user = await get(userId);
   delete user._id;
@@ -234,6 +265,7 @@ async function addBuildingRelation(userId, relation, buildingId) {
  * @param {string} buildingId - the building id to remove the relation from
  */
 async function removeBuildingRelation(userId, relation, buildingId) {
+  // basic error check
   userId = validator.checkId(userId, "userId");
   relation = validator.checkString(relation, "relation");
   buildingId = validator.checkId(buildingId, "buildingId");
@@ -241,6 +273,7 @@ async function removeBuildingRelation(userId, relation, buildingId) {
   if (!userBuildingRelations.includes(relation))
     throw `${relation} is not a building relation. Possible relations are: ${userBuildingRelations}`;
 
+  // remove relation from user
   let usersCollection = await users();
   let user = await get(userId);
   delete user._id;
@@ -260,6 +293,7 @@ async function removeBuildingRelation(userId, relation, buildingId) {
     throw "could not update user successfully";
   }
 
+  // if relation was ownership, remove building from buildings collection
   if (relation === "buildingOwnership")
     buildingDataFunctions.remove(buildingId);
 

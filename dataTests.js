@@ -19,6 +19,8 @@ try {
   console.log("No buildings collection found.");
 }
 
+let testObjId = new ObjectId().toString();
+
 let user = await userData.create(
   "xxmistacruzxx",
   "ABCD1234",
@@ -27,16 +29,12 @@ let user = await userData.create(
   "Cruz"
 );
 
-console.log(user);
-
-await userData.updateUserProperties(user._id, { email: "sfosfo@gmail.com" });
-
-// console.log(
-//   await userData.addBuildingRelation(user._id, "buildingOwnership", objId)
-// );
-
-// console.log(
-//   await userData.removeBuildingRelation(user._id, "buildingManageAccess", objId)
+// userData.create(
+//   "xxmistacruzxx",
+//   "ABCD1234",
+//   "dacruz04@optonline.net",
+//   "David",
+//   "Cruz"
 // );
 
 let building = await buildingData.create(
@@ -50,9 +48,10 @@ let building = await buildingData.create(
   false
 );
 
-console.log(building);
-
 await buildingData.remove(building._id);
 
-// userData.remove(user._id);
+user = await userData.get(user._id);
+// building = await buildingData.get(building._id);
+console.log(user);
+// console.log(building);
 closeConnection();
