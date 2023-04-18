@@ -12,9 +12,14 @@ rooms : ["string", ...] -- default is empty, arr can be empty
 */
 import { ObjectId } from "mongodb";
 import { users, buildings } from "../config/mongoCollections.js";
-import { getDocById, getAllDocs } from "./databaseHelpers.js";
+import {
+  getDocById,
+  getAllDocs,
+  generateCreationDate,
+} from "./databaseHelpers.js";
 import userDataFunctions from "./users.js";
 import validator from "../validator.js";
+import { roomData } from "./index.js";
 const buildingProperties = [
   "name",
   "description",
@@ -26,6 +31,7 @@ const buildingProperties = [
 ];
 
 /**
+ * Creates new building doc in buildings collection. Also adds building to a user's list of owned buildings.
  * @param {string} userId - the userId of the user who created the building
  * @param {string} name - the name of the building
  * @param {string} description - a description of the building
@@ -64,19 +70,16 @@ async function create(
     else throw e;
   }
   // TODO: check if state and zips are valid
+  if (publicBuilding === undefined) throw `publicBuilding must be provided`;
   if (typeof publicBuilding !== "boolean")
     throw `publicBuilding must be a boolean`;
   let user = await userDataFunctions.get(userId);
 
   // add building to collection
-  let date = new Date();
-  let creationDate = `${
-    date.getMonth() + 1
-  }\/${date.getDate()}\/${date.getFullYear()}`;
   let newBuilding = {
     name: name,
     description: description,
-    creationDate: creationDate,
+    creationDate: generateCreationDate(),
     address: address,
     city: city,
     state: state,
@@ -105,21 +108,24 @@ async function create(
 }
 
 /**
+ * gets all building docs in buildings collection
  * @returns an array of all building docs from buildings collection
  */
 async function getAll() {
-  return getAllDocs(buildings);
+  return await getAllDocs(buildings);
 }
 
 /**
+ * gets a building doc by its id from building's collection
  * @param {string} id - id of the building to fetch from buildings collection
  * @returns an object with keys & values the building fetched from buildings collection
  */
 async function get(id) {
-  return getDocById(buildings, id, "building");
+  return await getDocById(buildings, id, "building");
 }
 
 /**
+ * removes a building doc by its id from buildings collection and removes relations from all other users. Also removes any rooms inside it.
  * @param {string} id - id of building to remove from buildings collection
  * @returns a string saying the building has been deleted
  */
@@ -127,15 +133,8 @@ async function remove(id) {
   // basic error checks
   id = validator.checkId(id, "id");
 
-  // remove building from buildings collection
-  let buildingsCollection = await buildings();
-  let deletionInfo = await buildingsCollection.findOneAndDelete({
-    _id: new ObjectId(id),
-  });
-
-  if (deletionInfo.lastErrorObject.n === 0) {
-    throw `could not delete building with id of ${id}`;
-  }
+  // get building / check for existance
+  let building = await get(id);
 
   // remove building from any user relations
   let relations = userDataFunctions.userBuildingRelations;
@@ -148,11 +147,28 @@ async function remove(id) {
     await usersCollection.updateMany(filter, { $pull: updateInner });
   }
 
-  // TODO: remove rooms in the building
+  // remove rooms in the building from rooms collection
+  for (let i = 0; i < building["rooms"].length; i++) {
+    await roomData.remove(building["rooms"][i]);
+  }
+
+  // remove building from buildings collection
+  let buildingsCollection = await buildings();
+  let deletionInfo = await buildingsCollection.findOneAndDelete({
+    _id: new ObjectId(id),
+  });
+  if (deletionInfo.lastErrorObject.n === 0) {
+    throw `could not delete building with id of ${id}`;
+  }
 
   return `${deletionInfo.value.name} has been successfully deleted!`;
 }
 
+/**
+ * @param {string} buildingId - the building id of the building to update
+ * @param {object} propertiesAndValues - an object with keys being elems of @const buildingProperties and of proper values
+ * @returns an object with keys & new values the updated building from buildings collection
+ */
 async function updateBuildingProperties(buildingId, propertiesAndValues) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
@@ -194,6 +210,12 @@ async function updateBuildingProperties(buildingId, propertiesAndValues) {
   return updatedInfo.value;
 }
 
+/**
+ * adds roomId to a building's list of rooms
+ * @param {string} buildingId - id of building to add room to
+ * @param {string} roomId - id of room to add
+ * @returns an object with the keys and values of the building with the newly added room
+ */
 async function addRoom(buildingId, roomId) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
@@ -201,6 +223,10 @@ async function addRoom(buildingId, roomId) {
 
   // update building with added room
   let building = await get(buildingId);
+  // check room for existance
+  await roomData.get(roomId);
+
+  // append room
   delete building._id;
   let t = building["rooms"];
   t.push(roomId);
@@ -224,9 +250,11 @@ async function removeRoom(buildingId, roomId) {
   buildingId = validator.checkId(buildingId, "buildingId");
   roomId = validator.checkId(roomId, "roomId");
 
+  // get building / check for existance
+  let building = await get(buildingId);
+
   // update building with removed room
   let buildingsCollection = await buildings();
-  let building = await get(buildingId);
   delete building._id;
   let t = building["rooms"];
   let index = t.indexOf(roomId);
@@ -244,7 +272,8 @@ async function removeRoom(buildingId, roomId) {
     throw "could not update building successfully";
   }
 
-  // TODO: Remove room from rooms collection
+  // Remove room from rooms collection
+  roomData.remove(roomId);
 
   updatedInfo.value._id = updatedInfo.value._id.toString();
   return updatedInfo.value;
@@ -257,5 +286,5 @@ export default {
   remove,
   updateBuildingProperties,
   addRoom,
-  removeRoom,
+  // removeRoom,
 };

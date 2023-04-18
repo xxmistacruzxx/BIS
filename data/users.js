@@ -33,6 +33,7 @@ export const userBuildingRelations = [
 ];
 
 /**
+ * checks if there's a user with a given username
  * @param {string} userName
  * @returns true if the userName does not exist in users collection
  */
@@ -48,6 +49,7 @@ async function userNameUnique(userName) {
 }
 
 /**
+ * checks if there's a user with a given email
  * @param {string} email - an email in a string
  * @returns true if the email does not exist in users collection
  */
@@ -63,6 +65,7 @@ async function emailUnique(email) {
 }
 
 /**
+ * creates user doc in user's collection
  * @param {string} userName - username of new user
  * @param {string} hashedPassword - hashed password of new user
  * @param {string} email - email of new user
@@ -107,21 +110,24 @@ async function create(userName, hashedPassword, email, firstName, lastName) {
 }
 
 /**
+ * gets all user docs in users collection
  * @returns an array of all user docs from users collection
  */
 async function getAll() {
-  return getAllDocs(users);
+  return await getAllDocs(users);
 }
 
 /**
+ * gets a user doc by its id from users collection
  * @param {string} id - id of the user to fetch from users collection
  * @returns an object with keys & values the user fetched from users collection
  */
 async function get(id) {
-  return getDocById(users, id, "user");
+  return await getDocById(users, id, "user");
 }
 
 /**
+ * removes a user doc by its id from users collection. Also removes any buildings that the user owns.
  * @param {string} id - id of user to remove from users collection
  * @returns a string saying the user has been deleted
  */
@@ -129,27 +135,29 @@ async function remove(id) {
   // basic error check
   id = validator.checkId(id, "id");
 
+  // get user / check for existance
+  let user = await get(id);
+
+  // remove buildings the user owned
+  let ownedBuildingIds = user["buildingOwnership"];
+  for (let i = 0; i < ownedBuildingIds.length; i++) {
+    await buildingDataFunctions.remove(ownedBuildingIds[i]);
+  }
+
   // remove user from users collection
   let userCollection = await users();
-  let user = await get(id);
-  let ownedBuildingIds = user["buildingOwnership"];
   let deletionInfo = await userCollection.findOneAndDelete({
     _id: new ObjectId(id),
   });
-
   if (deletionInfo.lastErrorObject.n === 0) {
     throw `could not delete user with id of ${id}`;
-  }
-
-  // remove buildings the user owned
-  for (let i = 0; i < ownedBuildingIds.length; i++) {
-    await buildingDataFunctions.remove(ownedBuildingIds[i]);
   }
 
   return `${deletionInfo.value.name} has been successfully deleted!`;
 }
 
 /**
+ * gets a user doc from users collection by its username
  * @param {string} userName - username of user to be fetched from users collection
  * @returns an object with keys & values the user fetched from users collection
  */
@@ -167,6 +175,7 @@ async function getByUserName(userName) {
 }
 
 /**
+ * updates a user's properties by its id
  * @param {string} userId - the userid of the user to update
  * @param {object} propertiesAndValues - an object with keys being elems of @const userProperties and of proper values
  * @returns an object with keys & new values the updated user in users collection
@@ -180,7 +189,8 @@ async function updateUserProperties(userId, propertiesAndValues) {
   let keys = Object.keys(propertiesAndValues);
   for (let i = 0; i < keys.length; i++) {
     propertiesAndValues[keys[i]] = validator.checkString(
-      propertiesAndValues[keys[i]]
+      propertiesAndValues[keys[i]],
+      keys[i]
     );
     if (!userProperties.includes(keys[i]))
       throw `${keys[i]} is not a userProperty. Possible properties are: ${userProperties}`;

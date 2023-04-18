@@ -21,4 +21,12 @@ async function getDocById(collectionGetter, id, docType) {
   return doc;
 }
 
-export { getAllDocs, getDocById };
+function generateCreationDate() {
+  let date = new Date();
+  let creationDate = `${
+    date.getMonth() + 1
+  }/${date.getDate()}/${date.getFullYear()}`;
+  return creationDate;
+}
+
+export { getAllDocs, getDocById, generateCreationDate };

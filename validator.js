@@ -49,6 +49,21 @@ const exportedMethods = {
   isObject(variable) {
     return Object.prototype.toString.call(variable) === "[object Object]";
   },
+
+  checkInt(intVal, varName) {
+    if (!intVal) throw `Error: You must supply a ${varName}!`;
+    if (typeof intVal !== "number")
+      throw `Error: ${varName} must be an integer!`;
+    if (Math.trunc(intVal) !== intVal)
+      throw `Error: ${varName} must be an integer`;
+    return intVal;
+  },
+
+  checkNum(numVal, varName) {
+    if (!numVal) throw `Error: You must supply a ${varName}`;
+    if (typeof numVal !== "number") throw `Error: ${varName} must be a number`;
+    return numVal;
+  },
 };
 
 export default exportedMethods;
