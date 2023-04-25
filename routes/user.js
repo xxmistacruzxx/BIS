@@ -9,12 +9,12 @@ router.route("/").get(async (req, res) => {
 router.route("/:id").get(async (req, res) => {
     try {
         let id = req.params.id;
-        if (!id) throw 'Error: You must procvide a ID';
-        if (typeof id !== 'string') throw 'Error: ID must be a string';
+        if (!id) throw 'Error: You must procvide a user ID';
+        if (typeof id !== 'string') throw 'Error: User ID must be a string';
         id = id.trim();
         if (id.length === 0)
-            throw 'Error: ID cannot be an empty string or just spaces';
-        if (!ObjectId.isvalid(id)) throw 'Error: ID is an invalid object ID';
+            throw 'Error: User ID cannot be an empty string or just spaces';
+        if (!ObjectId.isvalid(id)) throw 'Error: User ID is an invalid object ID';
     } catch (e) {
         return res.status(400).json({error: e});
     }
