@@ -14,12 +14,22 @@ buildingFavorites : ["string", ...] -- default is empty, arr can be empty
 */
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
-import { getDocById, getAllDocs } from "./databaseHelpers.js";
+import {
+  getDocById,
+  getAllDocs,
+  getDocByParam,
+  getAllDocsByParam,
+  deleteDocById,
+  createDoc,
+  replaceDocById,
+} from "./databaseHelpers.js";
 import buildingDataFunctions from "./buildings.js";
 import validator from "../validator.js";
+import bcrypt from "bcrypt";
+
 const userProperties = [
   "userName",
-  "hashedPassword",
+  "password",
   "email",
   "firstName",
   "lastName",
@@ -31,6 +41,8 @@ export const userBuildingRelations = [
   "buildingViewAccess",
   "buildingFavorites",
 ];
+
+const saltRounds = 12;
 
 /**
  * checks if there's a user with a given username
@@ -67,27 +79,28 @@ async function emailUnique(email) {
 /**
  * creates user doc in user's collection
  * @param {string} userName - username of new user
- * @param {string} hashedPassword - hashed password of new user
+ * @param {string} password - hashed password of new user
  * @param {string} email - email of new user
  * @param {string} firstName - first name of new user
  * @param {string} lastName - last name of new user
  * @returns object with keys & values of the newly added user
  */
-async function create(userName, hashedPassword, email, firstName, lastName) {
+async function create(userName, password, email, firstName, lastName) {
   // basic error check
-  userName = validator.checkString(userName, "userName").toLowerCase();
-  hashedPassword = validator.checkString(hashedPassword, "hashedPassword");
-  email = validator.checkEmail(email, "email").toLowerCase();
-  firstName = validator.checkString(firstName, "firstName");
-  lastName = validator.checkString(lastName, "lastName");
+  userName = validator.checkUserName(userName, "userName").toLowerCase();
+  password = validator.checkPassword(password, "hashedPassword");
+  email = validator.checkEmail(email, "email");
+  firstName = validator.checkName(firstName, "firstName");
+  lastName = validator.checkName(lastName, "lastName");
   // check if userName and email are unique
   await userNameUnique(userName);
   await emailUnique(email);
+  password = await bcrypt.hash(password, saltRounds);
 
   // add user to users collection
   let newUser = {
     userName: userName,
-    hashedPassword: hashedPassword,
+    password: password,
     email: email,
     firstName: firstName,
     lastName: lastName,
@@ -97,15 +110,7 @@ async function create(userName, hashedPassword, email, firstName, lastName) {
     buildingViewAccess: [],
     buildingFavorites: [],
   };
-
-  let usersCollection = await users();
-  let insertInfo = await usersCollection.insertOne(newUser);
-  if (!insertInfo["acknowledged"] || !insertInfo["insertedId"])
-    throw `could not add user`;
-
-  let newId = insertInfo[["insertedId"]].toString();
-  let user = await get(newId);
-
+  let user = await createDoc(users, newUser, "user");
   return user;
 }
 
@@ -134,26 +139,16 @@ async function get(id) {
 async function remove(id) {
   // basic error check
   id = validator.checkId(id, "id");
-
   // get user / check for existance
   let user = await get(id);
-
   // remove buildings the user owned
   let ownedBuildingIds = user["buildingOwnership"];
   for (let i = 0; i < ownedBuildingIds.length; i++) {
     await buildingDataFunctions.remove(ownedBuildingIds[i]);
   }
-
   // remove user from users collection
-  let userCollection = await users();
-  let deletionInfo = await userCollection.findOneAndDelete({
-    _id: new ObjectId(id),
-  });
-  if (deletionInfo.lastErrorObject.n === 0) {
-    throw `could not delete user with id of ${id}`;
-  }
-
-  return `${deletionInfo.value.name} has been successfully deleted!`;
+  let deletion = await deleteDocById(users, id, "user");
+  return deletion;
 }
 
 /**
@@ -163,14 +158,29 @@ async function remove(id) {
  */
 async function getByUserName(userName) {
   // basic error check
-  userName = validator.checkString(userName, "userName").toLowerCase();
-
+  userName = validator.checkUserName(userName, "userName").toLowerCase();
   // get user from users collection
-  let usersCollection = await users();
-  let user = await usersCollection.findOne({ userName: userName });
-  if (user === null) throw `no user with that id`;
-  user._id = user._id.toString();
+  let user = await getDocByParam(users, "userName", userName, "user");
+  return user;
+}
 
+/**
+ * checks if a userName and password pair are valid.
+ * @param {string} userName - userName of user to auth
+ * @param {string} password - password of user to auth
+ * @throws if userName does not exist in database, or if password does not match
+ * @returns an object with keys & values of the auth'd user
+ */
+async function authUser(userName, password) {
+  // basic error check
+  userName = validator.checkUserName(userName, "userName");
+  password = validator.checkPassword(password, "password");
+
+  // check if user exists / get hashed password
+  let user = await getByUserName(userName);
+  let comparison = await bcrypt.compare(password, user.password);
+  if (!comparison) throw `invalid credentials`;
+  delete user.password;
   return user;
 }
 
@@ -188,49 +198,60 @@ async function updateUserProperties(userId, propertiesAndValues) {
 
   let keys = Object.keys(propertiesAndValues);
   for (let i = 0; i < keys.length; i++) {
-    propertiesAndValues[keys[i]] = validator.checkString(
-      propertiesAndValues[keys[i]],
-      keys[i]
-    );
-    if (!userProperties.includes(keys[i]))
-      throw `${keys[i]} is not a userProperty. Possible properties are: ${userProperties}`;
-  }
-
-  if (propertiesAndValues["email"])
-    propertiesAndValues["email"] = validator.checkEmail(
-      propertiesAndValues["email"]
-    );
-  if (propertiesAndValues["userName"])
-    propertiesAndValues["userName"] =
-      propertiesAndValues["userName"].toLowerCase();
-  if (propertiesAndValues["email"])
-    propertiesAndValues["email"] = propertiesAndValues["email"].toLowerCase();
-
-  if (keys.includes("userName")) {
-    await userNameUnique(propertiesAndValues["userName"]);
-  }
-  if (keys.includes("email")) {
-    await emailUnique(propertiesAndValues["email"]);
+    switch (keys[i]) {
+      case "userName":
+        propertiesAndValues[keys[i]] = validator.checkUserName(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+        userNameUnique(propertiesAndValues[keys[i]]);
+        break;
+      case "password":
+        propertiesAndValues[keys[i]] = validator.checkPassword(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+        propertiesAndValues[keys[i]] = bcrypt.hash(password, saltRounds);
+        break;
+      case "email":
+        propertiesAndValues[keys[i]] = validator.checkEmail(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+        emailUnique(keys[i]);
+        break;
+      case "firstName":
+        propertiesAndValues[keys[i]] = validator.checkName(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+        break;
+      case "lastName":
+        propertiesAndValues[keys[i]] = validator.checkName(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+        break;
+      case "profilePicture":
+        propertiesAndValues[keys[i]] = validator.checkString(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+        break;
+      default:
+        throw `${keys[i]} not a userProperty. Possible properties are: ${userProperties}`;
+    }
   }
 
   // update user properties
-  let usersCollection = await users();
   let user = await get(userId);
   delete user._id;
   for (let i = 0; i < keys.length; i++) {
     user[keys[i]] = propertiesAndValues[keys[i]];
   }
 
-  let updatedInfo = await usersCollection.findOneAndUpdate(
-    { _id: new ObjectId(userId) },
-    { $set: user },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update user successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  let updatedUser = replaceDocById(users, userId, user, "user");
+  return updatedUser;
 }
 
 /**
@@ -250,22 +271,13 @@ async function addBuildingRelation(userId, relation, buildingId) {
   await buildingDataFunctions.get(buildingId);
 
   // add relation to user
-  let usersCollection = await users();
   let user = await get(userId);
   delete user._id;
   let t = user[relation];
   t.push(buildingId);
   user[relation] = t;
-  let updatedInfo = await usersCollection.findOneAndUpdate(
-    { _id: new ObjectId(userId) },
-    { $set: user },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update user successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  let updatedDoc = await replaceDocById(users, userId, user, "user");
+  return updatedDoc;
 }
 
 /**
@@ -284,7 +296,6 @@ async function removeBuildingRelation(userId, relation, buildingId) {
     throw `${relation} is not a building relation. Possible relations are: ${userBuildingRelations}`;
 
   // remove relation from user
-  let usersCollection = await users();
   let user = await get(userId);
   delete user._id;
   let t = user[relation];
@@ -294,21 +305,13 @@ async function removeBuildingRelation(userId, relation, buildingId) {
   t.splice(index, 1);
   user[relation] = t;
 
-  let updatedInfo = await usersCollection.findOneAndUpdate(
-    { _id: new ObjectId(userId) },
-    { $set: user },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update user successfully";
-  }
+  let updatedDoc = replaceDocById(users, id, user, "user");
 
   // if relation was ownership, remove building from buildings collection
   if (relation === "buildingOwnership")
     buildingDataFunctions.remove(buildingId);
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  return updatedDoc;
 }
 
 export default {
@@ -318,6 +321,7 @@ export default {
   get,
   getByUserName,
   remove,
+  authUser,
   updateUserProperties,
   addBuildingRelation,
   removeBuildingRelation,

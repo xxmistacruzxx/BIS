@@ -14,6 +14,9 @@ import {
   getDocById,
   getAllDocs,
   generateCreationDate,
+  createDoc,
+  deleteDocById,
+  replaceDocById,
 } from "./databaseHelpers.js";
 import { roomData, containerData } from "./index.js";
 import validator from "../validator.js";
@@ -23,7 +26,7 @@ const itemProperties = ["name", "description"];
 /**
  * Creates an item doc in items collection and adds it to the list of items for a container or room.
  * @param {string} id - id of the room or container to add new item to
- * @param {string} type - collection to add to (room or container) 
+ * @param {string} type - collection to add to (room or container)
  * @param {string} name - name of new item
  * @param {string} description - description of new item
  * @param {int} count - count of new item
@@ -55,29 +58,20 @@ async function create(id, type, name, description, count, value) {
   };
 
   // determine whether item is being put in contianer or a room, and assign according variables
-  let collectionGetter;
   let dataFunctions;
-  if (type === "room") {
-    collectionGetter = rooms;
-    dataFunctions = roomData;
-  } else {
-    collectionGetter = containers;
-    dataFunctions = containerData;
-  }
+  if (type === "room") dataFunctions = roomData;
+  else dataFunctions = containerData;
+  await dataFunctions.get(id);
 
   // TODO: ensure item doesn't have same name as another item in container/room
 
   // add item to items collection
-  await dataFunctions.get(id);
-  let itemsCollection = await items();
-  let insertInfo = await itemsCollection.insertOne(newItem);
-  if (!insertInfo["acknowledged"] || !insertInfo["insertedId"])
-    throw `could not add item`;
+  newItem = await createDoc(items, newItem, "item");
 
   // add item to room/container
-  let newId = insertInfo[["insertedId"]].toString();
-  if (type === "room") dataFunctions.addContainerOrItem(id, newId, "item");
-  else dataFunctions.addItem(id, newId);
+  let newId = newItem._id;
+  if (type === "room") await dataFunctions.addContainerOrItem(id, newId, "item");
+  else await dataFunctions.addItem(id, newId);
 
   let item = await get(newId);
   return item;
@@ -132,23 +126,15 @@ async function remove(itemId) {
   await collection.updateMany(filter, { $pull: updateInner });
 
   // remove item from items collection
-  collection = await items();
-  let deletionInfo = await collection.findOneAndDelete({
-    _id: new ObjectId(itemId),
-  });
-
-  if (deletionInfo.lastErrorObject.n === 0) {
-    throw `could not delete item with id of ${id}`;
-  }
-
-  return `${deletionInfo.value.name} has been successfully deleted!`;
+  item = await deleteDocById(items, itemId, "item");
+  return item;
 }
 
 /**
- * updates an item's properties. 
+ * updates an item's properties.
  * @param {string} itemId - id of item to update
  * @param {object} propertiesAndValues - an object with keys of properties and values to update to
- * @returns an object with they keys and values of then newly updated item 
+ * @returns an object with they keys and values of then newly updated item
  */
 async function updateItemProperties(itemId, propertiesAndValues) {
   // basic error check
@@ -164,24 +150,14 @@ async function updateItemProperties(itemId, propertiesAndValues) {
     );
   }
 
-  // update container
-  let itemsCollection = await items();
+  // update item
   let item = await get(itemId);
   delete item._id;
   for (let i = 0; i < keys.length; i++) {
     item[keys[i]] = propertiesAndValues[keys[i]];
   }
-
-  let updatedInfo = await itemsCollection.findOneAndUpdate(
-    { _id: new ObjectId(itemId) },
-    { $set: item },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update item successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  item = await replaceDocById(items, itemId, item, "item");
+  return item;
 }
 
 /**
@@ -209,17 +185,8 @@ async function setCount(itemId, count) {
   delete item._id;
 
   // update item in items collection
-  let itemsCollection = await items();
-  let updatedInfo = await itemsCollection.findOneAndUpdate(
-    { _id: new ObjectId(itemId) },
-    { $set: item },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update item successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  item = await replaceDocById(items, itemId, item, "item");
+  return item;
 }
 
 /**
@@ -245,17 +212,8 @@ async function setValue(itemId, value) {
   item["valueHistory"] = valueHistory;
   delete item._id;
 
-  let itemsCollection = await items();
-  let updatedInfo = await itemsCollection.findOneAndUpdate(
-    { _id: new ObjectId(itemId) },
-    { $set: item },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update item successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  item = await replaceDocById(items, itemId, item, "item");
+  return item;
 }
 
 export default {

@@ -13,6 +13,7 @@ import {
 } from "./config/mongoCollections.js";
 import { closeConnection } from "./config/mongoConnection.js";
 import { ObjectId } from "mongodb";
+import { deleteDocById } from "./data/databaseHelpers.js";
 
 let usersCollection = await users();
 let buildingsCollection = await buildings();
@@ -50,7 +51,7 @@ let testObjId = new ObjectId().toString();
 
 let user = await userData.create(
   "xxmistacruzxx",
-  "ABCD1234",
+  "Abcdef1!",
   "dacruz04@optonline.net",
   "David",
   "Cruz"
@@ -65,6 +66,17 @@ let building = await buildingData.create(
   "NJ",
   "07030",
   false
+);
+
+let building2 = await buildingData.create(
+  user._id,
+  "Howe",
+  "Howe Center of Stevens",
+  "1 Castle Point Terrace",
+  "Hoboken",
+  "NJ",
+  "07030",
+  true
 );
 
 let room = await roomData.create(
@@ -88,25 +100,47 @@ let item = await itemData.create(
   20.0
 );
 
-await roomData.addContainerOrItem(room._id, testObjId, "container");
-await roomData.removeContainerOrItem(room._id, testObjId, "container");
+let item2 = await itemData.create(
+  room._id,
+  "room",
+  "Bell",
+  "Dinner Bell",
+  1,
+  100.2
+);
+
+await userData.updateUserProperties(user._id, { userName: "swegbot" });
+// await userData.authUser("swegbot", "Abcdef1!")
+
+await buildingData.updateBuildingProperties(building._id, {
+  description: "Alpha Xi of Chi Psi. Established 1883.",
+});
+
+console.log(await buildingData.getPublicBuildings());
+
 await roomData.updateRoomProperty(room._id, {
   name: "Foyer",
   description: "Leads to dining room, tube, and gpr.",
 });
 
-await itemData.updateItemProperties(item._id, { name: "Nerf Gun Box", description: "Nerf Blaster 3000" });
-await itemData.setValue(item._id, 17.5)
-await itemData.setCount(item._id, 5)
+await itemData.updateItemProperties(item._id, {
+  name: "Nerf Gun Box",
+  description: "Nerf Blaster 3000",
+});
+await itemData.setValue(item._id, 17.5);
+await itemData.setCount(item._id, 5);
 
 // await userData.remove(user._id);
 // await buildingData.remove(building._id);
 // await roomData.remove(room._id);
+// await containerData.remove(container._id);
 // await itemData.remove(item._id);
+// await itemData.remove(item2._id);
 
 try {
-  user = await userData.get(user._id);
-  console.log(user);
+  user = await userData.getByUserName("SwegBot");
+  let allUsers = await userData.getAll();
+  console.log(allUsers);
 } catch (e) {
   console.log(`dataTest User: ${e}`);
 }
@@ -137,6 +171,13 @@ try {
   console.log(item);
 } catch (e) {
   console.log(`dataTest Item: ${e}`);
+}
+
+try {
+  item2 = await itemData.get(item2._id);
+  console.log(item2);
+} catch (e) {
+  console.log(`dataTest Item2: ${e}`);
 }
 
 closeConnection();

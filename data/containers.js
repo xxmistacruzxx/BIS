@@ -11,6 +11,9 @@ import {
   getDocById,
   getAllDocs,
   generateCreationDate,
+  createDoc,
+  deleteDocById,
+  replaceDocById,
 } from "./databaseHelpers.js";
 import { itemData, roomData } from "./index.js";
 import validator from "../validator.js";
@@ -37,13 +40,10 @@ async function create(roomId, name, description) {
     creationDate: generateCreationDate(),
     items: [],
   };
-  let containersCollection = await containers();
-  let insertInfo = await containersCollection.insertOne(newContainer);
-  if (!insertInfo["acknowledged"] || !insertInfo["insertedId"])
-    throw `could not add container`;
+  newContainer = await createDoc(containers, newContainer, "container");
 
   // add container to rooms's list of containers
-  let newId = insertInfo[["insertedId"]].toString();
+  let newId = newContainer._id;
   await roomData.addContainerOrItem(roomId, newId, "container");
 
   let container = await get(newId);
@@ -94,14 +94,8 @@ async function remove(containerId) {
   }
 
   // remove container from containers collection
-  let deletionInfo = await containersCollection.findOneAndDelete({
-    _id: new ObjectId(containerId),
-  });
-  if (deletionInfo.lastErrorObject.n === 0) {
-    throw `could not delete container with id of ${id}`;
-  }
-
-  return `${deletionInfo.value.name} has been successfully deleted!`;
+  container = deleteDocById(containers, containerId, "container") 
+  return container;
 }
 
 /**
@@ -125,23 +119,14 @@ async function updateContainerProperties(containerId, propertiesAndValues) {
   }
 
   // update container
-  let containersCollection = await containers();
-  containerId = await get(containerId);
-  delete containerId._id;
+  let container = await get(containerId);
+  delete container._id;
   for (let i = 0; i < keys.length; i++) {
-    containerId[keys[i]] = propertiesAndValues[keys[i]];
+    container[keys[i]] = propertiesAndValues[keys[i]];
   }
 
-  let updatedInfo = await containersCollection.findOneAndUpdate(
-    { _id: new ObjectId(containerId) },
-    { $set: containerId },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update container successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  container = await replaceDocById(containers, containerId, container, "container")
+  return container;
 }
 
 /**
@@ -162,17 +147,8 @@ async function addItem(containerId, itemId) {
   t.push(itemId);
   container["items"] = t;
 
-  let containersCollection = await containers();
-  let updatedInfo = await containersCollection.findOneAndUpdate(
-    { _id: new ObjectId(containerId) },
-    { $set: container },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update container successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  container = await replaceDocById(containers, containerId, container, "container")
+  return container;
 }
 
 async function removeItem(containerId, itemId) {
@@ -190,19 +166,11 @@ async function removeItem(containerId, itemId) {
   t.splice(index, 1);
   container["items"] = t;
 
-  let updatedInfo = await containersCollection.findOneAndUpdate(
-    { _id: new ObjectId(containerId) },
-    { $set: container },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update container successfully";
-  }
+  container = await replaceDocById(containers, containerId, container, "container" )
 
   // TODO: Remove item from items collection
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  return container;
 }
 
 export default {

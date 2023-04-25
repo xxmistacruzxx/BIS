@@ -16,6 +16,10 @@ import {
   getDocById,
   getAllDocs,
   generateCreationDate,
+  createDoc,
+  deleteDocById,
+  replaceDocById,
+  getAllDocsByParam,
 } from "./databaseHelpers.js";
 import userDataFunctions from "./users.js";
 import validator from "../validator.js";
@@ -90,13 +94,10 @@ async function create(
 
   // TODO: ensure duplicate buildings can't be made
 
-  let buildingCollection = await buildings();
-  let insertInfo = await buildingCollection.insertOne(newBuilding);
-  if (!insertInfo["acknowledged"] || !insertInfo["insertedId"])
-    throw `could not add building`;
+  newBuilding = await createDoc(buildings, newBuilding, "building")
 
   // add ownership relation to user
-  let newId = insertInfo[["insertedId"]].toString();
+  let newId = newBuilding._id;
   await userDataFunctions.addBuildingRelation(
     user._id,
     "buildingOwnership",
@@ -124,10 +125,14 @@ async function get(id) {
   return await getDocById(buildings, id, "building");
 }
 
+async function getPublicBuildings() {
+  return await getAllDocsByParam(buildings, "publicBuilding", true, "building");
+}
+
 /**
  * removes a building doc by its id from buildings collection and removes relations from all other users. Also removes any rooms inside it.
  * @param {string} id - id of building to remove from buildings collection
- * @returns a string saying the building has been deleted
+ * @returns building doc that was removed
  */
 async function remove(id) {
   // basic error checks
@@ -153,15 +158,9 @@ async function remove(id) {
   }
 
   // remove building from buildings collection
-  let buildingsCollection = await buildings();
-  let deletionInfo = await buildingsCollection.findOneAndDelete({
-    _id: new ObjectId(id),
-  });
-  if (deletionInfo.lastErrorObject.n === 0) {
-    throw `could not delete building with id of ${id}`;
-  }
-
-  return `${deletionInfo.value.name} has been successfully deleted!`;
+  building = deleteDocById(buildings, id, "building")
+  
+  return building;
 }
 
 /**
@@ -198,16 +197,8 @@ async function updateBuildingProperties(buildingId, propertiesAndValues) {
     building[keys[i]] = propertiesAndValues[keys[i]];
   }
 
-  let updatedInfo = await buildingsCollection.findOneAndUpdate(
-    { _id: new ObjectId(buildingId) },
-    { $set: building },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update building successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  building = await replaceDocById(buildings, buildingId, building, "building");
+  return building;
 }
 
 /**
@@ -232,17 +223,8 @@ async function addRoom(buildingId, roomId) {
   t.push(roomId);
   building["rooms"] = t;
 
-  let buildingsCollection = await buildings();
-  let updatedInfo = await buildingsCollection.findOneAndUpdate(
-    { _id: new ObjectId(buildingId) },
-    { $set: building },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update building successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  building = replaceDocById(buildings, buildingId, building, "building");
+  return building;
 }
 
 async function removeRoom(buildingId, roomId) {
@@ -254,7 +236,6 @@ async function removeRoom(buildingId, roomId) {
   let building = await get(buildingId);
 
   // update building with removed room
-  let buildingsCollection = await buildings();
   delete building._id;
   let t = building["rooms"];
   let index = t.indexOf(roomId);
@@ -263,26 +244,19 @@ async function removeRoom(buildingId, roomId) {
   t.splice(index, 1);
   building["rooms"] = t;
 
-  let updatedInfo = await buildingsCollection.findOneAndUpdate(
-    { _id: new ObjectId(buildingId) },
-    { $set: building },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update building successfully";
-  }
+  building = replaceDocById(buildings, buildingId, building, "building")
 
   // Remove room from rooms collection
   roomData.remove(roomId);
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  return building;
 }
 
 export default {
   create,
   getAll,
   get,
+  getPublicBuildings,
   remove,
   updateBuildingProperties,
   addRoom,

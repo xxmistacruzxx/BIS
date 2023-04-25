@@ -12,6 +12,9 @@ import {
   getDocById,
   getAllDocs,
   generateCreationDate,
+  createDoc,
+  deleteDocById,
+  replaceDocById,
 } from "./databaseHelpers.js";
 import buildingDataFunctions from "./buildings.js";
 import { containerData, itemData } from "./index.js";
@@ -42,13 +45,10 @@ async function create(buildingId, name, description) {
 
   // TODO: ensure according building does not have a room with the same name
   await buildingDataFunctions.get(buildingId);
-  let roomsCollection = await rooms();
-  let insertInfo = await roomsCollection.insertOne(newRoom);
-  if (!insertInfo["acknowledged"] || !insertInfo["insertedId"])
-    throw `could not add room`;
+  newRoom = await createDoc(rooms, newRoom, "room");
 
   // add room to building's list of rooms
-  let newId = insertInfo[["insertedId"]].toString();
+  let newId = newRoom._id;
   await buildingDataFunctions.addRoom(buildingId, newId);
 
   let room = await get(newId);
@@ -105,15 +105,9 @@ async function remove(roomId) {
   }
 
   // remove room from collection
-  let roomsCollection = await rooms();
-  let deletionInfo = await roomsCollection.findOneAndDelete({
-    _id: new ObjectId(roomId),
-  });
-  if (deletionInfo.lastErrorObject.n === 0) {
-    throw `could not delete room with id of ${id}`;
-  }
+  room = await deleteDocById(rooms, roomId, "room");
 
-  return `${deletionInfo.value.name} has been successfully deleted!`;
+  return room;
 }
 
 /**
@@ -139,23 +133,14 @@ async function updateRoomProperty(roomId, propertiesAndValues) {
   }
 
   // update building
-  let roomsCollection = await rooms();
   let room = await get(roomId);
   delete room._id;
   for (let i = 0; i < keys.length; i++) {
     room[keys[i]] = propertiesAndValues[keys[i]];
   }
 
-  let updatedInfo = await roomsCollection.findOneAndUpdate(
-    { _id: new ObjectId(roomId) },
-    { $set: room },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update room successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  room = await replaceDocById(rooms, roomId, room, "room");
+  return room;
 }
 
 /**
@@ -188,17 +173,8 @@ async function addContainerOrItem(roomId, id, type) {
   room[type] = t;
 
   // update room doc
-  let roomsCollection = await rooms();
-  let updatedInfo = await roomsCollection.findOneAndUpdate(
-    { _id: new ObjectId(roomId) },
-    { $set: room },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update room successfully";
-  }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  room = await replaceDocById(rooms, roomId, room, "room");
+  return room;
 }
 
 async function removeContainerOrItem(roomId, id, type) {
@@ -218,19 +194,11 @@ async function removeContainerOrItem(roomId, id, type) {
   t.splice(index, 1);
   room[type] = t;
 
-  let updatedInfo = await roomsCollection.findOneAndUpdate(
-    { _id: new ObjectId(roomId) },
-    { $set: room },
-    { returnDocument: "after" }
-  );
-  if (updatedInfo.lastErrorObject.n === 0) {
-    throw "could not update room successfully";
-  }
+  room = replaceDocById(rooms, roomId, room, "room");
 
   // TODO: Remove according container or item from their collection
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  return room;
 }
 
 export default {
