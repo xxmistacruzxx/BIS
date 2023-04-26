@@ -5,7 +5,11 @@ import userData from "../data/users.js";
 
 router.route("/")
   .get(async (req, res) => {
-    res.render('landing', { title: 'Landing' });
+    try{
+      res.render('landing', { title: 'Landing' });
+    } catch(e) {
+      res.status(500).send(e);
+    }
   })
   .post(async (req, res) => {
     const inputInfo = req.body;
@@ -33,6 +37,15 @@ router.route("/")
       };
     } catch(e) {
       return res.status(400).render('landing', { title: 'Landing', error: e });
+    }
+  });
+
+  router.route("/register")
+  .get(async (req, res) => {
+    try{
+      res.render('register', { title: 'Register' });
+    } catch(e) {
+      res.status(500).send(e);
     }
   });
 

@@ -10,6 +10,7 @@ zip : string
 publicBuilding : boolean
 rooms : ["string", ...] -- default is empty, arr can be empty
 */
+
 import { ObjectId } from "mongodb";
 import { users, buildings } from "../config/mongoCollections.js";
 import {

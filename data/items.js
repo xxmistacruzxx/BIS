@@ -8,6 +8,7 @@ countHistory : [{"time" : string, "count" : int}, ...]
 value : float
 valueHistory : [{"time" : string, "value" : float}, ...]
 */
+
 import { ObjectId } from "mongodb";
 import { items, rooms, containers } from "../config/mongoCollections.js";
 import {

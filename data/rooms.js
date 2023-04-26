@@ -6,6 +6,7 @@ creationDate: string, date format -- default is current date
 containers : [string, ...] -- default is empty, arr can be empty
 items : [string, ...] -- default is empty, arr can be empty
 */
+
 import { ObjectId } from "mongodb";
 import { rooms, buildings } from "../config/mongoCollections.js";
 import {
