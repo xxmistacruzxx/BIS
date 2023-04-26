@@ -87,7 +87,7 @@ async function emailUnique(email) {
  */
 async function create(userName, password, email, firstName, lastName) {
   // basic error check
-  userName = validator.checkUserName(userName, "userName").toLowerCase();
+  userName = validator.checkUserName(userName, "userName");
   password = validator.checkPassword(password, "hashedPassword");
   email = validator.checkEmail(email, "email");
   firstName = validator.checkName(firstName, "firstName");
