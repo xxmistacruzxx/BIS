@@ -33,7 +33,7 @@ const itemProperties = ["name", "description"];
  * @param {number} value - value of new item
  * @returns object with keys and values of the newly added item
  */
-async function create(id, type, name, description, count, value) {
+export async function create(id, type, name, description, count, value) {
   // basic error check
   id = validator.checkId(id, "id");
   type = validator.checkString(type, "type");
@@ -82,7 +82,7 @@ async function create(id, type, name, description, count, value) {
  * @param {string} itemId - id of item to fetch from items collection
  * @returns object with keys and values of item fetched from items collection
  */
-async function get(itemId) {
+export async function get(itemId) {
   return await getDocById(items, itemId, "item");
 }
 
@@ -90,7 +90,7 @@ async function get(itemId) {
  * gets all items from items collection
  * @returns an array of objects with keys and values of docs from items collection
  */
-async function getAll() {
+export async function getAll() {
   return await getAllDocs(items);
 }
 
@@ -99,7 +99,7 @@ async function getAll() {
  * @param {string} itemId - id of item to remove
  * @returns a string saying the item has been deleted.
  */
-async function remove(itemId) {
+export async function remove(itemId) {
   // basic error check
   itemId = validator.checkId(itemId, "itemId");
 
@@ -136,7 +136,7 @@ async function remove(itemId) {
  * @param {object} propertiesAndValues - an object with keys of properties and values to update to
  * @returns an object with they keys and values of then newly updated item
  */
-async function updateItemProperties(itemId, propertiesAndValues) {
+export async function updateItemProperties(itemId, propertiesAndValues) {
   // basic error check
   itemId = validator.checkId(itemId, "itemId");
 
@@ -166,7 +166,7 @@ async function updateItemProperties(itemId, propertiesAndValues) {
  * @param {int} count - new count of item
  * @returns an object with they keys and values of the item with the updated count
  */
-async function setCount(itemId, count) {
+export async function setCount(itemId, count) {
   // basic error check
   itemId = validator.checkId(itemId, "itemId");
   count = validator.checkInt(count, "count");
@@ -195,7 +195,7 @@ async function setCount(itemId, count) {
  * @param {number} value - new value of item
  * @returns an object with the keys and values of the item with the updated value
  */
-async function setValue(itemId, value) {
+export async function setValue(itemId, value) {
   // basic error check
   itemId = validator.checkId(itemId, "itemId");
   value = validator.checkNum(value, "value");

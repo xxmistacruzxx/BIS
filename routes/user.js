@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import validator from "../validator.js";
-import {userData} from '..data/users.js';
+import *  as userData from "../data/users.js";
 
 router.route("/").get(async (req, res) => {
   return res.status(400).render('error', { title: 'Error', error: 'No user id provided' });

@@ -1,7 +1,7 @@
 import validator from "../validator.js";
 import { Collection, ObjectId } from "mongodb";
 
-async function getAllDocs(collectionGetter) {
+export async function getAllDocs(collectionGetter) {
   let collection = await collectionGetter();
   let allDocs = await collection.find({}).toArray();
 
@@ -11,7 +11,7 @@ async function getAllDocs(collectionGetter) {
   return allDocs;
 }
 
-async function getDocById(collectionGetter, id, docType) {
+export async function getDocById(collectionGetter, id, docType) {
   id = validator.checkId(id, "id");
 
   let collection = await collectionGetter();
@@ -21,7 +21,7 @@ async function getDocById(collectionGetter, id, docType) {
   return doc;
 }
 
-async function getDocByParam(collectionGetter, param, paramValue, docType) {
+export async function getDocByParam(collectionGetter, param, paramValue, docType) {
   let collection = await collectionGetter();
   let filter = {};
   filter[param] = paramValue;
@@ -31,7 +31,7 @@ async function getDocByParam(collectionGetter, param, paramValue, docType) {
   return doc;
 }
 
-async function getAllDocsByParam(collectionGetter, param, paramValue, docType) {
+export async function getAllDocsByParam(collectionGetter, param, paramValue, docType) {
   let collection = await collectionGetter();
   let filter = {};
   filter[param] = paramValue;
@@ -42,7 +42,7 @@ async function getAllDocsByParam(collectionGetter, param, paramValue, docType) {
   return allDocs;
 }
 
-async function createDoc(collectionGetter, doc, docType) {
+export async function createDoc(collectionGetter, doc, docType) {
   let collection = await collectionGetter();
   let insertInfo = await collection.insertOne(doc);
   if (!insertInfo["acknowledged"] || !insertInfo["insertedId"])
@@ -60,7 +60,7 @@ async function createDoc(collectionGetter, doc, docType) {
  * @param {string} docType - name of docType
  * @returns object of deleted doc
  */
-async function deleteDocById(collectionGetter, id, docType) {
+export async function deleteDocById(collectionGetter, id, docType) {
   id = validator.checkId(id, "id");
 
   let collection = await collectionGetter();
@@ -73,7 +73,7 @@ async function deleteDocById(collectionGetter, id, docType) {
   return deletionInfo.value;
 }
 
-async function replaceDocById(collectionGetter, id, replacement, docType) {
+export async function replaceDocById(collectionGetter, id, replacement, docType) {
   id = validator.checkId(id, "id");
   
   let collection = await collectionGetter();
@@ -89,7 +89,7 @@ async function replaceDocById(collectionGetter, id, replacement, docType) {
   return updatedInfo.value;
 }
 
-function generateCreationDate() {
+export function generateCreationDate() {
   let date = new Date();
   let creationDate = `${
     date.getMonth() + 1
@@ -104,6 +104,5 @@ export {
   getAllDocsByParam,
   createDoc,
   deleteDocById,
-  replaceDocById,
-  generateCreationDate,
+  replaceDocById
 };

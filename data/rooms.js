@@ -60,7 +60,7 @@ async function create(buildingId, name, description) {
  * @param {string} roomId - id of room to fetch from rooms collection
  * @returns object with keys and values of room fetched from rooms collection
  */
-async function get(roomId) {
+export async function get(roomId) {
   return await getDocById(rooms, roomId, "room");
 }
 
@@ -68,7 +68,7 @@ async function get(roomId) {
  * gets all rooms from rooms collection
  * @returns an array of all room docs from rooms collection
  */
-async function getAll() {
+export async function getAll() {
   return await getAllDocs(rooms);
 }
 
@@ -77,7 +77,7 @@ async function getAll() {
  * @param {string} roomId - id of room to remove from rooms collection
  * @returns a string saying the room has been deleted
  */
-async function remove(roomId) {
+export async function remove(roomId) {
   // basic error check
   roomId = validator.checkId(roomId, "roomId");
 
@@ -116,7 +116,7 @@ async function remove(roomId) {
  * @param {object} propertiesAndValues - an object with keys being elems of @const roomProperties and of proper values
  * @returns an object with keys & new values the updated room in rooms collection
  */
-async function updateRoomProperty(roomId, propertiesAndValues) {
+export async function updateRoomProperty(roomId, propertiesAndValues) {
   // basic error check
   roomId = validator.checkId(roomId, "roomId");
   if (!validator.isObject(propertiesAndValues))
@@ -150,7 +150,7 @@ async function updateRoomProperty(roomId, propertiesAndValues) {
  * @param {string} type - type to add to ('container' or 'item')
  * @returns an object with keys and values of the room with newly added container/item
  */
-async function addContainerOrItem(roomId, id, type) {
+export async function addContainerOrItem(roomId, id, type) {
   // basic error check
   roomId = validator.checkId(roomId, "roomId");
   id = validator.checkId(id, "id");
@@ -177,7 +177,7 @@ async function addContainerOrItem(roomId, id, type) {
   return room;
 }
 
-async function removeContainerOrItem(roomId, id, type) {
+export async function removeContainerOrItem(roomId, id, type) {
   // basic error check
   roomId = validator.checkId(roomId, "roomId");
   id = validator.checkId(id, "id");
