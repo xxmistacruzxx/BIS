@@ -12,6 +12,7 @@ buildingManageAccess : ["string", ...] -- default is empty, arr can be empty
 buildingViewAccess : ["string", ...] -- default is empty, arr can be empty
 buildingFavorites : ["string", ...] -- default is empty, arr can be empty
 */
+
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import {
