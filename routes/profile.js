@@ -4,6 +4,7 @@ import validator from "../validator.js";
 const router = Router();
 
 router.route("/").get(async (req, res) => {
+  if (!req.session.user) return res.redirect("/login");
   let _id = req.session.user._id;
   let user;
   try {
@@ -35,7 +36,7 @@ router.route("/:userName").get(async (req, res) => {
   try {
     user = await userData.getByUserName(userName);
   } catch (e) {
-    res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ error: "User not found" });
   }
   let l = {
     userName: user.userName,

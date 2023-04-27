@@ -14,12 +14,12 @@ const constructorMethod = (app) => {
   // app.use("/building", buildingRoutes);
   // app.use("/room", roomRoutes);
 
-  app.use("/", (req, res) => {
-    return res.json({error: "YOU SHOULD NOT BE HERE"})
-  });
-
   app.use("*", (req, res) => {
     return res.redirect("/");
+  });
+
+  app.use("/", (req, res) => {
+    return res.json({ error: "YOU SHOULD NOT BE HERE" });
   });
 };
 

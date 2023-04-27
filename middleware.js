@@ -19,6 +19,7 @@ function loggingMiddleware(req, res, next) {
 }
 
 function noAuthRedirect(req, res, next) {
+  if (req.path === "/favicon.ico") return next();
   if (!req.path.trim().startsWith("/public")) {
     if (
       !req.session.user &&
@@ -29,11 +30,11 @@ function noAuthRedirect(req, res, next) {
       return res.redirect("/login");
     }
   }
-
   next();
 }
 
 function authRedirect(req, res, next) {
+  if (req.path === "/favicon.ico") return next();
   if (!req.path.trim().startsWith("/public")) {
     if (
       req.session.user &&
