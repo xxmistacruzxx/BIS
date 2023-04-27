@@ -4,6 +4,7 @@ import profileRoutes from "./profile.js";
 import userRoutes from "./user.js";
 import buildingRoutes from "./building.js";
 import roomRoutes from "./room.js";
+import landingRoutes from "./landing.js";
 
 const constructorMethod = (app) => {
   app.use("/login", loginRoutes);

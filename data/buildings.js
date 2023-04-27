@@ -10,6 +10,7 @@ zip : string
 publicBuilding : boolean
 rooms : ["string", ...] -- default is empty, arr can be empty
 */
+
 import { ObjectId } from "mongodb";
 import { users, buildings } from "../config/mongoCollections.js";
 import {
@@ -46,7 +47,7 @@ const buildingProperties = [
  * @param {boolean} publicBuilding - whether the building can be viewed by all users
  * @returns object with keys & values of the newly added building
  */
-async function create(
+export async function create(
   userId,
   name,
   description,
@@ -112,7 +113,7 @@ async function create(
  * gets all building docs in buildings collection
  * @returns an array of all building docs from buildings collection
  */
-async function getAll() {
+export async function getAll() {
   return await getAllDocs(buildings);
 }
 
@@ -121,11 +122,11 @@ async function getAll() {
  * @param {string} id - id of the building to fetch from buildings collection
  * @returns an object with keys & values the building fetched from buildings collection
  */
-async function get(id) {
+export async function get(id) {
   return await getDocById(buildings, id, "building");
 }
 
-async function getPublicBuildings() {
+export async function getPublicBuildings() {
   return await getAllDocsByParam(buildings, "publicBuilding", true, "building");
 }
 
@@ -134,7 +135,7 @@ async function getPublicBuildings() {
  * @param {string} id - id of building to remove from buildings collection
  * @returns building doc that was removed
  */
-async function remove(id) {
+export async function remove(id) {
   // basic error checks
   id = validator.checkId(id, "id");
 
@@ -168,7 +169,7 @@ async function remove(id) {
  * @param {object} propertiesAndValues - an object with keys being elems of @const buildingProperties and of proper values
  * @returns an object with keys & new values the updated building from buildings collection
  */
-async function updateBuildingProperties(buildingId, propertiesAndValues) {
+export async function updateBuildingProperties(buildingId, propertiesAndValues) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
   if (!validator.isObject(propertiesAndValues))
@@ -207,7 +208,7 @@ async function updateBuildingProperties(buildingId, propertiesAndValues) {
  * @param {string} roomId - id of room to add
  * @returns an object with the keys and values of the building with the newly added room
  */
-async function addRoom(buildingId, roomId) {
+export async function addRoom(buildingId, roomId) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
   roomId = validator.checkId(roomId, "roomId");
@@ -227,7 +228,7 @@ async function addRoom(buildingId, roomId) {
   return building;
 }
 
-async function removeRoom(buildingId, roomId) {
+export async function removeRoom(buildingId, roomId) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
   roomId = validator.checkId(roomId, "roomId");

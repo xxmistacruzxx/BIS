@@ -30,12 +30,20 @@ app.use(middleware.loggingMiddleware);
 app.use("/", middleware.noAuthRedirect);
 app.use("/", middleware.authRedirect);
 
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+// Your app.js file 
+app.use(session({
+  name: 'AuthCookie',
+  secret: 'some secret string!',
+  resave: false,
+  saveUninitialized: false
+}))
+
+app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 configRoutes(app);
 
 app.listen(3000, () => {
   console.log("We've now got a server!");
-  console.log("Your routes will be running on http://localhost:3000");
+  console.log('Your routes will be running on http://localhost:3000');
 });

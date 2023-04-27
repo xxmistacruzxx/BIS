@@ -12,6 +12,7 @@ buildingManageAccess : ["string", ...] -- default is empty, arr can be empty
 buildingViewAccess : ["string", ...] -- default is empty, arr can be empty
 buildingFavorites : ["string", ...] -- default is empty, arr can be empty
 */
+
 import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import {
@@ -27,6 +28,8 @@ import buildingDataFunctions from "./buildings.js";
 import validator from "../validator.js";
 import bcrypt from "bcrypt";
 
+const saltRounds = 12;
+
 const userProperties = [
   "userName",
   "password",
@@ -35,6 +38,7 @@ const userProperties = [
   "lastName",
   "profilePicture",
 ];
+
 export const userBuildingRelations = [
   "buildingOwnership",
   "buildingManageAccess",
@@ -42,14 +46,12 @@ export const userBuildingRelations = [
   "buildingFavorites",
 ];
 
-const saltRounds = 12;
-
 /**
  * checks if there's a user with a given username
  * @param {string} userName
  * @returns true if the userName does not exist in users collection
  */
-async function userNameUnique(userName) {
+export async function userNameUnique(userName) {
   let usersCollection = await users();
   if (
     (await usersCollection.findOne({
@@ -65,7 +67,7 @@ async function userNameUnique(userName) {
  * @param {string} email - an email in a string
  * @returns true if the email does not exist in users collection
  */
-async function emailUnique(email) {
+export async function emailUnique(email) {
   let usersCollection = await users();
   if (
     (await usersCollection.findOne({
@@ -85,7 +87,7 @@ async function emailUnique(email) {
  * @param {string} lastName - last name of new user
  * @returns object with keys & values of the newly added user
  */
-async function create(userName, password, email, firstName, lastName) {
+export async function create(userName, password, email, firstName, lastName) {
   // basic error check
   userName = validator.checkUserName(userName, "userName");
   password = validator.checkPassword(password, "hashedPassword");
@@ -118,7 +120,7 @@ async function create(userName, password, email, firstName, lastName) {
  * gets all user docs in users collection
  * @returns an array of all user docs from users collection
  */
-async function getAll() {
+export async function getAll() {
   return await getAllDocs(users);
 }
 
@@ -127,7 +129,7 @@ async function getAll() {
  * @param {string} id - id of the user to fetch from users collection
  * @returns an object with keys & values the user fetched from users collection
  */
-async function get(id) {
+export async function get(id) {
   return await getDocById(users, id, "user");
 }
 
@@ -136,7 +138,7 @@ async function get(id) {
  * @param {string} id - id of user to remove from users collection
  * @returns a string saying the user has been deleted
  */
-async function remove(id) {
+export async function remove(id) {
   // basic error check
   id = validator.checkId(id, "id");
   // get user / check for existance
@@ -156,7 +158,7 @@ async function remove(id) {
  * @param {string} userName - username of user to be fetched from users collection
  * @returns an object with keys & values the user fetched from users collection
  */
-async function getByUserName(userName) {
+export async function getByUserName(userName) {
   // basic error check
   userName = validator.checkUserName(userName, "userName").toLowerCase();
   // get user from users collection
@@ -171,7 +173,7 @@ async function getByUserName(userName) {
  * @throws if userName does not exist in database, or if password does not match
  * @returns an object with keys & values of the auth'd user
  */
-async function authUser(userName, password) {
+export async function authUser(userName, password) {
   // basic error check
   userName = validator.checkUserName(userName, "userName");
   password = validator.checkPassword(password, "password");
@@ -190,7 +192,7 @@ async function authUser(userName, password) {
  * @param {object} propertiesAndValues - an object with keys being elems of @const userProperties and of proper values
  * @returns an object with keys & new values the updated user in users collection
  */
-async function updateUserProperties(userId, propertiesAndValues) {
+export async function updateUserProperties(userId, propertiesAndValues) {
   // basic error check
   userId = validator.checkId(userId, "userId");
   if (!validator.isObject(propertiesAndValues))
@@ -260,7 +262,7 @@ async function updateUserProperties(userId, propertiesAndValues) {
  * @param {string} relation - the relation type to add
  * @param {string} buildingId - the building id to relate to
  */
-async function addBuildingRelation(userId, relation, buildingId) {
+export async function addBuildingRelation(userId, relation, buildingId) {
   // basic error check
   userId = validator.checkId(userId, "userId");
   relation = validator.checkString(relation, "relation");
@@ -286,7 +288,7 @@ async function addBuildingRelation(userId, relation, buildingId) {
  * @param {string} relation - the relation type to remove
  * @param {string} buildingId - the building id to remove the relation from
  */
-async function removeBuildingRelation(userId, relation, buildingId) {
+export async function removeBuildingRelation(userId, relation, buildingId) {
   // basic error check
   userId = validator.checkId(userId, "userId");
   relation = validator.checkString(relation, "relation");

@@ -5,6 +5,7 @@ description : string
 creationDate : string, date format -- default is current date
 items : [string, ...] -- default is empty, arr can be empty
 */
+
 import { ObjectId } from "mongodb";
 import { rooms, containers } from "../config/mongoCollections.js";
 import {
@@ -27,7 +28,7 @@ const containerProperties = ["name", "description"];
  * @param {*} description - description of new container
  * @returns object with keys and values of newly added container
  */
-async function create(roomId, name, description) {
+export async function create(roomId, name, description) {
   roomId = validator.checkId(roomId, "containerId");
   name = validator.checkString(name, "name");
   description = validator.checkString(description, "description");
@@ -55,7 +56,7 @@ async function create(roomId, name, description) {
  * @param {string} containerId - id of container to fetch from containers collection
  * @returns object with keys and values of container fetched from containers collection
  */
-async function get(containerId) {
+export async function get(containerId) {
   return await getDocById(containers, containerId, "container");
 }
 
@@ -63,7 +64,7 @@ async function get(containerId) {
  * gets all containers from containers collection
  * @returns an array of objects with keys and values of docs from containers collection
  */
-async function getAll() {
+export async function getAll() {
   return await getAllDocs(containers);
 }
 
@@ -72,7 +73,7 @@ async function getAll() {
  * @param {string} containerId - id of container to remove
  * @returns a string saying the container has been deleted.
  */
-async function remove(containerId) {
+export async function remove(containerId) {
   // basic error check
   containerId = validator.checkId(containerId, "containerId");
 
@@ -104,7 +105,7 @@ async function remove(containerId) {
  * @param {object} propertiesAndValues - an object with keys of properties and values to update to
  * @returns an object with they keys and values of then newly updated container
  */
-async function updateContainerProperties(containerId, propertiesAndValues) {
+export async function updateContainerProperties(containerId, propertiesAndValues) {
   // basic error check
   containerId = validator.checkId(containerId, "containerId");
 
@@ -135,7 +136,7 @@ async function updateContainerProperties(containerId, propertiesAndValues) {
  * @param {string} itemId - id of item to add to container
  * @returns an object with keys and values of container with added item
  */
-async function addItem(containerId, itemId) {
+export async function addItem(containerId, itemId) {
   // basic error check
   containerId = validator.checkId(containerId, "containerId");
   itemId = validator.checkId(itemId, "itemId");
@@ -151,7 +152,7 @@ async function addItem(containerId, itemId) {
   return container;
 }
 
-async function removeItem(containerId, itemId) {
+export async function removeItem(containerId, itemId) {
   containerId = validator.checkId(containerId, "containerId");
   itemId = validator.checkId(itemId, "itemId");
 
