@@ -2,23 +2,23 @@ import { ObjectId } from "mongodb";
 
 const exportedMethods = {
   checkId(id, varName) {
-    if (!id) throw `Error: You must provide a ${varName}`;
-    if (typeof id !== "string") throw `Error:${varName} must be a string`;
+    if (!id) throw `You must provide a ${varName}`;
+    if (typeof id !== "string") throw `${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)
-      throw `Error: ${varName} cannot be an empty string or just spaces`;
-    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+      throw `${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `${varName} invalid object ID`;
     return id;
   },
 
   checkString(strVal, varName) {
-    if (!strVal) throw `Error: You must supply a ${varName}!`;
-    if (typeof strVal !== "string") throw `Error: ${varName} must be a string!`;
+    if (!strVal) throw `You must supply a ${varName}!`;
+    if (typeof strVal !== "string") throw `${varName} must be a string!`;
     strVal = strVal.trim();
     if (strVal.length === 0)
-      throw `Error: ${varName} cannot be an empty string or string with just spaces`;
+      throw `${varName} cannot be an empty string or string with just spaces`;
     if (!isNaN(strVal))
-      throw `Error: ${strVal} is not a valid value for ${varName} as it only contains digits`;
+      throw `${strVal} is not a valid value for ${varName} as it only contains digits`;
     return strVal;
   },
 
@@ -52,17 +52,17 @@ const exportedMethods = {
   },
 
   checkInt(intVal, varName) {
-    if (!intVal) throw `Error: You must supply a ${varName}!`;
+    if (!intVal) throw `You must supply a ${varName}!`;
     if (typeof intVal !== "number")
-      throw `Error: ${varName} must be an integer!`;
+      throw `${varName} must be an integer!`;
     if (Math.trunc(intVal) !== intVal)
-      throw `Error: ${varName} must be an integer`;
+      throw `${varName} must be an integer`;
     return intVal;
   },
 
   checkNum(numVal, varName) {
-    if (!numVal) throw `Error: You must supply a ${varName}`;
-    if (typeof numVal !== "number") throw `Error: ${varName} must be a number`;
+    if (!numVal) throw `You must supply a ${varName}`;
+    if (typeof numVal !== "number") throw `${varName} must be a number`;
     return numVal;
   },
 
@@ -91,7 +91,7 @@ const exportedMethods = {
       throw `${varName} must be between 3 and 25 characters (inclusive)`;
     if (userName.match(/[^\w-\_]/))
       throw `${varName} can only include letters, numbers, hyphens, and underscores.`;
-    return userName;
+    return userName.toLowerCase();
   },
 };
 

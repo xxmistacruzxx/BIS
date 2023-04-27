@@ -1,0 +1,29 @@
+<main>
+  {{#if success}}
+    <p id="registrationSuccessful">Registration successful. Please login.</p>
+  {{/if}}
+  <ul id="alerts">
+    {{#each alerts}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+  <form id="login-form" action="/login" method="POST">
+    <label for="userNameInput">Username</label>
+    <input
+      name="userNameInput"
+      id="userNameInput"
+      type="text"
+      value="{{userName}}"
+    />
+    <label for="passwordInput">Password</label>
+    <input
+      name="passwordInput"
+      id="passwordInput"
+      type="password"
+      value="{{password}}"
+    />
+    <label for="submit">Submit</label>
+    <input name="submit" id="submit" type="submit" value="Submit" />
+  </form>
+  <a href="/register">Click here to register!</a>
+</main>

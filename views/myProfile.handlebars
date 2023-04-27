@@ -4,7 +4,12 @@
       <li>{{this}}</li>
     {{/each}}
   </ul>
-  <form id="registration-form" action="/register" method="POST">
+  <form>
+    <img src="{{profilePicture}}" />
+    <label for="pictureUpload">Change profile picture:</label>
+    <input type="file" id="pictureUpload" name="pictureUpload" />
+  </form>
+  <form>
     <label for="firstNameInput">First Name</label>
     <input
       name="firstNameInput"
@@ -36,7 +41,10 @@
       type="email"
       value="{{emailAddress}}"
     />
-
+    <label for="submit">Update user info:</label>
+    <input type="submit" name="submit" id="submit" value="Submit" />
+  </form>
+  <form>
     <label for="passwordInput">Password</label>
     <input
       name="passwordInput"
@@ -44,17 +52,14 @@
       type="password"
       value="{{password}}"
     />
-
     <label for="confirmPasswordInput">Confirm Password</label>
     <input
       name="confirmPasswordInput"
       id="confirmPasswordInput"
       type="password"
+      value=""
     />
-
-    <label for="submit">Submit</label>
+    <label for="submit">Update password:</label>
     <input type="submit" name="submit" id="submit" value="Submit" />
   </form>
-  <a href="/login">Already have an account? Click here to log-in</a>
 </main>
-
