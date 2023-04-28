@@ -1,8 +1,56 @@
 import { Router } from "express";
+import validator from "../validator.js";
+import { buildingData, userData } from "../data/index.js";
 const router = Router();
 
 router.route("/").get(async (req, res) => {
-  return res.json({ error: "No building id provided" });
+  return res.redirect("/");
+});
+
+router.route("/:id").get(async (req, res) => {
+  // basic error checks
+  let userId = req.session.user._id;
+  try {
+    userId = validator.checkId(userId, "userId");
+    await userData.get(userId);
+  } catch (e) {
+    res.status(401).json({ error: e });
+  }
+  let buildingId;
+  try {
+    buildingId = req.params.id;
+    buildingId = validator.checkId(buildingId, "buildingId");
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+  let building;
+  try {
+    building = await buildingData.get(buildingId);
+  } catch (e) {
+    return res.status(404).json({ error: "no building with that id" });
+  }
+
+  // check if user exists and if they have access to building id (is owner, manager, viewer, or building is public)
+  if (!userData.hasViewerAccess(userId, "building", buildingId) || building.public)
+    return res.status(403).json({ error: "403: Forbidden" });
+
+  // get building data and create html render
+  let thisBuildingData = await buildingData.createExport(buildingId);
+  let buildingLocation = `${thisBuildingData.address}, ${thisBuildingData.city} ${thisBuildingData.state}, ${thisBuildingData.zip}`;
+  let mapLocation = buildingLocation.replace(" ", "+");
+  let sER;
+  if (await userData.hasEditAccess(userId, "building", buildingId)) {
+    sER = await buildingData.createSubEntriesHtmlRenderEdit(buildingId);
+  } else sER = await buildingData.createSubEntriesHtmlRender(buildingId);
+
+  return res.render("building", {
+    buildingName: thisBuildingData.name,
+    buildingCreationDate: thisBuildingData.creationDate,
+    buildingLocation: buildingLocation,
+    buildingDescription: thisBuildingData.description,
+    mapLocation: mapLocation,
+    sER: sER,
+  });
 });
 
 export default router;

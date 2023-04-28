@@ -3,10 +3,11 @@ import registerRoutes from "./register.js";
 import profileRoutes from "./profile.js";
 import addRoutes from "./add.js"
 import dataRoutes from "./data.js"
-import userRoutes from "./user.js";
 import buildingRoutes from "./building.js";
-import roomRoutes from "./room.js";
-import landingRoutes from "./landing.js";
+import logoutRoutes from "./logout.js";
+// import userRoutes from "./user.js";
+// import roomRoutes from "./room.js";
+// import landingRoutes from "./landing.js";
 
 const constructorMethod = (app) => {
   app.use("/login", loginRoutes);
@@ -14,8 +15,9 @@ const constructorMethod = (app) => {
   app.use("/profile", profileRoutes);
   app.use("/add", addRoutes)
   app.use("/data", dataRoutes)
+  app.use("/building", buildingRoutes);
+  app.use("/logout", logoutRoutes)
   // app.use("/user", userRoutes);
-  // app.use("/building", buildingRoutes);
   // app.use("/room", roomRoutes);
 
   app.use("*", (req, res) => {

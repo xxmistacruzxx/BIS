@@ -56,6 +56,14 @@ let user = await userData.create(
   "Cruz"
 );
 
+let user2 = await userData.create(
+  "x2mistacruz2x",
+  "Password1!",
+  "dacruz045@gmail.com",
+  "Mista",
+  "Cruz"
+);
+
 let building = await buildingData.create(
   user._id,
   "Lodge",
@@ -65,6 +73,12 @@ let building = await buildingData.create(
   "NJ",
   "07030",
   false
+);
+
+await userData.addBuildingRelation(
+  user2._id,
+  "buildingViewAccess",
+  building._id
 );
 
 let building2 = await buildingData.create(
@@ -194,7 +208,11 @@ try {
 }
 
 try {
-  let accessBool = await userData.hasViewerAccess(user._id, "building", building._id);
+  let accessBool = await userData.hasViewerAccess(
+    user._id,
+    "building",
+    building._id
+  );
   console.log(accessBool);
 } catch (e) {
   console.log(`dataTest userData.hasViewerAccess: ${e}`);

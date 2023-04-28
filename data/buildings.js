@@ -272,10 +272,80 @@ export async function createExport(buildingId) {
   // TODO: recursively call rooms
   let roomsLength = building.rooms.length;
   for (let i = 0; i < roomsLength; i++) {
-    building.rooms[i] = await roomData.createExport(building.rooms[i])
+    building.rooms[i] = await roomData.createExport(building.rooms[i]);
   }
 
-  return building
+  return building;
+}
+
+export async function createSubEntriesHtmlRender(buildingId) {
+  // basic error checks
+  buildingId = validator.checkId(buildingId, "buildingId");
+
+  let thisBuildingData = await createExport(buildingId);
+  let sER = "<ul>";
+  for (let room of thisBuildingData.rooms) {
+    sER =
+      sER +
+      `<li><a href="/room/${room._id}">${room.name} - ${room.description}</a>`;
+    sER = sER + `<p>${room.name} Containers</p><ul>`;
+    for (let container of room.containers) {
+      sER =
+        sER +
+        `<li><a href="/container/${container._id}">${container.name} - ${container.description}</a>`;
+      sER = sER + `<p>${container.name} Items</p><ul>`;
+      for (let item of container.items) {
+        sER =
+          sER +
+          `<li><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a></li>`;
+      }
+      sER = sER + `</ul></li>`;
+    }
+    sER = sER + `</ul><p>${room.name} Items</p><ul>`;
+    for (let item of room.items) {
+      sER =
+        sER +
+        `<li><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a></li>`;
+    }
+    sER = sER + `</ul></li>`;
+  }
+  sER = sER + "</ul>";
+  return sER;
+}
+
+export async function createSubEntriesHtmlRenderEdit(buildingId) {
+  // basic error checks
+  buildingId = validator.checkId(buildingId, "buildingId");
+
+  let thisBuildingData = await createExport(buildingId);
+  let sER = "<ul>";
+  for (let room of thisBuildingData.rooms) {
+    sER =
+      sER +
+      `<li><div class="linkDiv><a href="/room/${room._id}">${room.name} - ${room.description}</a> | <a href="/edit/room/${room._id}">Edit</a> | <a href="/delete/room/${room._id}">Delete</a></div>`;
+    sER = sER + `<p>${room.name} Containers</p><ul>`;
+    for (let container of room.containers) {
+      sER =
+        sER +
+        `<li><div class="linkDiv><a href="/container/${container._id}">${container.name} - ${container.description}</a> | <a href="/edit/container/${container._id}">Edit</a> | <a href="/delete/container/${container._id}">Delete</a></div>`;
+      sER = sER + `<p>${container.name} Items</p><ul>`;
+      for (let item of container.items) {
+        sER =
+          sER +
+          `<li><div class="linkDiv><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a> | <a href="/edit/item/${item._id}">Edit</a> | <a href="/delete/item/${item._id}">Delete</a></div></li>`;
+      }
+      sER = sER + `</ul></li>`;
+    }
+    sER = sER + `</ul><p>${room.name} Items</p><ul>`;
+    for (let item of room.items) {
+      sER =
+        sER +
+        `<li><div class="linkDiv><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a> | <a href="/edit/item/${item._id}">Edit</a> | <a href="/delete/item/${item._id}">Delete</a></div></li>`;
+    }
+    sER = sER + `</ul></li>`;
+  }
+  sER = sER + "</ul>";
+  return sER;
 }
 
 export default {
@@ -288,4 +358,6 @@ export default {
   addRoom,
   // removeRoom,
   createExport,
+  createSubEntriesHtmlRender,
+  createSubEntriesHtmlRenderEdit,
 };

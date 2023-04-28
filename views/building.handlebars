@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="/public/css/building.css">
+{{> navbar}}
+<main>
+    <div id="building">
+        <div id="buildingInfoDiv">
+            <h1>{{buildingName}}</h1>
+            <h2>Created: {{buildingCreationDate}}</h2>
+            <h3>{{buildingLocation}}</h3>
+            <p>{{buildingDescription}}</p>
+        </div>
+        <div id="buildingMapDiv">
+            {{> map}}
+        </div>
+    </div>
+    <div id="subEntitiesRender">
+        {{{sER}}}
+    </div>
+</main>

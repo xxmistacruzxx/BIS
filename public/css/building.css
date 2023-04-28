@@ -1,0 +1,18 @@
+#building {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#buildingMapDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.linkDiv {
+    display: flex;
+    flex-direction: row;
+}

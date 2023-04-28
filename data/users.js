@@ -409,6 +409,55 @@ export async function hasViewerAccess(userId, type, id) {
   return false;
 }
 
+export async function editAccessLists(userId) {
+  // basic error check
+  userId = validator.checkId(userId, "userId");
+  let data = await createExport(userId);
+  let allBuildings = [];
+  for (let i of data.buildingOwnership) allBuildings.push(i);
+  for (let i of data.buildingManageAccess) allBuildings.push(i);
+
+  let buildings = [],
+    rooms = [],
+    containers = [],
+    items = [];
+
+  for (let building of allBuildings) {
+    buildings.push(building._id);
+    for (let room of building.rooms) {
+      rooms.push(room._id);
+      for (let container of room.containers) {
+        containers.push(container._id);
+        for (let item of container.items) items.push(item._id);
+      }
+      for (let item of room.items) items.push(item._id);
+    }
+  }
+
+  let result = {
+    buildings: buildings,
+    rooms: rooms,
+    containers: containers,
+    items: items,
+  };
+  return result;
+}
+
+export async function hasEditAccess(userId, type, id) {
+  // basic error check
+  userId = validator.checkId(userId, "userId");
+  type = validator.checkString(type, "type");
+  const types = ["building", "room", "container", "item"];
+  if (!types.includes(type))
+    throw `type must be one of the following: ${types}`;
+  type = type + "s";
+  id = validator.checkId(id, "id");
+
+  let access = await editAccessLists(userId);
+  if (access[type].includes(id)) return true;
+  return false;
+}
+
 export default {
   userBuildingRelations,
   create,
