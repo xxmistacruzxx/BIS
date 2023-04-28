@@ -13,7 +13,6 @@ import {
 } from "./config/mongoCollections.js";
 import { closeConnection } from "./config/mongoConnection.js";
 import { ObjectId } from "mongodb";
-import { deleteDocById } from "./data/databaseHelpers.js";
 
 let usersCollection = await users();
 let buildingsCollection = await buildings();
@@ -178,6 +177,18 @@ try {
   console.log(item2);
 } catch (e) {
   console.log(`dataTest Item2: ${e}`);
+}
+
+try {
+  await userData.addBuildingRelation(
+    user._id,
+    "buildingViewAccess",
+    building2._id
+  );
+  let data = await userData.createExport(user._id);
+  console.log(data);
+} catch (e) {
+  console.log(`dataTest userData.createExport: ${e}`);
 }
 
 closeConnection();

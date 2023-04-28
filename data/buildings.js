@@ -69,7 +69,7 @@ export async function create(
   } catch (e) {
     if (
       e ===
-      `Error: ${zip.trim()} is not a valid value for zip as it only contains digits`
+      `${zip.trim()} is not a valid value for zip as it only contains digits`
     )
       zip = zip.trim();
     else throw e;
@@ -95,7 +95,7 @@ export async function create(
 
   // TODO: ensure duplicate buildings can't be made
 
-  newBuilding = await createDoc(buildings, newBuilding, "building")
+  newBuilding = await createDoc(buildings, newBuilding, "building");
 
   // add ownership relation to user
   let newId = newBuilding._id;
@@ -159,8 +159,8 @@ export async function remove(id) {
   }
 
   // remove building from buildings collection
-  building = deleteDocById(buildings, id, "building")
-  
+  building = deleteDocById(buildings, id, "building");
+
   return building;
 }
 
@@ -169,7 +169,10 @@ export async function remove(id) {
  * @param {object} propertiesAndValues - an object with keys being elems of @const buildingProperties and of proper values
  * @returns an object with keys & new values the updated building from buildings collection
  */
-export async function updateBuildingProperties(buildingId, propertiesAndValues) {
+export async function updateBuildingProperties(
+  buildingId,
+  propertiesAndValues
+) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
   if (!validator.isObject(propertiesAndValues))
@@ -245,12 +248,26 @@ export async function removeRoom(buildingId, roomId) {
   t.splice(index, 1);
   building["rooms"] = t;
 
-  building = replaceDocById(buildings, buildingId, building, "building")
+  building = replaceDocById(buildings, buildingId, building, "building");
 
   // Remove room from rooms collection
   roomData.remove(roomId);
 
   return building;
+}
+
+export async function createExport(buildingId) {
+  // basic error check
+  buildingId = validator.checkId(buildingId, "buildingId");
+  let building = await get(buildingId);
+
+  // TODO: recursively call rooms
+  let roomsLength = building.rooms.length;
+  for (let i = 0; i < roomsLength; i++) {
+    building.rooms[i] = await roomData.createExport(building.rooms[i])
+  }
+
+  return building
 }
 
 export default {
@@ -262,4 +279,5 @@ export default {
   updateBuildingProperties,
   addRoom,
   // removeRoom,
+  createExport,
 };

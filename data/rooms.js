@@ -29,7 +29,7 @@ const roomProperties = ["name", "description"];
  * @param {string} description - description of new room
  * @returns object with keys & values of the newly added room
  */
-async function create(buildingId, name, description) {
+export async function create(buildingId, name, description) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
   name = validator.checkString(name, "name");
@@ -202,6 +202,24 @@ export async function removeContainerOrItem(roomId, id, type) {
   return room;
 }
 
+export async function createExport(roomId) {
+  // basic error check
+  roomId = validator.checkId(roomId, "roomId");
+  let room = await get(roomId);
+
+  // TODO: recursively call rooms
+  let containersLength = room.containers.length;
+  let itemsLength = room.items.length;
+  for (let i = 0; i < containersLength; i++) {
+    room.containers[i] = await containerData.createExport(room.containers[i]);
+  }
+  for (let i = 0; i < itemsLength; i++) {
+    room.items[i] = await itemData.createExport(room.items[i]);
+  }
+
+  return room;
+}
+
 export default {
   create,
   get,
@@ -210,4 +228,5 @@ export default {
   updateRoomProperty,
   addContainerOrItem,
   // removeContainerOrItem,
+  createExport,
 };
