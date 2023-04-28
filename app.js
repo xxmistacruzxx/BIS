@@ -31,7 +31,6 @@ app.use(middleware.loggingMiddleware);
 app.use("/", middleware.noAuthRedirect);
 app.use("/", middleware.authRedirect);
 
-// Your app.js file 
 app.use(session({
   name: 'AuthCookie',
   secret: 'some secret string!',
@@ -39,7 +38,7 @@ app.use(session({
   saveUninitialized: false
 }))
 
-app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}, {partialsDir: __dirname + "/views/partials"}));
 app.set('view engine', 'handlebars');
 
 configRoutes(app);

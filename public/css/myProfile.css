@@ -1,0 +1,17 @@
+#profileForms {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#profileForms form {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#profileForms form label {
+    margin-top: 15px;
+}

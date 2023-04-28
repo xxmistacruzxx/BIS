@@ -1,0 +1,24 @@
+:root {
+  --background-color1: black;
+  --background-color2: #1b263b;
+  --background-color3: #415a77;
+  --backgournd-color4: #778da9;
+  --text-color1: #e0e1dd;
+}
+
+#globalNavBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+}
+
+#globalNavBar a {
+  margin-left: 15px;
+  padding: 4px;
+  margin-right: 15px;
+  text-decoration: none;
+  color: var(--text-color1);
+  background-color: var(--backgournd-color4);
+  border-radius: 8px;
+}

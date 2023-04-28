@@ -1,16 +1,21 @@
+
+<link rel="stylesheet" href="/public/css/myProfile.css">
+{{> navbar}}
 <main>
   <ul id="alerts">
     {{#each alerts}}
       <li>{{this}}</li>
     {{/each}}
   </ul>
-  <form>
+  <div id="profileForms">
+  <form method="POST" action="/profile">
     <img src="{{profilePicture}}" />
-    <label for="pictureUpload">Change profile picture:</label>
+    <label for="pictureUpload">Select profile picture:</label>
     <input type="file" id="pictureUpload" name="pictureUpload" />
-    <input type="submit" name="profilePictureSubmit" id="profilePictureSubmit" value="Submit" />
+    <label for="profilePictureSubmit">Update profile picture:</label>
+    <input type="submit" name="profilePictureSubmit" id="profilePictureSubmit" value="Submit Profile Picture" />
   </form>
-  <form>
+  <form method="POST" action="/profile">
     <label for="firstNameInput">First Name</label>
     <input
       name="firstNameInput"
@@ -43,9 +48,9 @@
       value="{{emailAddress}}"
     />
     <label for="userInfoSubmit">Update user info:</label>
-    <input type="submit" name="userInfoSubmit" id="userInfoSubmit" value="Submit" />
+    <input type="submit" name="userInfoSubmit" id="userInfoSubmit" value="Submit User Info" />
   </form>
-  <form>
+  <form method="POST" action="/profile">
     <label for="passwordInput">Password</label>
     <input
       name="passwordInput"
@@ -61,6 +66,7 @@
       value=""
     />
     <label for="passwordSubmit">Update password:</label>
-    <input type="submit" name="passwordSubmit" id="passwordSubmit" value="Submit" />
+    <input type="submit" name="passwordSubmit" id="passwordSubmit" value="Submit Password" />
   </form>
+  </div>
 </main>
