@@ -316,6 +316,32 @@ export async function removeBuildingRelation(userId, relation, buildingId) {
   return updatedDoc;
 }
 
+export async function createExport(userId) {
+  // basic error check
+  userId = validator.checkId(userId, "userId");
+  let user = await get(userId);
+
+  let ownershipLength = user.buildingOwnership.length;
+  let manageLength = user.buildingManageAccess.length;
+  let viewLength = user.buildingViewAccess.length;
+  for (let i = 0; i < ownershipLength; i++) {
+    user.buildingOwnership[i] = await buildingDataFunctions.createExport(
+      user.buildingOwnership[i]
+    );
+  }
+  for (let i = 0; i < manageLength; i++) {
+    user.buildingManageAccess[i] = await buildingDataFunctions.createExport(
+      user.buildingManageAccess[i]
+    );
+  }
+  for (let i = 0; i < viewLength; i++) {
+    user.buildingViewAccess[i] = await buildingDataFunctions.createExport(
+      user.buildingViewAccess[i]
+    );
+  }
+  return user;
+}
+
 export default {
   userBuildingRelations,
   create,
@@ -327,4 +353,5 @@ export default {
   updateUserProperties,
   addBuildingRelation,
   removeBuildingRelation,
+  createExport
 };

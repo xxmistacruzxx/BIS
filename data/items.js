@@ -217,6 +217,14 @@ export async function setValue(itemId, value) {
   return item;
 }
 
+export async function createExport(itemId) {
+  // basic error check
+  itemId = validator.checkId(itemId, "itemId");
+  let item = await get(itemId);
+
+  return item;
+}
+
 export default {
   create,
   get,
@@ -225,4 +233,5 @@ export default {
   updateItemProperties,
   setCount,
   setValue,
+  createExport
 };

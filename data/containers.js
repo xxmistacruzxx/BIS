@@ -174,6 +174,20 @@ export async function removeItem(containerId, itemId) {
   return container;
 }
 
+export async function createExport(containerId) {
+  // basic error check
+  containerId = validator.checkId(containerId, "containerId");
+  let container = await get(containerId);
+
+  // TODO: recursively call rooms
+  let itemsLength = container.items.length;
+  for (let i = 0; i < itemsLength; i++) {
+    container.items[i] = await itemData.createExport(container.items[i]);
+  }
+
+  return container;
+}
+
 export default {
   create,
   get,
@@ -182,4 +196,5 @@ export default {
   updateContainerProperties,
   addItem,
   // removeItem,
+  createExport
 };
