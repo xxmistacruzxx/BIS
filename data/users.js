@@ -12,14 +12,11 @@ buildingManageAccess : ["string", ...] -- default is empty, arr can be empty
 buildingViewAccess : ["string", ...] -- default is empty, arr can be empty
 buildingFavorites : ["string", ...] -- default is empty, arr can be empty
 */
-
-import { ObjectId } from "mongodb";
 import { users } from "../config/mongoCollections.js";
 import {
   getDocById,
   getAllDocs,
   getDocByParam,
-  getAllDocsByParam,
   deleteDocById,
   createDoc,
   replaceDocById,
@@ -49,7 +46,7 @@ export const userBuildingRelations = [
 /**
  * checks if there's a user with a given username
  * @param {string} userName
- * @returns true if the userName does not exist in users collection
+ * @returns {boolean} true if the userName does not exist in users collection
  */
 export async function userNameUnique(userName) {
   let usersCollection = await users();
@@ -65,7 +62,7 @@ export async function userNameUnique(userName) {
 /**
  * checks if there's a user with a given email
  * @param {string} email - an email in a string
- * @returns true if the email does not exist in users collection
+ * @returns {boolean} true if the email does not exist in users collection
  */
 export async function emailUnique(email) {
   let usersCollection = await users();
@@ -85,7 +82,7 @@ export async function emailUnique(email) {
  * @param {string} email - email of new user
  * @param {string} firstName - first name of new user
  * @param {string} lastName - last name of new user
- * @returns object with keys & values of the newly added user
+ * @returns {object} with keys & values of the newly added user
  */
 export async function create(userName, password, email, firstName, lastName) {
   // basic error check
@@ -118,7 +115,7 @@ export async function create(userName, password, email, firstName, lastName) {
 
 /**
  * gets all user docs in users collection
- * @returns an array of all user docs from users collection
+ * @returns {Array} of all user docs from users collection
  */
 export async function getAll() {
   return await getAllDocs(users);
@@ -127,7 +124,7 @@ export async function getAll() {
 /**
  * gets a user doc by its id from users collection
  * @param {string} id - id of the user to fetch from users collection
- * @returns an object with keys & values the user fetched from users collection
+ * @returns {object} with keys & values the user fetched from users collection
  */
 export async function get(id) {
   return await getDocById(users, id, "user");
@@ -136,7 +133,7 @@ export async function get(id) {
 /**
  * removes a user doc by its id from users collection. Also removes any buildings that the user owns.
  * @param {string} id - id of user to remove from users collection
- * @returns a string saying the user has been deleted
+ * @returns {string} saying the user has been deleted
  */
 export async function remove(id) {
   // basic error check
@@ -156,7 +153,7 @@ export async function remove(id) {
 /**
  * gets a user doc from users collection by its username
  * @param {string} userName - username of user to be fetched from users collection
- * @returns an object with keys & values the user fetched from users collection
+ * @returns {object} with keys & values the user fetched from users collection
  */
 export async function getByUserName(userName) {
   // basic error check
@@ -171,7 +168,7 @@ export async function getByUserName(userName) {
  * @param {string} userName - userName of user to auth
  * @param {string} password - password of user to auth
  * @throws if userName does not exist in database, or if password does not match
- * @returns an object with keys & values of the auth'd user
+ * @returns {object} with keys & values of the auth'd user
  */
 export async function authUser(userName, password) {
   // basic error check
@@ -190,7 +187,7 @@ export async function authUser(userName, password) {
  * updates a user's properties by its id
  * @param {string} userId - the userid of the user to update
  * @param {object} propertiesAndValues - an object with keys being elems of @const userProperties and of proper values
- * @returns an object with keys & new values the updated user in users collection
+ * @returns {object} with keys & new values the updated user in users collection
  */
 export async function updateUserProperties(userId, propertiesAndValues) {
   // basic error check
@@ -261,6 +258,7 @@ export async function updateUserProperties(userId, propertiesAndValues) {
  * @param {string} userId - the user id to add a relation to
  * @param {string} relation - the relation type to add
  * @param {string} buildingId - the building id to relate to
+ * @returns {object} of user with added relation
  */
 export async function addBuildingRelation(userId, relation, buildingId) {
   // basic error check
@@ -287,6 +285,8 @@ export async function addBuildingRelation(userId, relation, buildingId) {
  * @param {string} userId - the user id to remove a relation from
  * @param {string} relation - the relation type to remove
  * @param {string} buildingId - the building id to remove the relation from
+ * @throws if building is not in a user's given relation list
+ * @returns {object} of user with removed relation
  */
 export async function removeBuildingRelation(userId, relation, buildingId) {
   // basic error check
@@ -316,6 +316,11 @@ export async function removeBuildingRelation(userId, relation, buildingId) {
   return updatedDoc;
 }
 
+/**
+ * creates an object representation of data related to a user.
+ * @param {string} userId - the id of a user to export
+ * @returns {object} with keys & values of a user where the nested buildings, rooms, containers, and items have been changed from ids to the actual objects.
+ */
 export async function createExport(userId) {
   // basic error check
   userId = validator.checkId(userId, "userId");
@@ -342,7 +347,12 @@ export async function createExport(userId) {
   return user;
 }
 
-export async function accessibleLists(userId) {
+/**
+ * gets lists of buildings, rooms, containers, and items a user can view
+ * @param {string} userId - id of user to get view access
+ * @returns {object} an object with keys 'buildings', 'rooms', 'containers', and 'items' that are lists with strings of ids to which the user can view 
+ */
+export async function viewerAccessLists(userId) {
   // basic error check
   userId = validator.checkId(userId, "userId");
   let data = await createExport(userId);
@@ -377,7 +387,14 @@ export async function accessibleLists(userId) {
   return result;
 }
 
-export async function hasAccess(userId, type, id) {
+/**
+ * determines whether a user has access (viewer) to an entity
+ * @param {string} userId - id of user to check access
+ * @param {string} type - type of entity to check access for
+ * @param {string} id - id of entity to check access for
+ * @returns {boolean} true if user has access to entity, false if not/entity doesn't exist
+ */
+export async function hasViewerAccess(userId, type, id) {
   // basic error check
   userId = validator.checkId(userId, "userId");
   type = validator.checkString(type, "type");
@@ -387,7 +404,7 @@ export async function hasAccess(userId, type, id) {
   type = type + "s";
   id = validator.checkId(id, "id");
 
-  let access = await accessibleLists(userId);
+  let access = await viewerAccessLists(userId);
   if (access[type].includes(id)) return true;
   return false;
 }
@@ -404,6 +421,6 @@ export default {
   addBuildingRelation,
   removeBuildingRelation,
   createExport,
-  accessibleLists,
-  hasAccess,
+  viewerAccessLists,
+  hasViewerAccess,
 };

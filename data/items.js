@@ -217,6 +217,11 @@ export async function setValue(itemId, value) {
   return item;
 }
 
+/**
+ * creates an object representation of data related to an item.
+ * @param {string} itemId - the id of a room to export
+ * @returns {object} with keys & values of an item.
+ */
 export async function createExport(itemId) {
   // basic error check
   itemId = validator.checkId(itemId, "itemId");

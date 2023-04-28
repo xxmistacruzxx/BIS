@@ -187,17 +187,17 @@ try {
 }
 
 try {
-  let access = await userData.accessibleLists(user._id);
+  let access = await userData.viewerAccessLists(user._id);
   console.log(access);
 } catch (e) {
-  console.log(`dataTest userData.accessibleLists: ${e}`);
+  console.log(`dataTest userData.viewerAccessLists: ${e}`);
 }
 
 try {
-  let accessBool = await userData.hasAccess(user._id, "building", building._id);
+  let accessBool = await userData.hasViewerAccess(user._id, "building", building._id);
   console.log(accessBool);
 } catch (e) {
-  console.log(`dataTest userData.hasAccess: ${e}`);
+  console.log(`dataTest userData.hasViewerAccess: ${e}`);
 }
 
 closeConnection();

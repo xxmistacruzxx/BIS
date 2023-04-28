@@ -178,6 +178,9 @@ export async function addContainerOrItem(roomId, id, type) {
   return room;
 }
 
+/**
+ * DEPRECATED
+ */
 export async function removeContainerOrItem(roomId, id, type) {
   // basic error check
   roomId = validator.checkId(roomId, "roomId");
@@ -202,12 +205,16 @@ export async function removeContainerOrItem(roomId, id, type) {
   return room;
 }
 
+/**
+ * creates an object representation of data related to a room.
+ * @param {string} roomId - the id of a room to export
+ * @returns {object} with keys & values of a room where the nested containers and items have been changed from ids to the actual objects.
+ */
 export async function createExport(roomId) {
   // basic error check
   roomId = validator.checkId(roomId, "roomId");
   let room = await get(roomId);
 
-  // TODO: recursively call rooms
   let containersLength = room.containers.length;
   let itemsLength = room.items.length;
   for (let i = 0; i < containersLength; i++) {

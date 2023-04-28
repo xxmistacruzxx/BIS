@@ -231,6 +231,9 @@ export async function addRoom(buildingId, roomId) {
   return building;
 }
 
+/**
+ * DEPRECATED
+ */
 export async function removeRoom(buildingId, roomId) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
@@ -256,6 +259,11 @@ export async function removeRoom(buildingId, roomId) {
   return building;
 }
 
+/**
+ * creates an object representation of data related to a building.
+ * @param {string} buildingId - the id of a container to export
+ * @returns {object} with keys & values of a building where the nested rooms, containers, and items have been changed from ids to the actual objects.
+ */
 export async function createExport(buildingId) {
   // basic error check
   buildingId = validator.checkId(buildingId, "buildingId");
