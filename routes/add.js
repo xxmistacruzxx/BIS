@@ -84,7 +84,6 @@ router.route("/").post(async (req, res) => {
       if (errors.length > 0) {
         return res.status(400).render("add", { alerts: errors });
       }
-
       // CREATE NEW BUILDING
       let newBuilding;
       try {
@@ -138,7 +137,6 @@ router.route("/").post(async (req, res) => {
       if (errors.length > 0) {
         return res.status(400).render("add", { alerts: errors });
       }
-
       // CREATE NEW ROOM
       let newRoom;
       try {
@@ -182,7 +180,6 @@ router.route("/").post(async (req, res) => {
       if (errors.length > 0) {
         return res.status(400).render("add", { alerts: errors });
       }
-
       // CREATE NEW CONTAINER
       let newContainer;
       try {
@@ -202,7 +199,9 @@ router.route("/").post(async (req, res) => {
         return res.status(500).render("add", { alerts: errors });
       }
       return res.json(newContainer);
+    // ADD ITEM
     case "item":
+      // BASIC ERROR CHECK
       let roomId2 = req.body.roomInput,
         containerId = req.body.containerInput,
         itemName = req.body.addItemNameInput,
@@ -258,8 +257,7 @@ router.route("/").post(async (req, res) => {
       if (errors.length > 0) {
         return res.status(400).render("add", { alerts: errors });
       }
-
-      // CREATE NEW CONTAINER
+      // CREATE NEW ITEM
       let newItem;
       try {
         newItem = await itemData.create(
