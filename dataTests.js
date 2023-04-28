@@ -180,15 +180,24 @@ try {
 }
 
 try {
-  await userData.addBuildingRelation(
-    user._id,
-    "buildingViewAccess",
-    building2._id
-  );
   let data = await userData.createExport(user._id);
   console.log(data);
 } catch (e) {
   console.log(`dataTest userData.createExport: ${e}`);
+}
+
+try {
+  let access = await userData.accessibleLists(user._id);
+  console.log(access);
+} catch (e) {
+  console.log(`dataTest userData.accessibleLists: ${e}`);
+}
+
+try {
+  let accessBool = await userData.hasAccess(user._id, "building", building._id);
+  console.log(accessBool);
+} catch (e) {
+  console.log(`dataTest userData.hasAccess: ${e}`);
 }
 
 closeConnection();
