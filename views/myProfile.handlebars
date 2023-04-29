@@ -9,6 +9,7 @@
   </ul>
   <div id="profileForms">
   <form method="POST" action="/profile">
+    <input type="hidden" name="formType" value="profilePicture">
     <img src="{{profilePicture}}" />
     <label for="pictureUpload">Select profile picture:</label>
     <input type="file" id="pictureUpload" name="pictureUpload" />
@@ -16,6 +17,7 @@
     <input type="submit" name="profilePictureSubmit" id="profilePictureSubmit" value="Submit Profile Picture" />
   </form>
   <form method="POST" action="/profile">
+    <input type="hidden" name="formType" value="userInfo">
     <label for="firstNameInput">First Name</label>
     <input
       name="firstNameInput"
@@ -51,6 +53,7 @@
     <input type="submit" name="userInfoSubmit" id="userInfoSubmit" value="Submit User Info" />
   </form>
   <form method="POST" action="/profile">
+    <input type="hidden" name="formType" value="password">
     <label for="passwordInput">Password</label>
     <input
       name="passwordInput"
