@@ -85,7 +85,11 @@ router.route("/").post(async (req, res) => {
       console.log(password);
       let updatedUser = await userData.updateUserProperties(_id, { password: password });
       res.render('myProfile', {
-        title: 'My Profile', 
+        profilePicture: user.profilePicture,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+        emailAddress: user.email,
         message: 'Password has been updated'});
     } catch(e) {
       console.log(e);
@@ -124,8 +128,17 @@ router.route("/").post(async (req, res) => {
     try {
       let updatedUser = await userData.updateUserProperties(_id, { firstName: firstName });
       updatedUser = await userData.updateUserProperties(_id, { lastName: lastName });
-      updatedUser = await userData.updateUserProperties(_id, { userName: username });
+      if (user.userName != username) {
+        updatedUser = await userData.updateUserProperties(_id, { userName: username });
+      }
       updatedUser = await userData.updateUserProperties(_id, { email: email });
+      res.render('myProfile', {
+        profilePicture: updatedUser.profilePicture,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        userName: updatedUser.userName,
+        emailAddress: updatedUser.email,
+        message: 'User info has been updated'});
     } catch(e) {
       res.status(400).render('myProfile', {
         profilePicture: user.profliePicture, 
