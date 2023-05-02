@@ -1,5 +1,7 @@
 body {
   align-items: center;
+  overflow: auto;
+  overflow-y: scroll;
 }
 
 .login-container {
@@ -9,13 +11,12 @@ body {
   position: relative;
   text-align: center;
   width: 40%;
-
-  transform: translateY(15%);
+  transform: translateY(10%);
 }
 
 .text-container {
   width: 100%;
-  padding: 5px;
+  padding: 6px;
   margin: 8px 0;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
@@ -69,6 +70,25 @@ body {
   margin: auto;
   padding: 20px;
   text-align: center;
-  transform: translateY(140%);
+  transform: translateY(120%);
   width: 60%;
+}
+
+.register-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  margin: auto;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
 }
