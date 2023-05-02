@@ -12,6 +12,14 @@
             {{> map}}
         </div>
     </div>
+    <div id="buildingOptions">
+        {{#if canEdit}}
+            <a href="/edit/building/{{id}}">Edit This Building</a>
+        {{/if}}
+        {{#if canDelete}}
+            <a href="/delete/building/{{id}}">Delete This Building</a>
+        {{/if}}
+    </div>
     <div id="subEntitiesRender">
         {{{sER}}}
     </div>

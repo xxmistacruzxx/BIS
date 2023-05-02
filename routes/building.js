@@ -3,10 +3,6 @@ import validator from "../validator.js";
 import { buildingData, userData } from "../data/index.js";
 const router = Router();
 
-router.route("/").get(async (req, res) => {
-  return res.redirect("/");
-});
-
 router.route("/:id").get(async (req, res) => {
   // basic error checks
   let userId = req.session.user._id;
@@ -31,17 +27,25 @@ router.route("/:id").get(async (req, res) => {
   }
 
   // check if user exists and if they have access to building id (is owner, manager, viewer, or building is public)
-  if (!userData.hasViewerAccess(userId, "building", buildingId) || building.public)
+  if (
+    !userData.hasViewerAccess(userId, "building", buildingId) ||
+    building.public
+  )
     return res.status(403).json({ error: "403: Forbidden" });
 
   // get building data and create html render
   let thisBuildingData = await buildingData.createExport(buildingId);
   let buildingLocation = `${thisBuildingData.address}, ${thisBuildingData.city} ${thisBuildingData.state}, ${thisBuildingData.zip}`;
   let mapLocation = buildingLocation.replace(" ", "+");
-  let sER;
-  if (await userData.hasEditAccess(userId, "building", buildingId)) {
-    sER = await buildingData.createSubEntriesHtmlRenderEdit(buildingId);
-  } else sER = await buildingData.createSubEntriesHtmlRender(buildingId);
+  let sER = await buildingData.createSubEntriesHtmlRender(buildingId);
+  let canEdit = false;
+  let canDelete = false;
+  if (await userData.hasOwnerAccess(userId, "building", buildingId)) {
+    canEdit = true;
+    canDelete = true;
+  } else if (await userData.hasEditAccess(userId, "building", buildingId)) {
+    canEdit = true;
+  }
 
   return res.render("building", {
     buildingName: thisBuildingData.name,
@@ -50,6 +54,9 @@ router.route("/:id").get(async (req, res) => {
     buildingDescription: thisBuildingData.description,
     mapLocation: mapLocation,
     sER: sER,
+    canEdit: canEdit,
+    canDelete: canDelete,
+    id: buildingId
   });
 });
 

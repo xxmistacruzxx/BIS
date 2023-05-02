@@ -10,6 +10,7 @@ import {
   buildings,
   rooms,
   containers,
+  items,
 } from "./config/mongoCollections.js";
 import { closeConnection } from "./config/mongoConnection.js";
 import { ObjectId } from "mongodb";
@@ -18,6 +19,7 @@ let usersCollection = await users();
 let buildingsCollection = await buildings();
 let roomsCollection = await rooms();
 let containersCollection = await containers();
+let itemsCollection = await items();
 try {
   await usersCollection.drop();
   console.log("Users collection dropped.");
@@ -44,6 +46,13 @@ try {
   console.log("Containers collection dropped.");
 } catch (e) {
   console.log("No containers collection found.");
+}
+
+try {
+  await itemsCollection.drop();
+  console.log("items collection dropped.");
+} catch (e) {
+  console.log("No items collection found.");
 }
 
 let testObjId = new ObjectId().toString();
