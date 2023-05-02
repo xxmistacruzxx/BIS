@@ -3,10 +3,6 @@ import validator from "../validator.js";
 import { buildingData, userData } from "../data/index.js";
 const router = Router();
 
-router.route("/").get(async (req, res) => {
-  return res.redirect("/");
-});
-
 router.route("/:id").get(async (req, res) => {
   // basic error checks
   let userId = req.session.user._id;
