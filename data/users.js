@@ -203,21 +203,21 @@ export async function updateUserProperties(userId, propertiesAndValues) {
           propertiesAndValues[keys[i]],
           keys[i]
         );
-        userNameUnique(propertiesAndValues[keys[i]]);
+        await userNameUnique(propertiesAndValues[keys[i]]);
         break;
       case "password":
         propertiesAndValues[keys[i]] = validator.checkPassword(
           propertiesAndValues[keys[i]],
           keys[i]
         );
-        propertiesAndValues[keys[i]] = bcrypt.hash(password, saltRounds);
+        propertiesAndValues[keys[i]] = await bcrypt.hash(propertiesAndValues[keys[i]], saltRounds);
         break;
       case "email":
         propertiesAndValues[keys[i]] = validator.checkEmail(
           propertiesAndValues[keys[i]],
           keys[i]
         );
-        emailUnique(keys[i]);
+        await emailUnique(keys[i]);
         break;
       case "firstName":
         propertiesAndValues[keys[i]] = validator.checkName(

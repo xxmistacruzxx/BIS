@@ -49,111 +49,111 @@ router.route("/:userName").get(async (req, res) => {
 
 router.route("/").post(async (req, res) => {
   const formType = req.body.formType;
-  console.log(formType);
   let _id = req.session.user._id;
   let user = await userData.get(_id);
-  let l = {
-    profilePicture: user.profilePicture,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    userName: user.userName,
-    emailAddress: user.email,
-  };
+  let errors = [];
 
-
-  if (formType === 'password') {
+  // CHANGE PASSWORD FORM
+  if (formType === "password") {
+    let l = {
+      profilePicture: user.profilePicture,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      emailAddress: user.email,
+    };
+    // basic error checks
     let password = req.body.passwordInput;
-    let confirmPassword = req.body.confirmPasswordInput;
-    console.log(password);
-    console.log(confirmPassword);
     try {
       password = validator.checkPassword(password, "password");
-      confirmPassword = validator.checkPassword(confirmPassword, "confirm password");
-    } catch(e) {
-      console.log(e);
-      return res.status(400).render('myProfile', {
-        profilePicture: user.profilePicture,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        userName: user.userName,
-        emailAddress: user.email,
-        error: e });
-    }
-    
-    try {
-      if (password !== confirmPassword) throw 'Password and confirm password must match';
-      console.log(password);
-      let updatedUser = await userData.updateUserProperties(_id, { password: password });
-      res.render('myProfile', {
-        profilePicture: user.profilePicture,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        userName: user.userName,
-        emailAddress: user.email,
-        message: 'Password has been updated'});
-    } catch(e) {
-      console.log(e);
-      console.log(l);
-      return res.status(400).render('myProfile', {
-        profilePicture: user.profilePicture,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        userName: user.userName,
-        emailAddress: user.email,
-        error: e });
-    }
-  }
-
-  else if (formType === 'userInfo') {
-    let firstName = req.body.firstNameInput;
-    let lastName = req.body.lastNameInput;
-    let username = req.body.userNameInput;
-    let email = req.body.emailAddressInput;
-
-    try {
-      firstName = validator.checkName(firstName, "first name");
-      lastName = validator.checkName(lastName, "last name");
-      username = validator.checkUserName(username, "username");
-      email = validator.checkEmail(email, "email");
     } catch (e) {
-      return res.status(400).render('myProfile', {
-        profilePicture: user.profilePicture,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        userName: user.userName,
-        emailAddress: user.email,
-        error: e });
+      errors.push(e);
     }
 
+    if (errors.length > 0) {
+      l.alerts = errors;
+      return res.status(400).render("myProfile", l);
+    }
+
+    // update password in database
     try {
-      let updatedUser = await userData.updateUserProperties(_id, { firstName: firstName });
-      updatedUser = await userData.updateUserProperties(_id, { lastName: lastName });
-      if (user.userName != username) {
-        updatedUser = await userData.updateUserProperties(_id, { userName: username });
-      }
-      updatedUser = await userData.updateUserProperties(_id, { email: email });
-      res.render('myProfile', {
-        profilePicture: updatedUser.profilePicture,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        userName: updatedUser.userName,
-        emailAddress: updatedUser.email,
-        message: 'User info has been updated'});
-    } catch(e) {
-      res.status(400).render('myProfile', {
-        profilePicture: user.profliePicture, 
-        firstName: firstName, 
-        lastName: lastName, 
-        userName: username, 
-        email: email, 
-        error: e});
+      await userData.updateUserProperties(_id, {
+        password: password,
+      });
+      l.alerts = ["Password set successfully."];
+      return res.render("myProfile", l);
+    } catch (e) {
+      errors.push(e);
+      l.alerts = errors;
+      return res.status(500).render("myProfile", l);
     }
   }
 
-  else if (formType === 'profilePicture') {
+  // CHANGE USER INFO FORM
+  if (formType === "userInfo") {
+    let l = {
+      profilePicture: user.profilePicture,
+      firstName: req.body.firstNameInput,
+      lastName: req.body.lastNameInput,
+      userName: req.body.userNameInput,
+      emailAddress: req.body.emailAddressInput,
+    };
+    // basic error checks
+    try {
+      l.firstName = validator.checkName(l.firstName, "first name");
+    } catch (e) {
+      errors.push(e);
+      l.firstName = user.firstName;
+    }
+    try {
+      l.lastName = validator.checkName(l.lastName, "first name");
+    } catch (e) {
+      errors.push(e);
+      l.lastName = user.lastName;
+    }
+    try {
+      l.userName = validator.checkUserName(l.userName, "username");
+    } catch (e) {
+      errors.push(e);
+      l.userName = user.userName;
+    }
+    try {
+      l.emailAddress = validator.checkEmail(l.emailAddress, "email");
+    } catch (e) {
+      errors.push(e);
+      l.emailAddress = user.emailAddress;
+    }
+
+    if (errors.length > 0) {
+      l.alerts = errors;
+      return res.status(400).render("myProfile", l);
+    }
+
+    // update user info
+    let updates = {
+      firstName: l.firstName,
+      lastName: l.lastName,
+      userName: l.userName,
+      email: l.emailAddress,
+    };
+    if (updates.userName === user.userName) delete updates.userName;
+    if (updates.email === user.email) delete updates.email;
+    try {
+      await userData.updateUserProperties(_id, updates);
+      l.alerts = ["User info set successfully."];
+    } catch (e) {
+      errors.push(e);
+      l.alerts = errors;
+      return res.status(400).render("myProfile", l);
+    }
+    return res.render("myProfile", l);
+  }
+
+  // PROFILE PICTURE FORM
+  if (formType === "profilePicture") {
     // to do
   }
+  return res.redirect("/");
 });
-
 
 export default router;

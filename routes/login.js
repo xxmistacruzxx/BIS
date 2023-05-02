@@ -35,7 +35,7 @@ router.route("/").post(async (req, res) => {
   try {
     result = await userData.authUser(userName, password);
   } catch (e) {
-    if (e.includes("userName")) l.userName = "";
+    if (e.toString().includes("userName")) l.userName = "";
     l.password = "";
     l.alerts.push(e);
     return res.status(400).render("login", l);
