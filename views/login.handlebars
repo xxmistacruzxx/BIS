@@ -1,29 +1,62 @@
+<link href="/public/css/login.css" rel="stylesheet" />
+
 <main>
-  {{#if success}}
-    <p id="registrationSuccessful">Registration successful. Please login.</p>
-  {{/if}}
-  <ul id="alerts">
-    {{#each alerts}}
-      <li>{{this}}</li>
-    {{/each}}
-  </ul>
-  <form id="login-form" action="/login" method="POST">
-    <label for="userNameInput">Username</label>
-    <input
-      name="userNameInput"
-      id="userNameInput"
-      type="text"
-      value="{{userName}}"
-    />
-    <label for="passwordInput">Password</label>
-    <input
-      name="passwordInput"
-      id="passwordInput"
-      type="password"
-      value="{{password}}"
-    />
-    <label for="submit">Submit</label>
-    <input name="submit" id="submit" type="submit" value="Submit" />
-  </form>
-  <a href="/register">Click here to register!</a>
+  <div class="login-container">
+    <div>
+      <header>
+        <p><center><img
+              src="/public/images/logo.png"
+              width="120"
+              height="120"
+            /></center></p>
+      </header>
+    </div>
+
+    <form id="login-form" action="/login" method="POST">
+      <input
+        class="text-container"
+        name="userNameInput"
+        id="userNameInput"
+        type="text"
+        value="{{userName}}"
+        placeholder="Username"
+      /><br />
+      <input
+        class="text-container"
+        name="passwordInput"
+        id="passwordInput"
+        type="password"
+        value="{{password}}"
+        placeholder="Password"
+      /><br />
+      <input
+        class="confirm-button"
+        name="submit"
+        id="submit"
+        type="submit"
+        value="Submit"
+      />
+    </form>
+
+    <hr class="divider" />
+
+    <a href="/register">
+      <button class="redirect-button">
+        Sign Up
+      </button>
+    </a>
+
+    {{#if success}}
+      <p id="registrationSuccessful">Registration successful. Please login.</p>
+    {{/if}}
+    <ul id="alerts">
+      {{#each alerts}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  <p class="description">Hello! This is a building inventory system designed to fit your needs.
+    Searching and adding your items is easy, as we have multiple layers of
+    organization. In case you need an extra pair of hands to organize, our web
+    application allows for collaboration within buildings.</p>
 </main>
