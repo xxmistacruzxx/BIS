@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --background-color1: black;
   --background-color2: #1b263b;
   --background-color3: #415a77;
@@ -21,4 +21,57 @@
   color: var(--text-color1);
   background-color: var(--backgournd-color4);
   border-radius: 8px;
+} */
+
+body {
+  align-items: center;
+  margin: 0px;
+  overflow: auto;
+  overflow-y: scroll;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #bfbfbf;
+}
+
+.topnav img.logo {
+  float: left;
+  width: 27px;
+  height: 27px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.topnav a {
+  float: left;
+  color: #000000;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.topnav a:hover {
+  background-color: #ffea00;
+  color: #000000;
+}
+
+.parent-container {
+  margin: 1rem;
+  padding: 2rem 2rem;
+}
+
+.form-container {
+  border: 2px solid gray;
+  margin: auto;
+  padding: 15px;
+  position: relative;
+  text-align: center;
+  width: 20%;
+
+  display: inline-block;
+  padding: 2rem 2rem;
+  vertical-align: middle;
 }
