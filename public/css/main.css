@@ -59,19 +59,36 @@ body {
 }
 
 .parent-container {
+  align-items: center;
   margin: 1rem;
   padding: 2rem 2rem;
+  transform: translateX(11%);
 }
 
 .form-container {
   border: 2px solid gray;
-  margin: auto;
+  margin: 10px;
   padding: 15px;
   position: relative;
   text-align: center;
   width: 20%;
 
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+
   display: inline-block;
   padding: 2rem 2rem;
   vertical-align: middle;
+}
+
+.error-message {
+  color: red;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
 }

@@ -37,7 +37,7 @@
           id="firstNameInput"
           type="text"
           value="{{firstName}}"
-        /><br />
+        /><br /><br />
 
         <label for="lastNameInput">Last Name</label><br />
         <input
@@ -45,7 +45,7 @@
           id="lastNameInput"
           type="text"
           value="{{lastName}}"
-        /><br />
+        /><br /><br />
 
         <label for="userNameInput">Username</label><br />
         <input
@@ -53,7 +53,7 @@
           id="userNameInput"
           type="text"
           value="{{userName}}"
-        /><br />
+        /><br /><br />
 
         <label for="emailAddressInput">Email Address</label><br />
         <input
@@ -61,7 +61,7 @@
           id="emailAddressInput"
           type="email"
           value="{{emailAddress}}"
-        /><br />
+        /><br /><br />
         <label for="userInfoSubmit">Update user info:</label><br />
         <input
           type="submit"
@@ -81,14 +81,14 @@
           id="passwordInput"
           type="password"
           value="{{password}}"
-        /><br />
+        /><br /><br />
         <label for="confirmPasswordInput">Confirm Password</label><br />
         <input
           name="confirmPasswordInput"
           id="confirmPasswordInput"
           type="password"
           value=""
-        /><br />
+        /><br /><br />
         <label for="passwordSubmit">Update password:</label><br />
         <input
           type="submit"
@@ -99,10 +99,11 @@
       </form>
     </div>
   </div>
-</main>
 
-{{!-- <ul id="alerts">
+  <ul class="error-message" id="alerts">
     {{#each alerts}}
       <li>{{this}}</li>
     {{/each}}
-  </ul> --}}
+  </ul>
+
+</main>
