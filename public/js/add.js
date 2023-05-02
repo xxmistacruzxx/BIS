@@ -402,7 +402,6 @@ function thingToAddInputChange(e) {
 }
 
 function buildingInputChange(e) {
-  console.log("BUILDING CHANGED");
   let roomInput = document.querySelector("#roomInput");
   roomInput.innerHTML = roomOptionsRender();
   let containerInput = document.querySelector("#containerInput");
@@ -410,7 +409,6 @@ function buildingInputChange(e) {
 }
 
 function roomInputChange(e) {
-  console.log("ROOM CHANGED");
   let containerInput = document.querySelector("#containerInput");
   containerInput.innerHTML = containerOptionsRender();
 }
@@ -421,19 +419,15 @@ function submitButton(e) {
   let passedErrors = false;
   switch (thingToAddValue) {
     case "building":
-      console.log("ADDING BUILDING");
       passedErrors = addBuilding();
       break;
     case "room":
-      console.log("ADDING ROOM");
       passedErrors = addRoom();
       break;
     case "container":
-      console.log("ADDING CONTAINER");
       passedErrors = addContainer();
       break;
     case "item":
-      console.log("ADDING ITEM");
       passedErrors = addItem();
       break;
     default:
@@ -453,7 +447,6 @@ function setup() {
     type: "GET",
     success: function (result) {
       data = result;
-      console.log(data);
     },
     error: function (error) {
       console.log(`Error: ${error}`);
