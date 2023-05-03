@@ -25,7 +25,7 @@ npm start
 
 ### Seeding the Database
 ```
-npm seed
+npm run seed
 ```
 
 ## Core Features
