@@ -358,6 +358,9 @@ function thingToAddInputChange(e) {
   let buildingInput = document.querySelector("#buildingInput");
   let containerInput = document.querySelector("#containerInput");
 
+  let dividerDiv = document.querySelector("#dividerDiv");
+  let submitButtonDiv = document.querySelector("#submitButtonDiv");
+
   let divs = [
     buildingSelectorDiv,
     roomSelectorDiv,
@@ -366,6 +369,8 @@ function thingToAddInputChange(e) {
     addRoomDiv,
     addContainerDiv,
     addItemDiv,
+    dividerDiv,
+    submitButtonDiv
   ];
 
   for (i of divs) {
@@ -376,17 +381,23 @@ function thingToAddInputChange(e) {
   switch (thingToAddInputValue) {
     case "building":
       addBuildingDiv.hidden = false;
+      dividerDiv.hidden = false;
+      submitButtonDiv.hidden = false;
       break;
     case "room":
       buildingSelectorDiv.hidden = false;
       buildingInput.innerHTML = buildingOptionsRender();
       addRoomDiv.hidden = false;
+      dividerDiv.hidden = false;
+      submitButtonDiv.hidden = false;
       break;
     case "container":
       buildingSelectorDiv.hidden = false;
       buildingInput.innerHTML = buildingOptionsRender();
       roomSelectorDiv.hidden = false;
       addContainerDiv.hidden = false;
+      dividerDiv.hidden = false;
+      submitButtonDiv.hidden = false;
       break;
     case "item":
       buildingSelectorDiv.hidden = false;
@@ -394,6 +405,8 @@ function thingToAddInputChange(e) {
       roomSelectorDiv.hidden = false;
       containerSelectorDiv.hidden = false;
       addItemDiv.hidden = false;
+      dividerDiv.hidden = false;
+      submitButtonDiv.hidden = false;
       break;
     default:
       break;

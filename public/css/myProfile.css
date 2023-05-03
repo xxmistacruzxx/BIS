@@ -1,0 +1,53 @@
+body {
+  align-items: center;
+  margin: 0px;
+  overflow: auto;
+  overflow-y: scroll;
+}
+
+.parent-container {
+  align-items: center;
+  margin: 1rem;
+  padding: 2rem 2rem;
+  transform: translateX(11%);
+}
+
+.form-container {
+  border: 2px solid gray;
+  margin: 10px;
+  padding: 15px;
+  position: relative;
+  text-align: center;
+  width: 20%;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+
+  display: inline-block;
+  padding: 2rem 2rem;
+  vertical-align: middle;
+}
+
+.submit-button {
+  background-color: gray;
+  border: none;
+  width: 100%;
+  padding: 5px;
+  margin: 8px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.error-message {
+  color: red;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
