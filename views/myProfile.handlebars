@@ -1,15 +1,7 @@
 <link rel="stylesheet" href="/public/css/main.css" />
-{{!-- {{> navbar}} --}}
+{{> navbar}}
 
 <main>
-  <div class="topnav">
-    <a href="/profile"><img class="logo" src="/public/images/logo.png" /></a>
-    <a href="/add">Create</a>
-    <a href="/profile">Browse</a>
-    <a href="/profile">My Profile</a>
-    <a href="/logout">Logout</a>
-  </div>
-
   <div class="parent-container" id="profileForms">
     <div class="form-container">
       <form method="POST" action="/profile">
@@ -105,5 +97,41 @@
       <li>{{this}}</li>
     {{/each}}
   </ul>
+
+  <div class="buildingListing" id="ownedBuildings">
+    <h2>Buildings you own</h2>
+    <ul>
+      {{#each owned}}
+        {{{this}}}
+      {{/each}}
+    </ul>
+  </div>
+
+  <div class="buildingListing" id="managedBuildings">
+    <h2>Buildings you manage</h2>
+    <ul>
+      {{#each managed}}
+        {{{this}}}
+      {{/each}}
+    </ul>
+  </div>
+
+  <div class="buildingListing" id="viewBuildings">
+    <h2>Buildings you can view</h2>
+    <ul>
+      {{#each view}}
+        {{{this}}}
+      {{/each}}
+    </ul>
+  </div>
+
+  <div class="buildingListing" id="favoriteBuildings">
+    <h2>Buildings you've favorited</h2>
+    <ul>
+      {{#each favorites}}
+        {{{this}}}
+      {{/each}}
+    </ul>
+  </div>
 
 </main>

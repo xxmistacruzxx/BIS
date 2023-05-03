@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userData } from "../data/index.js";
+import { buildingData, userData } from "../data/index.js";
 import validator from "../validator.js";
 const router = Router();
 
@@ -14,12 +14,49 @@ router.route("/").get(async (req, res) => {
       .status(500)
       .json({ error: "Internal server error. Please try again." });
   }
+  let owned = user.buildingOwnership;
+  for (let i = 0; i < owned.length; i++) {
+    let building = await buildingData.get(owned[i]);
+    owned[
+      i
+    ] = `<li><a href=/building/${building._id}>${building.name} - ${building.description}</a></li>`;
+  }
+  if (owned.length === 0) owned.push(`<li>None</li>`);
+  let managed = user.buildingManageAccess;
+  for (let i = 0; i < managed.length; i++) {
+    let building = await buildingData.get(managed[i]);
+    managed[
+      i
+    ] = `<li><a href=/building/${building._id}>${building.name} - ${building.description}</a></li>`;
+  }
+  if (managed.length === 0) managed.push(`<li>None</li>`);
+  let view = user.buildingViewAccess;
+  for (let i = 0; i < view.length; i++) {
+    let building = await buildingData.get(view[i]);
+    view[
+      i
+    ] = `<li><a href=/building/${building._id}>${building.name} - ${building.description}</a></li>`;
+  }
+  if (view.length === 0) view.push(`<li>None</li>`);
+  let favorites = user.buildingFavorites;
+  for (let i = 0; i < favorites.length; i++) {
+    let building = await buildingData.get(favorites[i]);
+    favorites[
+      i
+    ] = `<li><a href=/building/${building._id}>${building.name} - ${building.description}</a></li>`;
+  }
+  if (favorites.length === 0) favorites.push(`<li>None</li>`);
+
   let l = {
     profilePicture: user.profilePicture,
     firstName: user.firstName,
     lastName: user.lastName,
     userName: user.userName,
     emailAddress: user.email,
+    owned: owned,
+    managed: managed,
+    view: view,
+    favorites: favorites,
   };
   return res.render("myProfile", l);
 });
@@ -121,7 +158,7 @@ router.route("/").post(async (req, res) => {
       l.emailAddress = validator.checkEmail(l.emailAddress, "email");
     } catch (e) {
       errors.push(e);
-      l.emailAddress = user.emailAddress;
+      l.emailAddress = user.email;
     }
 
     if (errors.length > 0) {
