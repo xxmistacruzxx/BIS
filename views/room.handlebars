@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/public/css/room.css">
+{{> navbar}}
+<main>
+    <div id="room">
+        <div id="roomInfoDiv">
+            <h1>{{roomName}}</h1>
+            <h2>Created: {{creationDate}}</h2>
+            <h3>Found in: {{buildingName}}</h3>
+            <p>{{roomDescription}}</p>
+        </div>
+    </div>
+    <div id="roomOptions">
+        {{#if canEdit}}
+            <a href="/edit/room/{{id}}">Edit This Room</a>
+        {{/if}}
+        {{#if canDelete}}
+            <a href="/delete/room/{{id}}">Delete This Room</a>
+            <a href="/share/{{id}}">Share This Room</a>
+        {{/if}}
+    </div>
+    <div id="subEntitiesRender">
+        {{{sER}}}
+    </div>
+</main>
