@@ -1,0 +1,17 @@
+{{> navbar}}
+<ul class="error-message" id="alerts">
+    {{#each alerts}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+<main>
+    <form method="POST" action="/edit/room/{{roomId}}">
+        <label for="roomNameInput">Room Name</label>
+        <input type="text" id="roomNameInput" name="roomNameInput" value="{{roomName}}"/>
+        <label for="roomDescriptionInput">Room Description</label>
+        <input type="text" id="roomDescriptionInput" name="roomDescriptionInput" value="{{roomDescription}}"/>
+        <label for="submit">Submit Changes</label>
+        <input type="submit" value="Submit"/>
+    </form>
+    {{!-- TODO --}}
+</main>

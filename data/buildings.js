@@ -186,10 +186,14 @@ export async function updateBuildingProperties(
       if (typeof propertiesAndValues[keys[i]] !== "boolean")
         throw `publicBuilding in propertiesAndValues must be a boolean`;
     } else {
-      propertiesAndValues[keys[i]] = validator.checkString(
-        propertiesAndValues[keys[i]],
-        keys[i]
-      );
+      if (keys[i] === "zip") {
+        propertiesAndValues[keys[i]] = propertiesAndValues[keys[i]].trim();
+      } else {
+        propertiesAndValues[keys[i]] = validator.checkString(
+          propertiesAndValues[keys[i]],
+          keys[i]
+        );
+      }
     }
   }
 

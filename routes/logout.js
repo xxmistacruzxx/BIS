@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
   try {
     validator.checkId(req.session.user._id);
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.redirect("/");
   }
   delete req.session.user;
   return res.redirect("/login");

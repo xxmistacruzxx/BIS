@@ -1,0 +1,16 @@
+{{> navbar}}
+<ul class="error-message" id="alerts">
+    {{#each alerts}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
+<main>
+    <form method="POST" action="/edit/container/{{containerId}}">
+        <label for="containerNameInput">Container Name</label>
+        <input type="text" id="containerNameInput" name="containerNameInput" value="{{containerName}}"/>
+        <label for="containerDescriptionInput">Container Description</label>
+        <input type="text" id="containerDescriptionInput" name="containerDescriptionInput" value="{{containerDescription}}"/>
+        <label for="submit">Submit Changes</label>
+        <input type="submit" value="Submit"/>
+    </form>
+</main>
