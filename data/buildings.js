@@ -348,6 +348,14 @@ export async function createSubEntriesHtmlRenderEdit(buildingId) {
   return sER;
 }
 
+export async function getByRoomId(roomId) {
+  roomId = validator.checkId(roomId, "roomId");
+  let buildingsCollection = await buildings();
+  const building = await buildingsCollection.findOne({ rooms: roomId });
+  if (!building) throw "No building with that room found";
+  return building;
+}
+
 export default {
   create,
   getAll,
