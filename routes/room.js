@@ -30,20 +30,34 @@ router.route("/:roomId").get(async (req, res) => {
 
   // get the room's building and check if user has access to that building id
   let building = await buildingData.getByRoomId(roomId);
+  let buildingId = building._id;
+  
   if (
-    !userData.hasViewerAccess(userId, "building", building._id) ||
+    !userData.hasViewerAccess(userId, "building", buildingId) ||
     building.public
   )
     return res.status(403).json({ error: "403: Forbidden" });
 
   // todo: get room data and create html render
+  let thisBuildingData = await buildingData.createExport(buildingId);
   let thisRoomData = await roomData.createExport(roomId);
+  let canEdit = false;
+  let canDelete = false;
+  if (await userData.hasOwnerAccess(userId, "building", buildingId)) {
+    canEdit = true;
+    canDelete = true;
+  } else if (await userData.hasEditAccess(userId, "building", buildingId)) {
+    canEdit = true;
+  }
   
   return res.render("room", {
+    buildingName: thisBuildingData.name,
     roomName: thisRoomData.name,
     roomDescription: thisRoomData.description,
     creationDate: thisRoomData.creationDate,
     containers: thisRoomData.containers,
+    canEdit: canEdit,
+    canDelete: canDelete,
     id: roomId
   });
 });
