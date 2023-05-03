@@ -95,7 +95,7 @@ export async function remove(containerId) {
   }
 
   // remove container from containers collection
-  container = deleteDocById(containers, containerId, "container") 
+  container = deleteDocById(containers, containerId, "container");
   return container;
 }
 
@@ -105,7 +105,10 @@ export async function remove(containerId) {
  * @param {object} propertiesAndValues - an object with keys of properties and values to update to
  * @returns an object with they keys and values of then newly updated container
  */
-export async function updateContainerProperties(containerId, propertiesAndValues) {
+export async function updateContainerProperties(
+  containerId,
+  propertiesAndValues
+) {
   // basic error check
   containerId = validator.checkId(containerId, "containerId");
 
@@ -126,7 +129,12 @@ export async function updateContainerProperties(containerId, propertiesAndValues
     container[keys[i]] = propertiesAndValues[keys[i]];
   }
 
-  container = await replaceDocById(containers, containerId, container, "container")
+  container = await replaceDocById(
+    containers,
+    containerId,
+    container,
+    "container"
+  );
   return container;
 }
 
@@ -148,7 +156,12 @@ export async function addItem(containerId, itemId) {
   t.push(itemId);
   container["items"] = t;
 
-  container = await replaceDocById(containers, containerId, container, "container")
+  container = await replaceDocById(
+    containers,
+    containerId,
+    container,
+    "container"
+  );
   return container;
 }
 
@@ -170,7 +183,12 @@ export async function removeItem(containerId, itemId) {
   t.splice(index, 1);
   container["items"] = t;
 
-  container = await replaceDocById(containers, containerId, container, "container" )
+  container = await replaceDocById(
+    containers,
+    containerId,
+    container,
+    "container"
+  );
 
   // TODO: Remove item from items collection
 
@@ -195,6 +213,19 @@ export async function createExport(containerId) {
   return container;
 }
 
+export async function isPublic(containerId) {
+  // basic error check
+  containerId = validator.checkId(containerId, "containerId");
+  let container = await get(containerId);
+
+  let collection = await rooms();
+  let filter = {};
+  filter["containers"] = { $in: [containerId] };
+  let vessel = await collection.findOne(filter);
+
+  return await roomData.isPublic(vessel._id.toString());
+}
+
 export default {
   create,
   get,
@@ -203,5 +234,6 @@ export default {
   updateContainerProperties,
   addItem,
   // removeItem,
-  createExport
+  createExport,
+  isPublic,
 };

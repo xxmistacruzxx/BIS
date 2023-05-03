@@ -21,7 +21,7 @@
     </form>
     <form method="POST" action="/edit/item/setvalue/{{itemId}}">
         <label for="itemValueInput">Item Value</label>
-        <input type="number" id="itemValueInput" name="itemValueInput" value="{{itemValue}}"/>
+        <input type="number" step=".01" id="itemValueInput" name="itemValueInput" value="{{itemValue}}"/>
         <label for="submit">Set Value</label>
         <input type="submit" value="Submit"/>
     </form>

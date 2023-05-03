@@ -257,18 +257,183 @@ router.route("/item/:itemId").get(async (req, res) => {
 });
 
 router.route("/item/:itemId").post(async (req, res) => {
-  // TODO: IMPLEMENT ME
-  return res.json({ error: "not implemented" });
+  // basic error check
+  let itemId = req.params.itemId;
+  try {
+    itemId = validator.checkId(itemId, "item id");
+  } catch (e) {
+    return res.status(400).json({ error: "invalid item id" });
+  }
+  let _id = req.session.user._id;
+  let item;
+  try {
+    item = await itemData.get(itemId);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+  let access = await userData.hasEditAccess(_id, "item", itemId);
+  if (!access)
+    return res
+      .status(403)
+      .json({ error: "you do not have edit access to this item" });
+
+  let name = req.body.itemNameInput;
+  let description = req.body.itemDescriptionInput;
+  let l = {
+    itemId: itemId,
+    itemName: name,
+    itemDescription: description,
+    itemCount: item.count,
+    itemValue: item.value,
+  };
+  let errors = [];
+  try {
+    name = validator.checkString(name, "name");
+  } catch (e) {
+    l.itemName = item.name;
+    errors.push(e);
+  }
+  try {
+    description = validator.checkString(description, "description");
+  } catch (e) {
+    l.itemDescription = item.description;
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    l.alerts = errors;
+    return res.status(400).render("editItem", l);
+  }
+
+  let updatedItem;
+  try {
+    updatedItem = await itemData.updateItemProperties(itemId, {
+      name:name,
+      description: description,
+    });
+  } catch (e) {
+    // USER ERROR
+    errors.push(e);
+    l.alerts = errors;
+    return res.status(400).render("editItem", l);
+  }
+  if (!("_id" in updatedItem)) {
+    // DATABASE ERROR
+    errors.push("Internal Server Error. Please try again.");
+    l.alerts = errors;
+    return res.status(500).render("editItem", l);
+  }
+  return res.redirect(`/item/${itemId}`);
 });
 
 router.route("/item/setcount/:itemId").post(async (req, res) => {
-  // TODO: IMPLEMENT ME
-  return res.json({ error: "not implemented" });
+  // basic error check
+  let itemId = req.params.itemId;
+  try {
+    itemId = validator.checkId(itemId, "item id");
+  } catch (e) {
+    return res.status(400).json({ error: "invalid item id" });
+  }
+  let _id = req.session.user._id;
+  let item;
+  try {
+    item = await itemData.get(itemId);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+  let access = await userData.hasEditAccess(_id, "item", itemId);
+  if (!access)
+    return res
+      .status(403)
+      .json({ error: "you do not have edit access to this item" });
+
+  let l = {
+    itemId: itemId,
+    itemName: item.name,
+    itemDescription: item.description,
+    itemCount: item.count,
+    itemValue: item.value,
+  };
+  let errors = [];
+
+  let count = req.body.itemCountInput;
+  try {
+    count = Number(count);
+    count = validator.checkInt(count, "count");
+  } catch (e) {
+    l.itemCount = "";
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    l.alerts = errors;
+    return res.status(400).render("editItem", l);
+  }
+
+  try {
+    await itemData.setCount(itemId, count);
+  } catch (e) {
+    errors.push(e);
+    l.alerts = errors;
+    return res.status(500).render("editItem", l);
+  }
+
+  return res.redirect(`/item/${itemId}`);
 });
 
 router.route("/item/setvalue/:itemId").post(async (req, res) => {
-  // TODO: IMPLEMENT ME
-  return res.json({ error: "not implemented" });
+  // basic error check
+  let itemId = req.params.itemId;
+  try {
+    itemId = validator.checkId(itemId, "item id");
+  } catch (e) {
+    return res.status(400).json({ error: "invalid item id" });
+  }
+  let _id = req.session.user._id;
+  let item;
+  try {
+    item = await itemData.get(itemId);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+  let access = await userData.hasEditAccess(_id, "item", itemId);
+  if (!access)
+    return res
+      .status(403)
+      .json({ error: "you do not have edit access to this item" });
+
+  let l = {
+    itemId: itemId,
+    itemName: item.name,
+    itemDescription: item.description,
+    itemCount: item.count,
+    itemValue: item.value,
+  };
+  let errors = [];
+
+  let value = req.body.itemValueInput;
+  try {
+    value = Number(value);
+    value = validator.checkNum(value, "value");
+  } catch (e) {
+    l.itemValue = "";
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    l.alerts = errors;
+    return res.status(400).render("editItem", l);
+  }
+
+  try {
+    await itemData.setValue(itemId, value);
+  } catch (e) {
+    errors.push(e);
+    l.alerts = errors;
+    return res.status(500).render("editItem", l);
+  }
+
+  return res.redirect(`/item/${itemId}`);
 });
 
 export default router;

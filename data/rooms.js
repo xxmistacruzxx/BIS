@@ -227,6 +227,19 @@ export async function createExport(roomId) {
   return room;
 }
 
+export async function isPublic(roomId) {
+  // basic error check
+  roomId = validator.checkId(roomId, "roomId");
+  let room = await get(roomId);
+
+  let collection = await buildings();
+  let filter = {};
+  filter["rooms"] = { $in: [roomId] };
+  let vessel = await collection.findOne(filter);
+
+  return await buildingDataFunctions.isPublic(vessel._id.toString());
+}
+
 export default {
   create,
   get,
@@ -236,4 +249,5 @@ export default {
   addContainerOrItem,
   // removeContainerOrItem,
   createExport,
+  isPublic,
 };

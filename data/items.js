@@ -71,7 +71,8 @@ export async function create(id, type, name, description, count, value) {
 
   // add item to room/container
   let newId = newItem._id;
-  if (type === "room") await dataFunctions.addContainerOrItem(id, newId, "item");
+  if (type === "room")
+    await dataFunctions.addContainerOrItem(id, newId, "item");
   else await dataFunctions.addItem(id, newId);
 
   let item = await get(newId);
@@ -112,10 +113,10 @@ export async function remove(itemId) {
   let collection = await containers();
   let filter = {};
   filter["items"] = { $in: [itemId] };
-  let vessel = collection.findOne(filter);
+  let vessel = await collection.findOne(filter);
   if (vessel === null) {
     collection = await rooms();
-    vessel = collection.findOne(filter);
+    vessel = await collection.findOne(filter);
     if (vessel === null)
       throw `could not find item id ${itemId} in a container or room`;
     type = "room";
@@ -200,6 +201,7 @@ export async function setValue(itemId, value) {
   // basic error check
   itemId = validator.checkId(itemId, "itemId");
   value = validator.checkNum(value, "value");
+  value = Math.round(value * 100) / 100;
 
   // get item / check if it exists
   let item = await get(itemId);
@@ -230,6 +232,28 @@ export async function createExport(itemId) {
   return item;
 }
 
+export async function isPublic(itemId) {
+  // basic error check
+  itemId = validator.checkId(itemId, "itemId");
+  let item = await get(itemId);
+
+  let collection = await containers();
+  let filter = {};
+  filter["items"] = { $in: [itemId] };
+  let vessel = await collection.findOne(filter);
+  let type;
+  if (vessel === null) {
+    collection = await rooms();
+    vessel = await collection.findOne(filter);
+    if (vessel === null)
+      throw `could not find item id ${itemId} in a container or room`;
+    type = "room";
+  } else type = "container";
+
+  if (type === "room") return await roomData.isPublic(vessel._id.toString());
+  return await containerData.isPublic(vessel._id.toString());
+}
+
 export default {
   create,
   get,
@@ -238,5 +262,6 @@ export default {
   updateItemProperties,
   setCount,
   setValue,
-  createExport
+  createExport,
+  isPublic
 };

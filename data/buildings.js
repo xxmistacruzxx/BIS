@@ -352,6 +352,14 @@ export async function createSubEntriesHtmlRenderEdit(buildingId) {
   return sER;
 }
 
+export async function isPublic(buildingId) {
+  // basic error check
+  buildingId = validator.checkId(buildingId, "roomId");
+  let building = await get(buildingId);
+
+  return building.publicBuilding;
+}
+
 export default {
   create,
   getAll,
@@ -364,4 +372,5 @@ export default {
   createExport,
   createSubEntriesHtmlRender,
   createSubEntriesHtmlRenderEdit,
+  isPublic,
 };

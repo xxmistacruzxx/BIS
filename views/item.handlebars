@@ -1,0 +1,38 @@
+{{!-- <link rel="stylesheet" href="/public/css/item.css" /> --}}
+{{> navbar}}
+<main>
+  <div id="item">
+    <div id="itemInfoDiv">
+      <h1>{{itemName}}</h1>
+      <h2>Created: {{itemCreationDate}}</h2>
+      <p>{{itemDescription}}</p>
+    </div>
+  </div>
+  <div id="itemOptions">
+    {{#if canEdit}}
+      <a href="/edit/item/{{id}}">Edit This Item</a>
+    {{/if}}
+    {{#if canDelete}}
+      <a href="/delete/item/{{id}}">Delete This Item</a>
+    {{/if}}
+  </div>
+  <div id="itemHistory">
+    <div id="countHistory">
+      <h2 id="countHistoryHeader">Count History</h2>
+      <ul class="historyList" id="countHistoryList">
+        {{#each countHistory}}
+          <li class="historyEntry">{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    <div id="valueHistory">
+      <h2 id="valueHistoryHeader">Value History</h2>
+      <ul class="historyList" id="valueHistoryList">
+        {{#each valueHistory}}
+          <li class="historyEntry">{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+</main>
