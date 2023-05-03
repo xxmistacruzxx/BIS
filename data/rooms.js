@@ -240,6 +240,35 @@ export async function isPublic(roomId) {
   return await buildingDataFunctions.isPublic(vessel._id.toString());
 }
 
+export async function createSubEntriesHtmlRender(roomId) {
+  // basic error checks
+  roomId = validator.checkId(roomId, "roomId");
+
+  let room = await createExport(roomId);
+  let sER = "<ul>";
+  sER = sER + `<p>${room.name} Containers</p><ul>`;
+  for (let container of room.containers) {
+    sER =
+      sER +
+      `<li><a href="/container/${container._id}">${container.name} - ${container.description}</a>`;
+    sER = sER + `<p>${container.name} Items</p><ul>`;
+    for (let item of container.items) {
+      sER =
+        sER +
+        `<li><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a></li>`;
+    }
+    sER = sER + `</ul></li>`;
+  }
+  sER = sER + `</ul><p>${room.name} Items</p><ul>`;
+  for (let item of room.items) {
+    sER =
+      sER +
+      `<li><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a></li>`;
+  }
+  sER = sER + "</ul>";
+  return sER;
+}
+
 export default {
   create,
   get,
