@@ -5,8 +5,16 @@ body {
     overflow-y: scroll;
 }
 
+.header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+}
 
-#building {
+/* #building {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -23,4 +31,4 @@ body {
 .linkDiv {
     display: flex;
     flex-direction: row;
-}
+} */
