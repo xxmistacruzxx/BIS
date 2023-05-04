@@ -1,0 +1,22 @@
+{{!-- <link rel="stylesheet" href="/public/css/container.css"> --}}
+{{> navbar}}
+<main>
+    <div id="container">
+        <div id="containerInfoDiv">
+            <h1>{{containerName}}</h1>
+            <h2>Created: {{creationDate}}</h2>
+            <p>{{containerDescription}}</p>
+        </div>
+    </div>
+    <div id="containerOptions">
+        {{#if canEdit}}
+            <a href="/edit/container/{{id}}">Edit This Container</a>
+        {{/if}}
+        {{#if canDelete}}
+            <a href="/delete/container/{{id}}">Delete This Container</a>
+        {{/if}}
+    </div>
+    <div id="subEntitiesRender">
+        {{{sER}}}
+    </div>
+</main>
