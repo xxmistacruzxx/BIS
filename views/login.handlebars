@@ -1,62 +1,67 @@
-<link href="/public/css/login.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link href="/public/css/login.css" rel="stylesheet">
+    <title>Login</title>
+  </head>
+  <body>
+    <main>
+      <div class="login-container">
+        <div>
+          <header>
+            <img class="logo" src="/public/images/logo.png" alt="logo">
+          </header>
+        </div>
 
-<main>
-  <div class="login-container">
-    <div>
-      <header>
-        <p><center><img
-              src="/public/images/logo.png"
-              width="120"
-              height="120"
-            /></center></p>
-      </header>
-    </div>
+        <form id="login-form" action="/login" method="POST">
+          <input
+            class="text-container"
+            name="userNameInput"
+            id="userNameInput"
+            type="text"
+            value="{{userName}}"
+            placeholder="Username"
+          ><br>
+          <input
+            class="text-container"
+            name="passwordInput"
+            id="passwordInput"
+            type="password"
+            value="{{password}}"
+            placeholder="Password"
+          ><br>
+          <input
+            class="confirm-button"
+            name="submit"
+            id="submit"
+            type="submit"
+            value="Submit"
+          >
+        </form>
 
-    <form id="login-form" action="/login" method="POST">
-      <input
-        class="text-container"
-        name="userNameInput"
-        id="userNameInput"
-        type="text"
-        value="{{userName}}"
-        placeholder="Username"
-      /><br />
-      <input
-        class="text-container"
-        name="passwordInput"
-        id="passwordInput"
-        type="password"
-        value="{{password}}"
-        placeholder="Password"
-      /><br />
-      <input
-        class="confirm-button"
-        name="submit"
-        id="submit"
-        type="submit"
-        value="Submit"
-      />
-    </form>
+        <hr class="divider">
 
-    <hr class="divider" />
+        <form action="/register">
+          <button type="submit" class="redirect-button">Sign Up</button>
+        </form>
 
-    <a href="/register">
-      <button class="redirect-button">
-        Sign Up
-      </button>
-    </a>
+        {{#if success}}
+          <p id="registrationSuccessful">Registration successful. Please login.</p>
+        {{/if}}
 
-    {{#if success}}
-      <p id="registrationSuccessful">Registration successful. Please login.</p>
-    {{/if}}
-    <ul class="error-message" id="alerts">
-      {{#each alerts}}
-        <li>{{this}}</li>
-      {{/each}}
-    </ul>
-  </div>
-  <p class="description">Hello! This is a building inventory system designed to fit your needs.
-    Searching and adding your items is easy, as we have multiple layers of
-    organization. In case you need an extra pair of hands to organize, our web
-    application allows for collaboration within buildings.</p>
-</main>
+        {{#if alerts}}
+          {{#each alerts}}
+            <p class="error-message">{{this}}</p>
+          {{/each}}
+        {{/if}}
+      </div>
+
+      <p class="description">Hello! This is a building inventory system designed
+        to fit your needs. Searching and adding your items is easy, as we have
+        multiple layers of organization. In case you need an extra pair of hands
+        to organize, our web application allows for collaboration within
+        buildings.</p>
+    </main>
+  </body>
+</html>

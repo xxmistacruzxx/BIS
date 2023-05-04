@@ -1,137 +1,145 @@
-<link rel="stylesheet" href="/public/css/myProfile.css" />
-{{> navbar}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/public/css/myProfile.css">
+    <title>My Profile</title>
+  </head>
+  <body>
+    <header>
+      {{> navbar}}
+    </header>
+    <main>
+      <div class="parent-container" id="profileForms">
+        <div class="form-container">
+          <form method="POST" action="/profile">
+            <input type="hidden" name="formType" value="profilePicture">
+            <img src={{profilePicture}} alt="Profile Picture"><br><br>
+            <label for="pictureUpload">Select Profile Picture</label><br>
+            <input type="file" id="pictureUpload" name="pictureUpload"><br><br>
+            <label for="profilePictureSubmit">Set Profile Picture</label><br>
+            <input
+              type="submit"
+              name="profilePictureSubmit"
+              id="profilePictureSubmit"
+              value="Confirm"
+            >
+          </form>
+        </div>
 
-<main>
-  <div class="parent-container" id="profileForms">
-    <div class="form-container">
-      <form method="POST" action="/profile">
-        <input type="hidden" name="formType" value="profilePicture" />
-        <img src="{{profilePicture}}" /><br /><br />
-        <label for="pictureUpload">Select Profile Picture</label><br />
-        <input type="file" id="pictureUpload" name="pictureUpload" /><br /><br
-        />
-        <label for="profilePictureSubmit">Set Profile Picture</label><br />
-        <input
-          type="submit"
-          name="profilePictureSubmit"
-          id="profilePictureSubmit"
-          value="Confirm"
-        />
-      </form>
-    </div>
+        <div class="form-container">
+          <form method="POST" action="/profile">
+            <input type="hidden" name="formType" value="userInfo"><br>
+            <label for="firstNameInput">First Name</label><br>
+            <input
+              name="firstNameInput"
+              id="firstNameInput"
+              type="text"
+              value="{{firstName}}"
+            ><br><br>
 
-    <div class="form-container">
-      <form method="POST" action="/profile">
-        <input type="hidden" name="formType" value="userInfo" /><br />
-        <label for="firstNameInput">First Name</label><br />
-        <input
-          name="firstNameInput"
-          id="firstNameInput"
-          type="text"
-          value="{{firstName}}"
-        /><br /><br />
+            <label for="lastNameInput">Last Name</label><br>
+            <input
+              name="lastNameInput"
+              id="lastNameInput"
+              type="text"
+              value="{{lastName}}"
+            ><br><br>
 
-        <label for="lastNameInput">Last Name</label><br />
-        <input
-          name="lastNameInput"
-          id="lastNameInput"
-          type="text"
-          value="{{lastName}}"
-        /><br /><br />
+            <label for="userNameInput">Username</label><br>
+            <input
+              name="userNameInput"
+              id="userNameInput"
+              type="text"
+              value="{{userName}}"
+            ><br><br>
 
-        <label for="userNameInput">Username</label><br />
-        <input
-          name="userNameInput"
-          id="userNameInput"
-          type="text"
-          value="{{userName}}"
-        /><br /><br />
+            <label for="emailAddressInput">Email Address</label><br>
+            <input
+              name="emailAddressInput"
+              id="emailAddressInput"
+              type="email"
+              value="{{emailAddress}}"
+            ><br><br>
+            <label for="userInfoSubmit">Set User Info</label><br>
+            <input
+              type="submit"
+              name="userInfoSubmit"
+              id="userInfoSubmit"
+              value="Confirm"
+            ><br>
+          </form>
+        </div>
 
-        <label for="emailAddressInput">Email Address</label><br />
-        <input
-          name="emailAddressInput"
-          id="emailAddressInput"
-          type="email"
-          value="{{emailAddress}}"
-        /><br /><br />
-        <label for="userInfoSubmit">Set User Info</label><br />
-        <input
-          type="submit"
-          name="userInfoSubmit"
-          id="userInfoSubmit"
-          value="Confirm"
-        /><br />
-      </form>
-    </div>
+        <div class="form-container">
+          <form method="POST" action="/profile">
+            <input type="hidden" name="formType" value="password">
+            <label for="passwordInput">Password</label><br>
+            <input
+              name="passwordInput"
+              id="passwordInput"
+              type="password"
+              value="{{password}}"
+            ><br><br>
+            <label for="confirmPasswordInput">Confirm Password</label><br>
+            <input
+              name="confirmPasswordInput"
+              id="confirmPasswordInput"
+              type="password"
+              value=""
+            ><br><br>
+            <label for="passwordSubmit">Set Password</label><br>
+            <input
+              type="submit"
+              name="passwordSubmit"
+              id="passwordSubmit"
+              value="Confirm"
+            ><br>
+          </form>
+        </div>
+      </div>
 
-    <div class="form-container">
-      <form method="POST" action="/profile">
-        <input type="hidden" name="formType" value="password" />
-        <label for="passwordInput">Password</label><br />
-        <input
-          name="passwordInput"
-          id="passwordInput"
-          type="password"
-          value="{{password}}"
-        /><br /><br />
-        <label for="confirmPasswordInput">Confirm Password</label><br />
-        <input
-          name="confirmPasswordInput"
-          id="confirmPasswordInput"
-          type="password"
-          value=""
-        /><br /><br />
-        <label for="passwordSubmit">Set Password</label><br />
-        <input
-          type="submit"
-          name="passwordSubmit"
-          id="passwordSubmit"
-          value="Confirm"
-        /><br />
-      </form>
-    </div>
-  </div>
+      <ul class="error-message" id="alerts">
+        {{#each alerts}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
 
-  <ul class="error-message" id="alerts">
-    {{#each alerts}}
-      <li>{{this}}</li>
-    {{/each}}
-  </ul>
+      <div class="buildingListing" id="ownedBuildings">
+        <h2>Buildings you own</h2>
+        <ul>
+          {{#each owned}}
+            {{{this}}}
+          {{/each}}
+        </ul>
+      </div>
 
-  <div class="buildingListing" id="ownedBuildings">
-    <h2>Buildings you own</h2>
-    <ul>
-      {{#each owned}}
-        {{{this}}}
-      {{/each}}
-    </ul>
-  </div>
+      <div class="buildingListing" id="managedBuildings">
+        <h2>Buildings you manage</h2>
+        <ul>
+          {{#each managed}}
+            {{{this}}}
+          {{/each}}
+        </ul>
+      </div>
 
-  <div class="buildingListing" id="managedBuildings">
-    <h2>Buildings you manage</h2>
-    <ul>
-      {{#each managed}}
-        {{{this}}}
-      {{/each}}
-    </ul>
-  </div>
+      <div class="buildingListing" id="viewBuildings">
+        <h2>Buildings you can view</h2>
+        <ul>
+          {{#each view}}
+            {{{this}}}
+          {{/each}}
+        </ul>
+      </div>
 
-  <div class="buildingListing" id="viewBuildings">
-    <h2>Buildings you can view</h2>
-    <ul>
-      {{#each view}}
-        {{{this}}}
-      {{/each}}
-    </ul>
-  </div>
-
-  <div class="buildingListing" id="favoriteBuildings">
-    <h2>Buildings you've favorited</h2>
-    <ul>
-      {{#each favorites}}
-        {{{this}}}
-      {{/each}}
-    </ul>
-  </div>
-
-</main>
+      <div class="buildingListing" id="favoriteBuildings">
+        <h2>Buildings you've favorited</h2>
+        <ul>
+          {{#each favorites}}
+            {{{this}}}
+          {{/each}}
+        </ul>
+      </div>
+    </main>
+  </body>
+</html>
