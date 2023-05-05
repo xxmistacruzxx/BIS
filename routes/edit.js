@@ -185,8 +185,73 @@ router.route("/room/:roomId").get(async (req, res) => {
 });
 
 router.route("/room/:roomId").post(async (req, res) => {
-  // TODO: IMPLEMENT ME
-  return res.json({ error: "not implemented" });
+  // basic error check
+  let roomId = req.params.roomId;
+  try {
+    roomId = validator.checkId(roomId, "room id");
+  } catch (e) {
+    return res.status(400).json({ error: "invalid room id" });
+  }
+  let _id = req.session.user._id;
+  let room;
+  try {
+    room = await roomData.get(roomId);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+  let access = await userData.hasEditAccess(_id, "room", roomId);
+  if (!access)
+    return res
+      .status(403)
+      .json({ error: "you do not have edit access to this room" });
+
+  let name = req.body.roomNameInput;
+  let description = req.body.roomDescriptionInput;
+  let l = {
+    roomId: roomId,
+    roomName: name,
+    roomDescription: description,
+    roomCount: room.count,
+    roomValue: room.value,
+  };
+  let errors = [];
+  try {
+    name = validator.checkString(name, "name");
+  } catch (e) {
+    l.roomName = room.name;
+    errors.push(e);
+  }
+  try {
+    description = validator.checkString(description, "description");
+  } catch (e) {
+    l.roomDescription = room.description;
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    l.alerts = errors;
+    return res.status(400).render("editRoom", l);
+  }
+
+  let updatedRoom;
+  try {
+    updatedRoom = await roomData.updateRoomProperty(roomId, {
+      name:name,
+      description: description,
+    });
+  } catch (e) {
+    // USER ERROR
+    errors.push(e);
+    l.alerts = errors;
+    return res.status(400).render("editRoom", l);
+  }
+  if (!("_id" in updatedRoom)) {
+    // DATABASE ERROR
+    errors.push("Internal Server Error. Please try again.");
+    l.alerts = errors;
+    return res.status(500).render("editRoom", l);
+  }
+  return res.redirect(`/room/${roomId}`);
 });
 
 router.route("/container/:containerId").get(async (req, res) => {
@@ -220,8 +285,73 @@ router.route("/container/:containerId").get(async (req, res) => {
 });
 
 router.route("/container/:containerId").post(async (req, res) => {
-  // TODO: IMPLEMENT ME
-  return res.json({ error: "not implemented" });
+  // basic error check
+  let containerId = req.params.containerId;
+  try {
+    containerId = validator.checkId(containerId, "container id");
+  } catch (e) {
+    return res.status(400).json({ error: "invalid container id" });
+  }
+  let _id = req.session.user._id;
+  let container;
+  try {
+    container = await containerData.get(containerId);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+  let access = await userData.hasEditAccess(_id, "container", containerId);
+  if (!access)
+    return res
+      .status(403)
+      .json({ error: "you do not have edit access to this container" });
+
+  let name = req.body.containerNameInput;
+  let description = req.body.containerDescriptionInput;
+  let l = {
+    containerId: containerId,
+    containerName: name,
+    containerDescription: description,
+    containerCount: container.count,
+    containerValue: container.value,
+  };
+  let errors = [];
+  try {
+    name = validator.checkString(name, "name");
+  } catch (e) {
+    l.containerName = container.name;
+    errors.push(e);
+  }
+  try {
+    description = validator.checkString(description, "description");
+  } catch (e) {
+    l.containerDescription = container.description;
+    errors.push(e);
+  }
+
+  if (errors.length > 0) {
+    l.alerts = errors;
+    return res.status(400).render("editContainer", l);
+  }
+
+  let updatedContainer;
+  try {
+    updatedContainer = await containerData.updateContainerProperties(containerId, {
+      name:name,
+      description: description,
+    });
+  } catch (e) {
+    // USER ERROR
+    errors.push(e);
+    l.alerts = errors;
+    return res.status(400).render("editContainer", l);
+  }
+  if (!("_id" in updatedContainer)) {
+    // DATABASE ERROR
+    errors.push("Internal Server Error. Please try again.");
+    l.alerts = errors;
+    return res.status(500).render("editContainer", l);
+  }
+  return res.redirect(`/container/${containerId}`);
 });
 
 router.route("/item/:itemId").get(async (req, res) => {

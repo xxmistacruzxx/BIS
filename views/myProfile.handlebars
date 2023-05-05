@@ -27,16 +27,24 @@
           </form>
         </div>
 
-        <div class="form-container">
-          <form method="POST" action="/profile">
-            <input type="hidden" name="formType" value="userInfo"><br>
-            <label for="firstNameInput">First Name</label><br>
-            <input
-              name="firstNameInput"
-              id="firstNameInput"
-              type="text"
-              value="{{firstName}}"
-            ><br><br>
+<main>
+  <div class="parent-container" id="profileForms">
+    <div class="form-container">
+      <form method="POST" action="/profile" enctype="multipart/form-data">
+        <input type="hidden" name="formType" value="profilePicture" />
+        <img src="{{profilePicture}}" /><br /><br />
+        <label for="pictureUpload">Select Profile Picture</label><br />
+        <input type="file" id="pictureUpload" name="pictureUpload" /><br /><br
+        />
+        <label for="profilePictureSubmit">Set Profile Picture</label><br />
+        <input
+          type="submit"
+          name="profilePictureSubmit"
+          id="profilePictureSubmit"
+          value="Confirm"
+        />
+      </form>
+    </div>
 
             <label for="lastNameInput">Last Name</label><br>
             <input

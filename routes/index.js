@@ -6,6 +6,7 @@ import dataRoutes from "./data.js";
 import addRoutes from "./add.js";
 import editRoutes from "./edit.js";
 import deleteRoutes from "./delete.js";
+import shareRoutes from "./share.js"
 import buildingRoutes from "./building.js";
 import roomRoutes from "./room.js";
 import containerRoutes from "./container.js";
@@ -19,6 +20,7 @@ const constructorMethod = (app) => {
   app.use("/add", addRoutes);
   app.use("/edit", editRoutes);
   app.use("/delete", deleteRoutes);
+  app.use("/share", shareRoutes)
   app.use("/data", dataRoutes);
   app.use("/building", buildingRoutes);
   app.use("/room", roomRoutes);

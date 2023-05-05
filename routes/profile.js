@@ -2,6 +2,7 @@ import { Router } from "express";
 import { buildingData, userData } from "../data/index.js";
 import validator from "../validator.js";
 const router = Router();
+import middleware from "../middleware.js"
 
 router.route("/").get(async (req, res) => {
   if (!req.session.user) return res.redirect("/login");
@@ -84,7 +85,7 @@ router.route("/:userName").get(async (req, res) => {
   return res.render("profile", l);
 });
 
-router.route("/").post(async (req, res) => {
+router.route("/").post(middleware.upload.single("pictureUpload"), async (req, res) => {
   const formType = req.body.formType;
   let _id = req.session.user._id;
   let user = await userData.get(_id);
@@ -189,7 +190,41 @@ router.route("/").post(async (req, res) => {
   // PROFILE PICTURE FORM
   if (formType === "profilePicture") {
     // to do
+    let l = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      emailAddress: user.email,
+    };
+
+    // basic error checks
+    if (!req.file) {
+      return res.status(400).render("myProfile", {
+        alerts: ["Please choose a file to upload."],
+        profilePicture: user.profilePicture,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+        emailAddress: user.email,
+      });
+    }
+
+    // update profile picture in database
+    try {
+      let profilePic = `../public/images/profilepics/${req.file.filename}`;
+      await userData.updateUserProperties(_id, {
+        profilePicture: profilePic,
+      });
+      l.profilePicture = profilePic,
+      l.alerts = ["Profile picture uploaded successfully."];
+      return res.render("myProfile", l);
+    } catch(e) {
+      errors.push(e);
+      l.alerts = errors;
+      return res.status(500).render("myProfile", l);
+    }
   }
+  
   return res.redirect("/");
 });
 

@@ -226,6 +226,21 @@ export async function isPublic(containerId) {
   return await roomData.isPublic(vessel._id.toString());
 }
 
+export async function createSubEntriesHtmlRender(containerId) {
+  // basic error checks
+  containerId = validator.checkId(containerId, "roomId");
+
+  let container = await createExport(containerId);
+  let sER = `<p>${container.name} Items</p><ul>`;
+  for (let item of container.items) {
+    sER =
+      sER +
+      `<li><a href="/item/${item._id}">${item.name} - ${item.description} | Count: ${item.count} | Value: ${item.value}</a></li>`;
+  }
+  sER = sER + "</ul>";
+  return sER;
+}
+
 export default {
   create,
   get,
@@ -236,4 +251,5 @@ export default {
   // removeItem,
   createExport,
   isPublic,
+  createSubEntriesHtmlRender,
 };

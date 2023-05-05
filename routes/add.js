@@ -107,7 +107,7 @@ router.route("/").post(async (req, res) => {
         errors.push("Internal Server Error. Please try again.");
         return res.status(500).render("add", { alerts: errors });
       }
-      return res.json(newBuilding);
+      return res.redirect(`/building/${newBuilding._id}`);
 
     // ADD ROOM
     case "room":
@@ -151,7 +151,7 @@ router.route("/").post(async (req, res) => {
         errors.push("Internal Server Error. Please try again.");
         return res.status(500).render("add", { alerts: errors });
       }
-      return res.json(newRoom);
+      return res.redirect(`/room/${newRoom._id}`);
     // ADD CONTAINER
     case "container":
       // BASIC ERROR CHECK
@@ -198,7 +198,7 @@ router.route("/").post(async (req, res) => {
         errors.push("Internal Server Error. Please try again.");
         return res.status(500).render("add", { alerts: errors });
       }
-      return res.json(newContainer);
+      return res.redirect(`/container/${newContainer._id}`);
     // ADD ITEM
     case "item":
       // BASIC ERROR CHECK
@@ -278,7 +278,7 @@ router.route("/").post(async (req, res) => {
         errors.push("Internal Server Error. Please try again.");
         return res.status(500).render("add", { alerts: errors });
       }
-      return res.json(newItem);
+      return res.redirect(`/item/${newItem._id}`);
     default:
       return res.status(400).render("add", {
         alerts: [`"${thingToAdd}" is an invalid thing to add.`],

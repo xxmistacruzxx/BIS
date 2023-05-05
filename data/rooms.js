@@ -245,8 +245,7 @@ export async function createSubEntriesHtmlRender(roomId) {
   roomId = validator.checkId(roomId, "roomId");
 
   let room = await createExport(roomId);
-  let sER = "<ul>";
-  sER = sER + `<p>${room.name} Containers</p><ul>`;
+  let sER = `<p>${room.name} Containers</p><ul>`;
   for (let container of room.containers) {
     sER =
       sER +
