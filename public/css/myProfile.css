@@ -80,3 +80,8 @@ body {
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
 }
+
+.profilePicture {
+  width: 100%;
+  border-radius: 50%;
+}

@@ -11,6 +11,7 @@ import buildingRoutes from "./building.js";
 import roomRoutes from "./room.js";
 import containerRoutes from "./container.js";
 import itemRoutes from "./item.js";
+import browseRoutes from "./browse.js"
 
 const constructorMethod = (app) => {
   app.use("/login", loginRoutes);
@@ -26,6 +27,7 @@ const constructorMethod = (app) => {
   app.use("/room", roomRoutes);
   app.use("/container", containerRoutes);
   app.use("/item", itemRoutes);
+  app.use("/browse", browseRoutes)
 
   app.use("*", (req, res) => {
     return res.redirect("/");

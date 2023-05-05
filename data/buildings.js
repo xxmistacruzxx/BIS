@@ -21,6 +21,7 @@ import {
   deleteDocById,
   replaceDocById,
   getAllDocsByParam,
+  getAllDocsByParamSkipLimit
 } from "./databaseHelpers.js";
 import userDataFunctions from "./users.js";
 import validator from "../validator.js";
@@ -124,10 +125,6 @@ export async function getAll() {
  */
 export async function get(id) {
   return await getDocById(buildings, id, "building");
-}
-
-export async function getPublicBuildings() {
-  return await getAllDocsByParam(buildings, "publicBuilding", true, "building");
 }
 
 /**
@@ -384,6 +381,13 @@ export async function viewList(buildingId) {
   let userList = await collection.find(filter).toArray();
 
   return userList;
+}
+
+export async function getPublicBuildings(skip) {
+  // basic error check
+  skip = validator.checkInt(skip, "skip");
+  let fetchedBuildings = await getAllDocsByParamSkipLimit(buildings, "publicBuilding", true, "building", skip, 20);
+  return fetchedBuildings;
 }
 
 export default {
