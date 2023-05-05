@@ -1,3 +1,5 @@
+import multer from "multer";
+
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   if (req.body && req.body._method) {
     req.method = req.body._method;
@@ -48,9 +50,23 @@ function authRedirect(req, res, next) {
   next();
 }
 
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "./public/images/profilepics/");
+    },
+    filename: (req, file, cb) => {
+      // console.log(file);
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  }),
+  limits: { fileSize: 1 * 1024 * 1024 },
+});
+
 export default {
   rewriteUnsupportedBrowserMethods,
   loggingMiddleware,
   noAuthRedirect,
   authRedirect,
+  upload,
 };

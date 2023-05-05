@@ -3,6 +3,7 @@ import exphbs from "express-handlebars";
 import session from "express-session";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+// import multer from "multer";
 
 import configRoutes from "./routes/index.js";
 import middleware from "./middleware.js";

@@ -360,6 +360,32 @@ export async function isPublic(buildingId) {
   return building.publicBuilding;
 }
 
+export async function manageList(buildingId) {
+  // basic error check
+  buildingId = validator.checkId(buildingId, "buildingId");
+  let building = await get(buildingId);
+
+  let collection = await users();
+  let filter = {};
+  filter["buildingManageAccess"] = { $in: [buildingId] };
+  let userList = await collection.find(filter).toArray();
+
+  return userList;
+}
+
+export async function viewList(buildingId) {
+  // basic error check
+  buildingId = validator.checkId(buildingId, "buildingId");
+  let building = await get(buildingId);
+
+  let collection = await users();
+  let filter = {};
+  filter["buildingViewAccess"] = { $in: [buildingId] };
+  let userList = await collection.find(filter).toArray();
+
+  return userList;
+}
+
 export default {
   create,
   getAll,
@@ -373,4 +399,6 @@ export default {
   createSubEntriesHtmlRender,
   createSubEntriesHtmlRenderEdit,
   isPublic,
+  manageList,
+  viewList,
 };
