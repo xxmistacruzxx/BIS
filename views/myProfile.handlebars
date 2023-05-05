@@ -4,7 +4,7 @@
 <main>
   <div class="parent-container" id="profileForms">
     <div class="form-container">
-      <form method="POST" action="/profile">
+      <form method="POST" action="/profile" enctype="multipart/form-data">
         <input type="hidden" name="formType" value="profilePicture" />
         <img src="{{profilePicture}}" /><br /><br />
         <label for="pictureUpload">Select Profile Picture</label><br />
