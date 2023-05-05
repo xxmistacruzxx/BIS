@@ -224,55 +224,6 @@ router.route("/").post(middleware.upload.single("pictureUpload"), async (req, re
       return res.status(500).render("myProfile", l);
     }
   }
-
-  // if (formType === "profilePicture") {
-  //   multer.single("profilePicture")(req, res, async (err) => {
-  //     if (err) {
-  //       return res.status(400).render("myProfile", {
-  //         alerts: [err.message],
-  //         profilePicture: user.profilePicture,
-  //         firstName: user.firstName,
-  //         lastName: user.lastName,
-  //         userName: user.userName,
-  //         emailAddress: user.email,
-  //       });
-  //     }
-  
-      // if (!req.file) {
-      //   return res.status(400).render("myProfile", {
-      //     alerts: ["Please choose a file to upload."],
-      //     profilePicture: user.profilePicture,
-      //     firstName: user.firstName,
-      //     lastName: user.lastName,
-      //     userName: user.userName,
-      //     emailAddress: user.email,
-      //   });
-      // }
-  
-  //     try {
-  //       await userData.updateUserProperties(_id, {
-  //         profilePicture: req.file.filename,
-  //       });
-  //       return res.render("myProfile", {
-  //         alerts: ["Profile picture uploaded successfully."],
-  //         profilePicture: req.file.filename,
-  //         firstName: user.firstName,
-  //         lastName: user.lastName,
-  //         userName: user.userName,
-  //         emailAddress: user.email,
-  //       });
-  //     } catch (e) {
-  //       return res.status(500).render("myProfile", {
-  //         alerts: [e.message],
-  //         profilePicture: user.profilePicture,
-  //         firstName: user.firstName,
-  //         lastName: user.lastName,
-  //         userName: user.userName,
-  //         emailAddress: user.email,
-  //       });
-  //     }
-  //   });
-  // }
   
   return res.redirect("/");
 });
