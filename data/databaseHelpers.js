@@ -42,6 +42,17 @@ async function getAllDocsByParam(collectionGetter, param, paramValue, docType) {
   return allDocs;
 }
 
+async function getAllDocsByParamSkipLimit(collectionGetter, param, paramValue, docType, skip, limit) {
+  let collection = await collectionGetter();
+  let filter = {};
+  filter[param] = paramValue;
+  let allDocs = await collection.find(filter).skip(skip).limit(limit).toArray();
+  for (let i = 0; i < allDocs.length; i++) {
+    allDocs[i]["_id"] = allDocs[i]["_id"].toString();
+  }
+  return allDocs;
+}
+
 async function createDoc(collectionGetter, doc, docType) {
   let collection = await collectionGetter();
   let insertInfo = await collection.insertOne(doc);
@@ -106,4 +117,5 @@ export {
   deleteDocById,
   replaceDocById,
   generateCreationDate,
+  getAllDocsByParamSkipLimit
 };
