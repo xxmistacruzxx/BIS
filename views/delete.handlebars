@@ -1,8 +1,15 @@
-{{> navbar}}
+<link href="/public/css/edit.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
-    <h1>Are you sure you want to delete "[{{type}}] {{name}} - {{id}}"</h1>
+    {{!-- i'm lazy --}}
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="form-container">
+    <h1 class="header">Are you sure you want to delete "[{{type}}] {{name}} - {{id}}"</h1>
     <form method="POST" action="/delete/{{type}}/{{id}}">
         <label for="submit"></label>
-        <input type="submit" name="submit" id="submit" value="YES, DELETE."/>
+        <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Yes, Delete.</button><br>
     </form>
+    </div>
 </main>
