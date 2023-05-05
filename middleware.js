@@ -60,7 +60,7 @@ const upload = multer({
       cb(null, `${Date.now()}-${file.originalname}`);
     },
   }),
-  limits: { fileSize: 1 * 1024 * 1024 },
+  // limits: { fileSize: 1 * 1024 * 1024 },
 });
 
 export default {
