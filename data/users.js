@@ -307,7 +307,7 @@ export async function removeBuildingRelation(userId, relation, buildingId) {
   t.splice(index, 1);
   user[relation] = t;
 
-  let updatedDoc = replaceDocById(users, id, user, "user");
+  let updatedDoc = replaceDocById(users, userId, user, "user");
 
   // if relation was ownership, remove building from buildings collection
   if (relation === "buildingOwnership")
