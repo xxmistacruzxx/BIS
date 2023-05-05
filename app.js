@@ -3,6 +3,7 @@ import exphbs from "express-handlebars";
 import session from "express-session";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+// import multer from "multer";
 
 import configRoutes from "./routes/index.js";
 import middleware from "./middleware.js";
@@ -30,6 +31,7 @@ app.use(middleware.rewriteUnsupportedBrowserMethods);
 app.use(middleware.loggingMiddleware);
 app.use("/", middleware.noAuthRedirect);
 app.use("/", middleware.authRedirect);
+// app.use("/profile", middleware.upload.single("pictureUpload"));
 
 app.use(session({
   name: 'AuthCookie',
