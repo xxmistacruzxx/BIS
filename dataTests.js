@@ -84,6 +84,32 @@ let building = await buildingData.create(
   false
 );
 
+const characters =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+function generateString(length) {
+  let result = " ";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result;
+}
+
+for (let i = 0; i < 100; i++) {
+  await buildingData.create(
+    user._id,
+    generateString(10),
+    generateString(10),
+    generateString(8),
+    generateString(8),
+    generateString(8),
+    generateString(6),
+    true
+  );
+}
+
 await userData.addBuildingRelation(
   user2._id,
   "buildingViewAccess",
@@ -138,7 +164,7 @@ await buildingData.updateBuildingProperties(building._id, {
   description: "Alpha Xi of Chi Psi. Established 1883.",
 });
 
-console.log(await buildingData.getPublicBuildings());
+// console.log(await buildingData.getPublicBuildings(0));
 
 await roomData.updateRoomProperty(room._id, {
   name: "Foyer",

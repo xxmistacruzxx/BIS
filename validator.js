@@ -52,7 +52,7 @@ const exportedMethods = {
   },
 
   checkInt(intVal, varName) {
-    if (!intVal) throw `You must supply a ${varName}!`;
+    if (!intVal && intVal !== 0) throw `You must supply a ${varName}!`;
     if (typeof intVal !== "number")
       throw `${varName} must be an integer!`;
     if (Math.trunc(intVal) !== intVal)
@@ -61,7 +61,7 @@ const exportedMethods = {
   },
 
   checkNum(numVal, varName) {
-    if (!numVal) throw `You must supply a ${varName}`;
+    if (!numVal && numVal !== 0) throw `You must supply a ${varName}`;
     if (typeof numVal !== "number") throw `${varName} must be a number`;
     return numVal;
   },

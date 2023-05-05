@@ -1,0 +1,17 @@
+{{> navbar}}
+<main>
+    <h1>
+        Browse Public Buildings
+    </h1>
+    <div id="publicBuildingsDiv">
+        <ul id="publicBuildingsList">
+            {{#each buildings}}
+                {{{this}}}
+            {{/each}}
+        </ul>
+    </div>
+    <div>
+        <a href="/browse/{{prev}}">Previous</a> | 
+        <a href="/browse/{{next}}">Next</a>
+    </div>
+</main>
