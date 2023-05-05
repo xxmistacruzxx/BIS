@@ -1,5 +1,4 @@
-<link href="/public/css/login.css" rel="stylesheet" />
-
+<link href="/public/css/login.css" rel="stylesheet">
 <main>
   <div class="login-container">
     <form id="registration-form" action="/register" method="POST">
@@ -10,7 +9,7 @@
         id="firstNameInput"
         type="text"
         value="{{firstName}}"
-      />
+      >
 
       <label class="register-label" for="lastNameInput">Last Name</label>
       <input
@@ -19,7 +18,7 @@
         id="lastNameInput"
         type="text"
         value="{{lastName}}"
-      />
+      >
 
       <label class="register-label" for="userNameInput">Username</label>
       <input
@@ -28,7 +27,7 @@
         id="userNameInput"
         type="text"
         value="{{userName}}"
-      />
+      >
 
       <label class="register-label" for="emailAddressInput">Email Address</label>
       <input
@@ -37,7 +36,7 @@
         id="emailAddressInput"
         type="email"
         value="{{emailAddress}}"
-      />
+      >
 
       <label class="register-label" for="passwordInput">Password</label>
       <input
@@ -46,7 +45,7 @@
         id="passwordInput"
         type="password"
         value="{{password}}"
-      />
+      >
 
       <label class="register-label" for="confirmPasswordInput">Confirm Password</label>
       <input
@@ -54,7 +53,7 @@
         name="confirmPasswordInput"
         id="confirmPasswordInput"
         type="password"
-      />
+      >
 
       <input
         class="confirm-button"
@@ -62,16 +61,13 @@
         name="submit"
         id="submit"
         value="Submit"
-      />
+      >
     </form>
 
-    <hr class="divider" />
-
-    <a href="/login">
-      <button class="redirect-button">
-        Already have an account? Login!
-      </button>
-    </a>
+    <hr class="divider">
+    <form action="/login">
+      <button class="redirect-button">Already have an account? Login!</button>
+    </form>
 
     <ul class="error-message" id="alerts">
     {{#each alerts}}
