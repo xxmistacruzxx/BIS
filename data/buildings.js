@@ -369,7 +369,6 @@ export async function manageList(buildingId) {
   let filter = {};
   filter["buildingManageAccess"] = { $in: [buildingId] };
   let userList = await collection.find(filter).toArray();
-  console.log(userList);
 
   return userList;
 }
@@ -383,7 +382,6 @@ export async function viewList(buildingId) {
   let filter = {};
   filter["buildingViewAccess"] = { $in: [buildingId] };
   let userList = await collection.find(filter).toArray();
-  console.log(userList);
 
   return userList;
 }

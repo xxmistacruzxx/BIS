@@ -1,34 +1,40 @@
+{{> navbar}}
 <main>
   <h1>Share {{buildingName}}</h1>
+  <ul class="error-message" id="alerts">
+    {{#each alerts}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ul>
   <div id="shareContainer">
     <div class="shareDiv" id="manageDiv">
       <h2 class="shareHeader" id="manageHeader">Manage Permission</h2>
       <ul class="shareList" id="manageList">
         {{#each managePerm}}
-          <li>{{this}}</li>
+          <li>{{{this}}}</li>
         {{/each}}
       </ul>
       <form method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="manage" />
         <label for="userNameInput">Username</label>
-        <input type="text" id="userNameInput" name="userNameInput"/>
+        <input type="text" id="userNameInput" name="userNameInput" />
         <label for="submit">Confirm Share Manage Permissions</label>
-        <input type="submit" id="submit" name="submit" value="Share"/>
+        <input type="submit" id="submit" name="submit" value="Share" />
       </form>
     </div>
     <div class="shareDiv" id="viewDiv">
       <h2 class="shareHeader" id="viewHeader">View Permission</h2>
       <ul class="shareList" id="viewList">
         {{#each viewPerm}}
-          <li>{{this}}</li>
+          <li>{{{this}}}</li>
         {{/each}}
       </ul>
       <form method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="view" />
         <label for="userNameInput">Username</label>
-        <input type="text" id="userNameInput" name="userNameInput"/>
+        <input type="text" id="userNameInput" name="userNameInput" />
         <label for="submit">Confirm Share View Permissions</label>
-        <input type="submit" id="submit" name="submit" value="Share"/>
+        <input type="submit" id="submit" name="submit" value="Share" />
       </form>
     </div>
   </div>
