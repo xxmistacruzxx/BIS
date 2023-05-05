@@ -1,197 +1,188 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/public/css/add.css">
-    <title>Add</title>
-  </head>
-  <body>
-    <header>
-      {{> navbar}}
-    </header>
-    <main>
-      <div class="form-container">
-        <form method="POST" action="/add">
-        
-          {{! THING SELECTOR }}
-          <div class="form-top">
-            <label for="thingToAddInput">What're you adding?</label><br>
-            <select id="thingToAddInput" name="thingToAddInput">
-              <option value="" disabled selected>Select your option...</option>
-              <option value="building">Building</option>
-              <option value="room">Room</option>
-              <option value="container">Container</option>
-              <option value="item">Item</option>
-            </select>
-          </div>
-
-          <br>
-          <hr id="dividerDiv" class="divider" hidden>
-          <br>
-
-          {{! BUILDING SELECTOR }}
-          <div id="buildingSelectorDiv" hidden>
-            <label for="buildingInput">Which building are you adding to?
-            </label>
-            <select id="buildingInput" name="buildingInput">
-              <option value="" disabled selected>Select your option...</option>
-            </select><br><br>
-          </div>
-
-          {{! ROOM SELECTOR }}
-          <div id="roomSelectorDiv" hidden>
-            <label for="roomInput">Which room are you adding to? </label>
-            <select id="roomInput" name="roomInput">
-              <option value="" disabled selected>Select your option...</option>
-            </select><br><br>
-          </div>
-
-          {{! CONTAINER SELECTOR }}
-          <div id="containerSelectorDiv" hidden>
-            <label for="containerInput">Which container are you adding to?
-            </label>
-            <select id="containerInput" name="containerInput">
-              <option value="" selected>N/A</option>
-            </select><br><br>
-          </div>
-
-          {{! ADD BUILDING INPUTS }}
-          <div id="addBuildingDiv" hidden>
-            {{! building name }}
-            <label for="addBuildingNameInput">Building Name: </label>
-            <input
-              name="addBuildingNameInput"
-              id="addBuildingNameInput"
-              type="text"
-            ><br><br>
-            {{! building description }}
-            <label for="addBuildingDescriptionInput">Building Description:
-            </label>
-            <input
-              name="addBuildingDescriptionInput"
-              id="addBuildingDescriptionInput"
-              type="text"
-            ><br><br>
-            {{! buidling address }}
-            <label for="addBuildingAddressInput">Building Address: </label>
-            <input
-              name="addBuildingAddressInput"
-              id="addBuildingAddressInput"
-              type="text"
-            ><br><br>
-            {{! building city }}
-            <label for="addBuildingCityInput">Building City: </label>
-            <input
-              name="addBuildingCityInput"
-              id="addBuildingCityInput"
-              type="text"
-            ><br><br>
-            {{! building state }}
-            <label for="addBuildingStateInput">Building State: </label>
-            <input
-              name="addBuildingStateInput"
-              id="addBuildingStateInput"
-              type="text"
-            ><br><br>
-            {{! building zipcode }}
-            <label for="addBuildingZipInput">Building Zipcode: </label>
-            <input
-              name="addBuildingZipInput"
-              id="addBuildingZipInput"
-              type="text"
-            ><br><br>
-            {{! building publicity }}
-            <label for="addBuildingPublicInput">Do you want your building to be
-              public?</label>
-            <select
-              id="addBuildingPublicInput"
-              name="addBuildingPublicInput"
-            >
-              <option value="false">No</option>
-              <option value="true">Yes</option>
-            </select><br><br>
-          </div>
-
-          {{! ADD ROOM INPUTS }}
-          <div id="addRoomDiv" hidden>
-            {{! room name }}
-            <label for="addRoomNameInput">Room Name: </label>
-            <input
-              name="addRoomNameInput"
-              id="addRoomNameInput"
-              type="text"
-            ><br><br>
-            {{! rrom description }}
-            <label for="addRoomDescriptionInput">Room Description: </label>
-            <input
-              name="addRoomDescriptionInput"
-              id="addRoomDescriptionInput"
-              type="text"
-            >
-          </div>
-
-          {{! ADD CONTAINER INPUTS }}
-          <div id="addContainerDiv" hidden>
-            {{! container name }}
-            <label for="addContainerNameInput">Container Name: </label>
-            <input
-              name="addContainerNameInput"
-              id="addContainerNameInput"
-              type="text"
-            ><br><br>
-            {{! container description }}
-            <label for="addContainerDescriptionInput">Container Description:
-            </label>
-            <input
-              name="addContainerDescriptionInput"
-              id="addContainerDescriptionInput"
-              type="text"
-            >
-          </div>
-
-          {{! ADD ITEM INPUTS }}
-          <div id="addItemDiv" hidden>
-            {{! item name }}
-            <label for="addItemNameInput">Item Name: </label>
-            <input
-              name="addItemNameInput"
-              id="addItemNameInput"
-              type="text"
-            ><br><br>
-            {{! item description }}
-            <label for="addItemDescriptionInput">Item Description: </label>
-            <input
-              name="addItemDescriptionInput"
-              id="addItemDescriptionInput"
-              type="text"
-            ><br><br>
-            {{! item count }}
-            <label for="addItemCountInput">Item Count: </label>
-            <input
-              name="addItemCountInput"
-              id="addItemCountInput"
-              type="number"
-            ><br><br>
-            {{! item value }}
-            <label for="addItemValueInput">Item Value: </label>
-            <input
-              name="addItemValueInput"
-              id="addItemValueInput"
-              type="number"
-            >
-          </div>
-
-          <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit" hidden>Submit</button><br><br>
-
-          {{#if alerts}}
-            {{#each alerts}}
-              <p class="error-message">{{this}}</p>
-            {{/each}}
-          {{/if}}
-
-        </form>
-        <script src="public/js/add.js"></script>
+<link href="/public/css/add.css" rel="stylesheet">
+<header>
+  {{> navbar}}
+</header>
+<main>
+  <div class="form-container">
+    <form method="POST" action="/add">
+    
+      {{! THING SELECTOR }}
+      <div class="form-top">
+        <label for="thingToAddInput">What're you adding?</label><br>
+        <select id="thingToAddInput" name="thingToAddInput">
+          <option value="" disabled selected>Select your option...</option>
+          <option value="building">Building</option>
+          <option value="room">Room</option>
+          <option value="container">Container</option>
+          <option value="item">Item</option>
+        </select>
       </div>
-    </main>
-  </body>
-</html>
+
+      <br>
+      <hr id="dividerDiv" class="divider" hidden>
+      <br>
+
+      {{! BUILDING SELECTOR }}
+      <div id="buildingSelectorDiv" hidden>
+        <label for="buildingInput">Which building are you adding to?
+        </label>
+        <select id="buildingInput" name="buildingInput">
+          <option value="" disabled selected>Select your option...</option>
+        </select><br><br>
+      </div>
+
+      {{! ROOM SELECTOR }}
+      <div id="roomSelectorDiv" hidden>
+        <label for="roomInput">Which room are you adding to? </label>
+        <select id="roomInput" name="roomInput">
+          <option value="" disabled selected>Select your option...</option>
+        </select><br><br>
+      </div>
+
+      {{! CONTAINER SELECTOR }}
+      <div id="containerSelectorDiv" hidden>
+        <label for="containerInput">Which container are you adding to?
+        </label>
+        <select id="containerInput" name="containerInput">
+          <option value="" selected>N/A</option>
+        </select><br><br>
+      </div>
+
+      {{! ADD BUILDING INPUTS }}
+      <div id="addBuildingDiv" hidden>
+        {{! building name }}
+        <label for="addBuildingNameInput">Building Name: </label>
+        <input
+          name="addBuildingNameInput"
+          id="addBuildingNameInput"
+          type="text"
+        ><br><br>
+        {{! building description }}
+        <label for="addBuildingDescriptionInput">Building Description:
+        </label>
+        <input
+          name="addBuildingDescriptionInput"
+          id="addBuildingDescriptionInput"
+          type="text"
+        ><br><br>
+        {{! buidling address }}
+        <label for="addBuildingAddressInput">Building Address: </label>
+        <input
+          name="addBuildingAddressInput"
+          id="addBuildingAddressInput"
+          type="text"
+        ><br><br>
+        {{! building city }}
+        <label for="addBuildingCityInput">Building City: </label>
+        <input
+          name="addBuildingCityInput"
+          id="addBuildingCityInput"
+          type="text"
+        ><br><br>
+        {{! building state }}
+        <label for="addBuildingStateInput">Building State: </label>
+        <input
+          name="addBuildingStateInput"
+          id="addBuildingStateInput"
+          type="text"
+        ><br><br>
+        {{! building zipcode }}
+        <label for="addBuildingZipInput">Building Zipcode: </label>
+        <input
+          name="addBuildingZipInput"
+          id="addBuildingZipInput"
+          type="text"
+        ><br><br>
+        {{! building publicity }}
+        <label for="addBuildingPublicInput">Do you want your building to be
+          public?</label>
+        <select
+          id="addBuildingPublicInput"
+          name="addBuildingPublicInput"
+        >
+          <option value="false">No</option>
+          <option value="true">Yes</option>
+        </select><br><br>
+      </div>
+
+      {{! ADD ROOM INPUTS }}
+      <div id="addRoomDiv" hidden>
+        {{! room name }}
+        <label for="addRoomNameInput">Room Name: </label>
+        <input
+          name="addRoomNameInput"
+          id="addRoomNameInput"
+          type="text"
+        ><br><br>
+        {{! rrom description }}
+        <label for="addRoomDescriptionInput">Room Description: </label>
+        <input
+          name="addRoomDescriptionInput"
+          id="addRoomDescriptionInput"
+          type="text"
+        >
+      </div>
+
+      {{! ADD CONTAINER INPUTS }}
+      <div id="addContainerDiv" hidden>
+        {{! container name }}
+        <label for="addContainerNameInput">Container Name: </label>
+        <input
+          name="addContainerNameInput"
+          id="addContainerNameInput"
+          type="text"
+        ><br><br>
+        {{! container description }}
+        <label for="addContainerDescriptionInput">Container Description:
+        </label>
+        <input
+          name="addContainerDescriptionInput"
+          id="addContainerDescriptionInput"
+          type="text"
+        >
+      </div>
+
+      {{! ADD ITEM INPUTS }}
+      <div id="addItemDiv" hidden>
+        {{! item name }}
+        <label for="addItemNameInput">Item Name: </label>
+        <input
+          name="addItemNameInput"
+          id="addItemNameInput"
+          type="text"
+        ><br><br>
+        {{! item description }}
+        <label for="addItemDescriptionInput">Item Description: </label>
+        <input
+          name="addItemDescriptionInput"
+          id="addItemDescriptionInput"
+          type="text"
+        ><br><br>
+        {{! item count }}
+        <label for="addItemCountInput">Item Count: </label>
+        <input
+          name="addItemCountInput"
+          id="addItemCountInput"
+          type="number"
+        ><br><br>
+        {{! item value }}
+        <label for="addItemValueInput">Item Value: </label>
+        <input
+          name="addItemValueInput"
+          id="addItemValueInput"
+          type="number"
+        >
+      </div>
+
+      <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit" hidden>Submit</button><br><br>
+
+      {{#if alerts}}
+        {{#each alerts}}
+          <p class="error-message">{{this}}</p>
+        {{/each}}
+      {{/if}}
+
+    </form>
+    <script src="public/js/add.js"></script>
+  </div>
+</main>

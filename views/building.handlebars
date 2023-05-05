@@ -1,29 +1,39 @@
-<link rel="stylesheet" href="/public/css/building.css">
-{{> navbar}}
-
+<link href="/public/css/building.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
-    <div id="building">
-        <div id="buildingInfoDiv">
-            <h1>{{buildingName}}</h1>
-            <h2>Created: {{buildingCreationDate}}</h2>
-            <h3>{{buildingLocation}}</h3>
-            <p>{{buildingDescription}}</p>
-        </div>
-        <div id="buildingMapDiv">
+   <div id="building">
+      <div id="buildingInfoDiv">
+         <h1 class="header">{{buildingName}} (Building)</h1>
+         <h2 class="subheader">Created: {{buildingCreationDate}}</h2>
+         <h2 class="subheader">Location: {{buildingLocation}}</h2>
+         <p class="subheader">{{buildingDescription}}</p>
+         <div class="subheader" id="buildingMapDiv">
             {{> map}}
-        </div>
-    </div>
-    <div id="buildingOptions">
-        {{#if canEdit}}
-            <a href="/edit/building/{{id}}">Edit This Building</a>
-        {{/if}}
-        {{#if canDelete}}
-            <a href="/delete/building/{{id}}">Delete This Building</a>
-            <a href="/share/{{id}}">Share This Building</a>
-        {{/if}}
-    </div>
-    <div id="subEntitiesRender">
-        <p>{{buildingName}} Rooms</p>
-        {{{sER}}}
-    </div>
+         </div><br>
+         <div id="buildingOptions">
+            {{#if canEdit}}
+            <a class="submit-button" href="/edit/building/{{id}}">Edit This Building</a>
+            {{/if}}
+            {{#if canDelete}}
+            <a class="submit-button" href="/delete/building/{{id}}">Delete This Building</a>
+            <a class="submit-button" href="/share/{{id}}">Share This Building</a>
+            {{/if}}
+         </div>
+      </div>
+
+      <br><br>
+      <hr class="divider">
+
+   </div>
+   <div id="subEntitiesRender">
+      <p class="header">{{buildingName}} Rooms:</p>
+      {{#if sER}}
+            <div class="layers">{{{sER}}}</div>
+      {{else}}
+            <p class="subheader">No Rooms Found</p>
+      {{/if}}
+   </div>
+
 </main>

@@ -1,24 +1,30 @@
-{{!-- <link rel="stylesheet" href="/public/css/item.css" /> --}}
-{{> navbar}}
+<link href="/public/css/building.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
   <div id="item">
     <div id="itemInfoDiv">
-      <h1>{{itemName}}</h1>
-      <h2>Created: {{itemCreationDate}}</h2>
-      <p>{{itemDescription}}</p>
+      <h1 class="header">{{itemName}}</h1>
+      <h2 class="subheader">Created: {{itemCreationDate}}</h2>
+      <p class="subheader">{{itemDescription}}</p>
     </div>
   </div>
   <div id="itemOptions">
     {{#if canEdit}}
-      <a href="/edit/item/{{id}}">Edit This Item</a>
+      <a class="submit-button" href="/edit/item/{{id}}">Edit This Item</a>
     {{/if}}
     {{#if canDelete}}
-      <a href="/delete/item/{{id}}">Delete This Item</a>
+      <a class="submit-button" href="/delete/item/{{id}}">Delete This Item</a>
     {{/if}}
   </div>
+
+  <br><br>
+  <hr class="divider">
+
   <div id="itemHistory">
     <div id="countHistory">
-      <h2 id="countHistoryHeader">Count History</h2>
+      <h2 class="subheader" id="countHistoryHeader">Count History</h2>
       <ul class="historyList" id="countHistoryList">
         {{#each countHistory}}
           <li class="historyEntry">{{this}}</li>
@@ -26,7 +32,7 @@
       </ul>
     </div>
     <div id="valueHistory">
-      <h2 id="valueHistoryHeader">Value History</h2>
+      <h2 class="subheader" id="valueHistoryHeader">Value History</h2>
       <ul class="historyList" id="valueHistoryList">
         {{#each valueHistory}}
           <li class="historyEntry">{{this}}</li>

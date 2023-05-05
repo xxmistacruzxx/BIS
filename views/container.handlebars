@@ -1,22 +1,35 @@
-{{!-- <link rel="stylesheet" href="/public/css/container.css"> --}}
-{{> navbar}}
+<link href="/public/css/building.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
-    <div id="container">
-        <div id="containerInfoDiv">
-            <h1>{{containerName}}</h1>
-            <h2>Created: {{creationDate}}</h2>
-            <p>{{containerDescription}}</p>
-        </div>
+  <div id="container">
+    <div id="containerInfoDiv">
+      <h1 class="header">{{containerName}}</h1>
+      <h2 class="subheader">Created: {{creationDate}}</h2>
+      <p class="subheader">{{containerDescription}}</p>
     </div>
-    <div id="containerOptions">
-        {{#if canEdit}}
-            <a href="/edit/container/{{id}}">Edit This Container</a>
-        {{/if}}
-        {{#if canDelete}}
-            <a href="/delete/container/{{id}}">Delete This Container</a>
-        {{/if}}
-    </div>
-    <div id="subEntitiesRender">
-        {{{sER}}}
-    </div>
+  </div>
+  <div id="containerOptions">
+    {{#if canEdit}}
+      <a class="submit-button" href="/edit/container/{{id}}">Edit This Container</a>
+    {{/if}}
+    {{#if canDelete}}
+      <a class="submit-button" href="/delete/container/{{id}}">Delete This
+        Container</a>
+    {{/if}}
+  </div>
+
+  <br><br>
+  <hr class="divider">
+
+  <div id="subEntitiesRender">
+    <p class="header">{{buildingName}} Rooms:</p>
+    {{#if sER}}
+      <div class="layers">{{{sER}}}</div>
+    {{else}}
+      <p class="subheader">No Rooms Found</p>
+    {{/if}}
+  </div>
+
 </main>
