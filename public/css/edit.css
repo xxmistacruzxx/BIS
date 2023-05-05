@@ -34,6 +34,13 @@ body {
   color: #000000;
 }
 
+.header {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
 .form-container {
   border: 2px solid gray;
   margin: auto;
@@ -41,24 +48,7 @@ body {
   position: relative;
   text-align: center;
   width: 40%;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
-  transform: translateY(15%);
-}
-
-.form-container .form-top {
-  font-weight: bold;
-  font-size: 24px;
-}
-
-.divider {
-  border-top: 4px solid #bbb;
-  border-radius: 5px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 50%;
 }
 
 .confirm-button {
@@ -67,7 +57,6 @@ body {
   width: 30%;
   padding: 5px;
   margin: 8px 0;
-  font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 24px;
 }
@@ -77,14 +66,36 @@ body {
   cursor: pointer;
 }
 
-.error-message {
-  color: red;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+.item-confirm-button {
+  background-color: #ffd800;
+  border: none;
+  width: 30%;
+  padding: 5px;
+  margin: 8px 0;
   font-weight: bold;
-  margin: auto;
-  text-align: center;
-  list-style-type: none; /* Remove bullets */
-  padding: 0px; /* Remove padding */
-  margin: 0px; /* Remove margins */
+  font-size: 24px;
+}
+
+.item-confirm-button:hover {
+  background-color: #ffea00;
+  cursor: pointer;
+}
+
+.divider {
+  border-top: 4px solid #bbb;
+  border-radius: 5px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.center-helper {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
