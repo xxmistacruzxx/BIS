@@ -31,7 +31,6 @@ app.use(middleware.rewriteUnsupportedBrowserMethods);
 app.use(middleware.loggingMiddleware);
 app.use("/", middleware.noAuthRedirect);
 app.use("/", middleware.authRedirect);
-// app.use("/profile", middleware.upload.single("pictureUpload"));
 
 app.use(session({
   name: 'AuthCookie',
