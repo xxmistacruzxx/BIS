@@ -1,24 +1,62 @@
-{{> navbar}}
-<ul class="error-message" id="alerts">
-    {{#each alerts}}
-      <li>{{this}}</li>
-    {{/each}}
-  </ul>
+<link href="/public/css/edit.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
-    <form method="POST" action="/edit/building/{{buildingId}}">
-        <label for="buildingNameInput">Building Name</label>
-        <input type="text" id="buildingNameInput" name="buildingNameInput" value="{{buildingName}}"/>
-        <label for="buildingDescriptionInput">Building Description</label>
-        <input type="text" id="buildingDescriptionInput" name="buildingDescriptionInput" value="{{buildingDescription}}"/>
-        <label for="buildingDescriptionInput">Building Street Address</label>
-        <input type="text" id="buildingAddressInput" name="buildingAddressInput" value="{{buildingAddress}}"/>
-        <label for="buildingCityInput">Building City</label>
-        <input type="text" id="buildingCityInput" name="buildingCityInput" value="{{buildingCity}}"/>
-        <label for="buildingStateInput">Building State</label>
-        <input type="text" id="buildingStateInput" name="buildingStateInput" value="{{buildingState}}"/>
-        <label for="buildingZipInput">Building Zip</label>
-        <input type="text" id="buildingZipInput" name="buildingZipInput" value="{{buildingZip}}"/>
-        <label for="submit">Submit Changes</label>
-        <input type="submit" value="Submit"/>
-    </form>
+  <form method="POST" action="/edit/building/{{buildingId}}">
+    <h1 class="header">Editing Building</h1>
+    <div class="form-container">
+      <label for="buildingNameInput">Building Name: </label>
+      <input
+        type="text"
+        id="buildingNameInput"
+        name="buildingNameInput"
+        value="{{buildingName}}"
+      ><br><br>
+      <label for="buildingDescriptionInput">Building Description: </label>
+      <input
+        type="text"
+        id="buildingDescriptionInput"
+        name="buildingDescriptionInput"
+        value="{{buildingDescription}}"
+      ><br><br>
+      <label for="buildingDescriptionInput">Building Street Address: </label>
+      <input
+        type="text"
+        id="buildingAddressInput"
+        name="buildingAddressInput"
+        value="{{buildingAddress}}"
+      ><br><br>
+      <label for="buildingCityInput">Building City: </label>
+      <input
+        type="text"
+        id="buildingCityInput"
+        name="buildingCityInput"
+        value="{{buildingCity}}"
+      ><br><br>
+      <label for="buildingStateInput">Building State: </label>
+      <input
+        type="text"
+        id="buildingStateInput"
+        name="buildingStateInput"
+        value="{{buildingState}}"
+      ><br><br>
+      <label for="buildingZipInput">Building Zip: </label>
+      <input
+        type="text"
+        id="buildingZipInput"
+        name="buildingZipInput"
+        value="{{buildingZip}}"
+      ><br><br>
+
+      <hr class="divider">
+      <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Submit Changes</button><br>
+
+      <ul class="error-message" id="alerts">
+        {{#each alerts}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  </form>
 </main>
