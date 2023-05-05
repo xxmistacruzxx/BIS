@@ -189,8 +189,10 @@ router.route("/").post(middleware.upload.single("pictureUpload"), async (req, re
 
   // PROFILE PICTURE FORM
   if (formType === "profilePicture") {
+    console.log(req.file);
     // to do
     let l = {
+      profilePicture: user.profilePicture,
       firstName: user.firstName,
       lastName: user.lastName,
       userName: user.userName,
@@ -198,9 +200,13 @@ router.route("/").post(middleware.upload.single("pictureUpload"), async (req, re
     };
 
     // basic error checks
-    if (!req.file) {
+    try {
+      if (!req.file) throw 'Please choose a file to upload.';
+      console.log(req.file.size);
+      if (req.file.size > 1 * 512 * 512) throw 'File size limit exceeded.';
+    } catch(e) {
       return res.status(400).render("myProfile", {
-        alerts: ["Please choose a file to upload."],
+        alerts: [e],
         profilePicture: user.profilePicture,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -208,6 +214,16 @@ router.route("/").post(middleware.upload.single("pictureUpload"), async (req, re
         emailAddress: user.email,
       });
     }
+    // if (!req.file) {
+    //   return res.status(400).render("myProfile", {
+    //     alerts: ["Please choose a file to upload."],
+    //     profilePicture: user.profilePicture,
+    //     firstName: user.firstName,
+    //     lastName: user.lastName,
+    //     userName: user.userName,
+    //     emailAddress: user.email,
+    //   });
+    // }
 
     // update profile picture in database
     try {
@@ -216,7 +232,7 @@ router.route("/").post(middleware.upload.single("pictureUpload"), async (req, re
         profilePicture: profilePic,
       });
       l.profilePicture = profilePic,
-      l.alerts = ["Profile picture uploaded successfully."];
+      l.alerts = ["Profile picture successfully updated."];
       return res.render("myProfile", l);
     } catch(e) {
       errors.push(e);
