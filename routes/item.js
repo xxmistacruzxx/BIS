@@ -4,7 +4,6 @@ import validator from "../validator.js";
 const router = Router();
 import middleware from "../middleware.js";
 
-
 router.route("/:itemId").get(async (req, res) => {
   // basic error checks
   let userId = req.session.user._id;
@@ -59,7 +58,8 @@ router.route("/:itemId").get(async (req, res) => {
       countStats.high = item.countHistory[i].count;
     countStats.average = countStats.average + item.countHistory[i].count;
   }
-  countStats.average = Math.round((countStats.average / item.countHistory.length) * 100) / 100;
+  countStats.average =
+    Math.round((countStats.average / item.countHistory.length) * 100) / 100;
 
   let valueStats = {
     average: 0,
@@ -73,7 +73,8 @@ router.route("/:itemId").get(async (req, res) => {
       valueStats.high = item.valueHistory[i].value;
     valueStats.average = valueStats.average + item.valueHistory[i].value;
   }
-  valueStats.average = Math.round((valueStats.average / item.valueHistory.length) * 100) / 100;
+  valueStats.average =
+    Math.round((valueStats.average / item.valueHistory.length) * 100) / 100;
 
   // create list to insert of item count and value histories
   for (let i = 0; i < item.countHistory.length - 1; i++) {
@@ -119,74 +120,137 @@ router.route("/:itemId").get(async (req, res) => {
   });
 });
 
-router.route("/:itemId").post(middleware.itemUpload.array("image", 6), async (req, res) => {
-  let itemId = req.params.itemId;
-  let userId = req.session.user._id;
-  let item;
-  try {
-    item = await itemData.get(itemId);
-  } catch (e) {
-    return res.status(404).json({ error: "no item with that id" });
-  }
-
-  let canEdit = false;
-  let canDelete = false;
-  if (await userData.hasOwnerAccess(userId, "item", itemId)) {
-    canEdit = true;
-    canDelete = true;
-  } else if (await userData.hasEditAccess(userId, "item", itemId)) {
-    canEdit = true;
-  }
-
-  try {
-    if (!req.files || Object.keys(req.files).length === 0) throw 'Please choose files to upload.';
-    const files = req.files;
-    for (const file of files) {
-      if (file.size > 1 * 512 * 512) throw 'File size limit exceeded.';
+router
+  .route("/:itemId")
+  .post(middleware.itemUpload.array("image", 6), async (req, res) => {
+    let itemId = req.params.itemId;
+    let userId = req.session.user._id;
+    let item;
+    try {
+      item = await itemData.get(itemId);
+    } catch (e) {
+      return res.status(404).json({ error: "no item with that id" });
     }
-  } catch(e) {
-    return res.status(400).render("item", {
-      id: item._id,
-      itemName: item.name,
-      itemCreationDate: item.creationDate,
-      itemDescription: item.description,
-      canEdit: canEdit,
-      canDelete: canDelete,
-      countHistory: item.countHistory,
-      valueHistory: item.valueHistory,
-      error: e
-    });
-  }
 
-  try {
-    if (req.files) {
-      const imagePathList = req.files.map((file) => `../public/images/items/${file.filename}`);
-      console.log(imagePathList);
-      return res.render("item", { 
-        id: item._id, 
-        imagePathList, 
+    let canEdit = false;
+    let canDelete = false;
+    if (await userData.hasOwnerAccess(userId, "item", itemId)) {
+      canEdit = true;
+      canDelete = true;
+    } else if (await userData.hasEditAccess(userId, "item", itemId)) {
+      canEdit = true;
+    }
+
+    // get item stats
+    let countStats = {
+      average: 0,
+      low: item.count,
+      high: item.count,
+    };
+    for (let i = 0; i < item.countHistory.length; i++) {
+      if (item.countHistory[i].count < countStats.low)
+        countStats.low = item.countHistory[i].count;
+      if (item.countHistory[i].count > countStats.high)
+        countStats.high = item.countHistory[i].count;
+      countStats.average = countStats.average + item.countHistory[i].count;
+    }
+    countStats.average =
+      Math.round((countStats.average / item.countHistory.length) * 100) / 100;
+
+    let valueStats = {
+      average: 0,
+      low: item.value,
+      high: item.value,
+    };
+    for (let i = 0; i < item.valueHistory.length; i++) {
+      if (item.valueHistory[i].value < valueStats.low)
+        valueStats.low = item.valueHistory[i].value;
+      if (item.valueHistory[i].value > valueStats.high)
+        valueStats.high = item.valueHistory[i].value;
+      valueStats.average = valueStats.average + item.valueHistory[i].value;
+    }
+    valueStats.average =
+      Math.round((valueStats.average / item.valueHistory.length) * 100) / 100;
+
+    // create list to insert of item count and value histories
+    for (let i = 0; i < item.countHistory.length - 1; i++) {
+      let change = item.countHistory[i].count - item.countHistory[i + 1].count;
+      if (change > 0) change = "+" + change;
+      item.countHistory[i] = `Time: ${new Date(
+        item.countHistory[i].time
+      ).toString()} | Count: ${item.countHistory[i].count} | Change: ${change}`;
+    }
+    let last = item.countHistory[item.countHistory.length - 1];
+    item.countHistory[item.countHistory.length - 1] = `Time: ${new Date(
+      last.time
+    ).toString()} | Count: ${last.count} | Change: N/A`;
+
+    for (let i = 0; i < item.valueHistory.length - 1; i++) {
+      let change = item.valueHistory[i].value - item.valueHistory[i + 1].value;
+      change = Math.round(change * 100) / 100;
+      if (change > 0) change = "+" + change;
+      item.valueHistory[i] = `Time: ${new Date(
+        item.valueHistory[i].time
+      ).toString()} | Value: ${item.valueHistory[i].value} | Change: ${change}`;
+    }
+    last = item.valueHistory[item.valueHistory.length - 1];
+    item.valueHistory[item.valueHistory.length - 1] = `Time: ${new Date(
+      last.time
+    ).toString()} | Value: ${last.value} | Change: N/A`;
+
+    try {
+      if (!req.files || Object.keys(req.files).length === 0)
+        throw "Please choose files to upload.";
+      const files = req.files;
+      for (const file of files) {
+        if (file.size > 1 * 512 * 512) throw "File size limit exceeded.";
+      }
+    } catch (e) {
+      return res.status(400).render("item", {
+        id: item._id,
         itemName: item.name,
         itemCreationDate: item.creationDate,
         itemDescription: item.description,
         canEdit: canEdit,
         canDelete: canDelete,
         countHistory: item.countHistory,
-        valueHistory: item.valueHistory
+        valueHistory: item.valueHistory,
+        avgCount: countStats.average,
+        lowCount: countStats.low,
+        highCount: countStats.high,
+        avgValue: valueStats.average,
+        lowValue: valueStats.low,
+        highValue: valueStats.high,
+        error: e,
       });
     }
-  } catch(e) {
-    return res.status(400).render("item", {
-      id: item._id,
-      itemName: item.name,
-      itemCreationDate: item.creationDate,
-      itemDescription: item.description,
-      canEdit: canEdit,
-      canDelete: canDelete,
-      countHistory: item.countHistory,
-      valueHistory: item.valueHistory,
-      error: e
-    });
-  }
-});
+
+    try {
+      if (req.files) {
+        const imagePathList = req.files.map(
+          (file) => `../public/images/items/${file.filename}`
+        );
+        return res.redirect(`/item/${item._id}`);
+      }
+    } catch (e) {
+      return res.status(400).render("item", {
+        id: item._id,
+        itemName: item.name,
+        itemCreationDate: item.creationDate,
+        itemDescription: item.description,
+        canEdit: canEdit,
+        canDelete: canDelete,
+        countHistory: item.countHistory,
+        valueHistory: item.valueHistory,
+        avgCount: countStats.average,
+        lowCount: countStats.low,
+        highCount: countStats.high,
+        avgValue: valueStats.average,
+        lowValue: valueStats.low,
+        highValue: valueStats.high,
+        error: e,
+      });
+    }
+  });
 
 export default router;
