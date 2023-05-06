@@ -252,20 +252,20 @@ router
       };
 
       // basic error checks
-    try {
-      if (!req.file) throw 'Please choose a file to upload.';
-      console.log(req.file.size);
-      if (req.file.size > 1 * 512 * 512) throw 'File size limit exceeded.';
-    } catch(e) {
-      return res.status(400).render("myProfile", {
-        alerts: [e],
-        profilePicture: user.profilePicture,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        userName: user.userName,
-        emailAddress: user.email,
-      });
-    }
+      try {
+        if (!req.file) throw 'Please choose a file to upload.';
+        console.log(req.file.size);
+        if (req.file.size > 1 * 512 * 512) throw 'File size limit exceeded.';
+      } catch(e) {
+        return res.status(400).render("myProfile", {
+          alerts: [e],
+          profilePicture: user.profilePicture,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userName: user.userName,
+          emailAddress: user.email,
+        });
+      }
 
       // update profile picture in database
       try {
