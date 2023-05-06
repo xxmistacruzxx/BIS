@@ -180,6 +180,10 @@ router
         lastName: req.body.lastNameInput,
         userName: req.body.userNameInput,
         emailAddress: req.body.emailAddressInput,
+        owned: owned,
+        managed: managed,
+        view: view,
+        favorites: favorites,
       };
       // basic error checks
       try {
@@ -218,10 +222,6 @@ router
         lastName: l.lastName,
         userName: l.userName,
         email: l.emailAddress,
-        owned: owned,
-        managed: managed,
-        view: view,
-        favorites: favorites,
       };
       if (updates.userName === user.userName) delete updates.userName;
       if (updates.email === user.email) delete updates.email;

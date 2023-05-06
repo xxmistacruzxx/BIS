@@ -18,8 +18,11 @@
             {{/if}}
             {{#if canDelete}}
             <a class="submit-button" href="/delete/building/{{id}}">Delete This Building</a>
-            <a class="submit-button" href="/share/{{id}}">Share This Building</a>
+               {{#if private}}
+               <a class="submit-button" href="/share/{{id}}">Share This Building</a>
+               {{/if}}
             {{/if}}
+            <a class="submit-button" href="/building/{{id}}/download">Download JSON</a>
          </div>
       </div>
 
