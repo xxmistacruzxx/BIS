@@ -108,21 +108,16 @@ body {
 }
 
 .listings {
-  background-color: #ffd800;
-  padding: 6px;
-  border-radius: 12px;
   text-decoration: none;
-  margin-left: 20px;
   width: 20%;
   list-style-type: none;
   font-weight: bold;
 }
 
-.listings a {
-  text-decoration: none;
+.listings li {
+  background-color: #ffd800;
+  border-radius: 12px;
   color: black;
-}
-
-.listings:hover {
-  background-color: #ffea00;
+  margin: 10px 0;
+  padding: 4px 6px 4px 6px;
 }
