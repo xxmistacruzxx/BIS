@@ -1,6 +1,7 @@
-<link href="/public/css/building.css" rel="stylesheet">
+<link href="/public/css/building.css" rel="stylesheet" />
+<script src="/public/js/search.js"></script>
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <div id="room">
@@ -19,9 +20,15 @@
     {{/if}}
   </div>
 
-  <br><br>
-  <hr class="divider">
+  <br /><br />
+  <hr class="divider" />
 
+  <form id="searchDiv">
+    <label for="searchInput">Search Term:</label>
+    <input type="text" id="searchInput" name="searchInput" />
+    <label for="search">Search</label>
+    <input type="submit" id="search" name="search" />
+  </form>
   <div id="subEntitiesRender">
     <p class="header">{{buildingName}} Rooms:</p>
     {{#if sER}}
