@@ -10,7 +10,7 @@ function search(term) {
   if (term.replace(" ").length === 0) return;
   // highlight entities with search term
   for (let i = 0; i < anchors.length; i++) {
-    let anchorHTML = anchors[i].innerHTML.split("|")[0];
+    let anchorHTML = anchors[i].innerHTML.split("-")[0];
     if (anchorHTML.toLowerCase().includes(term.toLowerCase())) {
       anchors[i].style.backgroundColor = "yellow";
     }
