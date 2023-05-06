@@ -85,3 +85,44 @@ body {
   width: 100%;
   border-radius: 50%;
 }
+
+.header {
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.subheader {
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.divider {
+  border-top: 4px solid #bbb;
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.listings {
+  background-color: #ffd800;
+  padding: 6px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin-left: 20px;
+  width: 20%;
+  list-style-type: none;
+  font-weight: bold;
+}
+
+.listings a {
+  text-decoration: none;
+  color: black;
+}
+
+.listings:hover {
+  background-color: #ffea00;
+}

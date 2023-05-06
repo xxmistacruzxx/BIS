@@ -3,24 +3,19 @@
   {{> navbar}}
 </header>
 <main>
+  <h1 class="header">What would you like to add?</h1>
   <div class="form-container">
     <form method="POST" action="/add">
-    
       {{! THING SELECTOR }}
       <div class="form-top">
-        <label for="thingToAddInput">What're you adding?</label><br>
-        <select id="thingToAddInput" name="thingToAddInput">
+        <select class="selector" id="thingToAddInput" name="thingToAddInput">
           <option value="" disabled selected>Select your option...</option>
           <option value="building">Building</option>
           <option value="room">Room</option>
           <option value="container">Container</option>
           <option value="item">Item</option>
         </select>
-      </div>
-
-      <br>
-      <hr id="dividerDiv" class="divider" hidden>
-      <br>
+      </div><br>
 
       {{! BUILDING SELECTOR }}
       <div id="buildingSelectorDiv" hidden>
@@ -174,6 +169,9 @@
         >
       </div>
 
+      <br>
+      <hr id="dividerDiv" class="divider" hidden>
+      <br>
       <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit" hidden>Submit</button><br><br>
 
       {{#if alerts}}
