@@ -2,6 +2,7 @@
 {{> navbar}}
 
 <main>
+  <h1 class="header">Welcome back to the Inventory System!</h1>
   <div class="parent-container" id="profileForms">
     <div class="form-container">
       <form method="POST" action="/profile" enctype="multipart/form-data">
@@ -98,9 +99,13 @@
     {{/each}}
   </ul>
 
+  <br><br>
+  <hr class="divider">
+  <br><br>
+
   <div class="buildingListing" id="ownedBuildings">
-    <h2>Buildings you own</h2>
-    <ul>
+    <h2 class="subheader">Buildings you own</h2>
+    <ul class="listings">
       {{#each owned}}
         {{{this}}}
       {{/each}}
@@ -108,8 +113,8 @@
   </div>
 
   <div class="buildingListing" id="managedBuildings">
-    <h2>Buildings you manage</h2>
-    <ul>
+    <h2 class="subheader">Buildings you manage</h2>
+    <ul class="listings">
       {{#each managed}}
         {{{this}}}
       {{/each}}
@@ -117,8 +122,8 @@
   </div>
 
   <div class="buildingListing" id="viewBuildings">
-    <h2>Buildings you can view</h2>
-    <ul>
+    <h2 class="subheader">Buildings you can view</h2>
+    <ul class="listings">
       {{#each view}}
         {{{this}}}
       {{/each}}
@@ -126,8 +131,8 @@
   </div>
 
   <div class="buildingListing" id="favoriteBuildings">
-    <h2>Buildings you've favorited</h2>
-    <ul>
+    <h2 class="subheader">Buildings you've favorited</h2>
+    <ul class="listings">
       {{#each favorites}}
         {{{this}}}
       {{/each}}

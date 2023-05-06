@@ -5,10 +5,30 @@
 <main>
   <div id="item">
     <div id="itemInfoDiv">
-      <h1 class="header">{{itemName}}</h1>
+      <h1 class="header">{{itemName}} (Item)</h1>
       <h2 class="subheader">Created: {{itemCreationDate}}</h2>
       <p class="subheader">{{itemDescription}}</p>
     </div>
+  </div>
+  <div id="itemPictures">
+    <form method="post" action="/item/{{id}}" enctype="multipart/form-data">
+      <label for="image">Upload photos:</label><br>
+      <input type="file" id="image" name="image" multiple /><br><br>
+      <input
+        type="submit"
+        name="addPicture"
+        id="addPicture"
+        value="Add"
+      />
+      <br>
+      <br>
+    </form>
+
+    {{#if imagePathList}}
+    {{#each imagePathList}}
+    <img src ="{{this}}" />
+    {{/each}}
+    {{/if}}
   </div>
   <div id="itemOptions">
     {{#if canEdit}}
@@ -43,4 +63,5 @@
     </div>
   </div>
 
+<div id="error">{{error}}</div>
 </main>

@@ -1,12 +1,10 @@
-{{> navbar}}
+<link href="/public/css/edit.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
-  <h1>Share {{buildingName}}</h1>
-  <ul class="error-message" id="alerts">
-    {{#each alerts}}
-      <li>{{this}}</li>
-    {{/each}}
-  </ul>
-  <div id="shareContainer">
+  <h1 class="header">Share {{buildingName}}</h1>
+  <div class="form-container" id="shareContainer">
     <div class="shareDiv" id="manageDiv">
       <h2 class="shareHeader" id="manageHeader">Manage Permission</h2>
       <ul class="shareList" id="manageList">
@@ -17,9 +15,8 @@
       <form method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="manage" />
         <label for="userNameInput">Username</label>
-        <input type="text" id="userNameInput" name="userNameInput" />
-        <label for="submit">Confirm Share Manage Permissions</label>
-        <input type="submit" id="submit" name="submit" value="Share" />
+        <input type="text" id="userNameInput" name="userNameInput" /><br><br>
+        <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Confirm Manage Permissions</button><br>
       </form>
     </div>
     <div class="shareDiv" id="viewDiv">
@@ -32,10 +29,15 @@
       <form method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="view" />
         <label for="userNameInput">Username</label>
-        <input type="text" id="userNameInput" name="userNameInput" />
-        <label for="submit">Confirm Share View Permissions</label>
-        <input type="submit" id="submit" name="submit" value="Share" />
+        <input type="text" id="userNameInput" name="userNameInput" /><br><br>
+        <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Confirm View Permissions</button><br>
       </form>
     </div>
+
+    <ul class="error-message" id="alerts">
+      {{#each alerts}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
   </div>
 </main>

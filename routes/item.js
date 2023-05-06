@@ -2,6 +2,8 @@ import { Router } from "express";
 import { itemData, userData } from "../data/index.js";
 import validator from "../validator.js";
 const router = Router();
+import middleware from "../middleware.js";
+
 
 router.route("/:itemId").get(async (req, res) => {
   // basic error checks
@@ -115,6 +117,75 @@ router.route("/:itemId").get(async (req, res) => {
     lowValue: valueStats.low,
     highValue: valueStats.high,
   });
+});
+
+router.route("/:itemId").post(middleware.itemUpload.array("image", 6), async (req, res) => {
+  let itemId = req.params.itemId;
+  let userId = req.session.user._id;
+  let item;
+  try {
+    item = await itemData.get(itemId);
+  } catch (e) {
+    return res.status(404).json({ error: "no item with that id" });
+  }
+
+  let canEdit = false;
+  let canDelete = false;
+  if (await userData.hasOwnerAccess(userId, "item", itemId)) {
+    canEdit = true;
+    canDelete = true;
+  } else if (await userData.hasEditAccess(userId, "item", itemId)) {
+    canEdit = true;
+  }
+
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) throw 'Please choose files to upload.';
+  } catch(e) {
+    return res.status(400).render("item", {
+      id: item._id,
+      itemName: item.name,
+      itemCreationDate: item.creationDate,
+      itemDescription: item.description,
+      canEdit: canEdit,
+      canDelete: canDelete,
+      countHistory: item.countHistory,
+      valueHistory: item.valueHistory,
+      error: e
+    });
+  }
+
+  try {
+    if (req.files) {
+      const imagePathList = req.files.map((file) =>
+        '../' + file.path.replace(/\\/g, "/")
+      );
+      console.log(imagePathList);
+      return res.render ("item", { 
+        id: item._id, 
+        imagePathList, 
+        id: item._id,
+        itemName: item.name,
+        itemCreationDate: item.creationDate,
+        itemDescription: item.description,
+        canEdit: canEdit,
+        canDelete: canDelete,
+        countHistory: item.countHistory,
+        valueHistory: item.valueHistory,
+      });
+    }
+  } catch(e) {
+    return res.status(400).render("item", {
+      id: item._id,
+      itemName: item.name,
+      itemCreationDate: item.creationDate,
+      itemDescription: item.description,
+      canEdit: canEdit,
+      canDelete: canDelete,
+      countHistory: item.countHistory,
+      valueHistory: item.valueHistory,
+      error: e
+    });
+  }
 });
 
 export default router;
