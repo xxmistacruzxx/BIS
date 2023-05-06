@@ -140,6 +140,10 @@ router.route("/:itemId").post(middleware.itemUpload.array("image", 6), async (re
 
   try {
     if (!req.files || Object.keys(req.files).length === 0) throw 'Please choose files to upload.';
+    const files = req.files;
+    for (const file of files) {
+      if (file.size > 1 * 512 * 512) throw 'File size limit exceeded.';
+    }
   } catch(e) {
     return res.status(400).render("item", {
       id: item._id,
@@ -156,21 +160,18 @@ router.route("/:itemId").post(middleware.itemUpload.array("image", 6), async (re
 
   try {
     if (req.files) {
-      const imagePathList = req.files.map((file) =>
-        '../' + file.path.replace(/\\/g, "/")
-      );
+      const imagePathList = req.files.map((file) => `../public/images/items/${file.filename}`);
       console.log(imagePathList);
-      return res.render ("item", { 
+      return res.render("item", { 
         id: item._id, 
         imagePathList, 
-        id: item._id,
         itemName: item.name,
         itemCreationDate: item.creationDate,
         itemDescription: item.description,
         canEdit: canEdit,
         canDelete: canDelete,
         countHistory: item.countHistory,
-        valueHistory: item.valueHistory,
+        valueHistory: item.valueHistory
       });
     }
   } catch(e) {
