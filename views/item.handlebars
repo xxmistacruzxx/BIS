@@ -25,6 +25,7 @@
   <div id="itemHistory">
     <div id="countHistory">
       <h2 class="subheader" id="countHistoryHeader">Count History</h2>
+      <h2 class="subheader">Average: {{avgCount}} | Low: {{lowCount}} | High: {{highCount}}</h2>
       <ul class="historyList" id="countHistoryList">
         {{#each countHistory}}
           <li class="historyEntry">{{this}}</li>
@@ -33,6 +34,7 @@
     </div>
     <div id="valueHistory">
       <h2 class="subheader" id="valueHistoryHeader">Value History</h2>
+      <h2 class="subheader">Average: {{avgValue}} | Low: {{lowValue}} | High: {{highValue}}</h2>
       <ul class="historyList" id="valueHistoryList">
         {{#each valueHistory}}
           <li class="historyEntry">{{this}}</li>

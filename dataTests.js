@@ -97,18 +97,18 @@ function generateString(length) {
   return result;
 }
 
-for (let i = 0; i < 100; i++) {
-  await buildingData.create(
-    user._id,
-    generateString(10),
-    generateString(10),
-    generateString(8),
-    generateString(8),
-    generateString(8),
-    generateString(6),
-    true
-  );
-}
+// for (let i = 0; i < 100; i++) {
+//   await buildingData.create(
+//     user._id,
+//     generateString(10),
+//     generateString(10),
+//     generateString(8),
+//     generateString(8),
+//     generateString(8),
+//     generateString(6),
+//     true
+//   );
+// }
 
 await userData.addBuildingRelation(
   user2._id,
