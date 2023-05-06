@@ -44,6 +44,8 @@ router.route("/:id").get(async (req, res) => {
   let sER = await buildingData.createSubEntriesHtmlRender(buildingId);
   let canEdit = false;
   let canDelete = false;
+  let user = await userData.get(userId)
+  let favorited = user.buildingFavorites.includes(buildingId);
   if (await userData.hasOwnerAccess(userId, "building", buildingId)) {
     canEdit = true;
     canDelete = true;
@@ -62,6 +64,7 @@ router.route("/:id").get(async (req, res) => {
     canDelete: canDelete,
     private: !building.publicBuilding,
     id: buildingId,
+    favorited: favorited,
   });
 });
 
