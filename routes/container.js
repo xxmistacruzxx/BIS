@@ -10,20 +10,20 @@ router.route("/:containerId").get(async (req, res) => {
     userId = validator.checkId(userId, "userId");
     await userData.get(userId);
   } catch (e) {
-    res.status(401).json({ error: e });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let containerId;
   try {
     containerId = req.params.containerId;
     containerId = validator.checkId(containerId, "containerId");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let container;
   try {
     container = await containerData.get(containerId);
   } catch (e) {
-    return res.status(404).json({ error: "no container with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
 
   // get the container's building and check if user has access to that building id
@@ -31,7 +31,7 @@ router.route("/:containerId").get(async (req, res) => {
     !await userData.hasViewerAccess(userId, "container", containerId) &&
     !await containerData.isPublic(containerId)
   )
-    return res.status(403).json({ error: "403: Forbidden" });
+  return res.status(403).render("error", { code: 403, error: "You do not have access to this container." });
 
   // todo: get container data and create html render
   let thisContainerData = await containerData.createExport(containerId);

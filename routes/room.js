@@ -9,29 +9,29 @@ router.route("/:roomId").get(async (req, res) => {
   try {
     userId = validator.checkId(userId, "userId");
     await userData.get(userId);
-  } catch(e) {
-    res.status(401).json({ error: e });
+  } catch (e) {
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let roomId;
   try {
     roomId = req.params.roomId;
     roomId = validator.checkId(roomId, "roomId");
-  } catch(e) {
-    return res.status(400).json({ error: e });
+  } catch (e) {
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let room;
   try {
     room = await roomData.get(roomId);
-  } catch(e) {
-    return res.status(404).json({ error: "no room with that id" });
+  } catch (e) {
+    return res.status(404).render("error", { code: 404, error: e });
   }
 
   // get the room's building and check if user has access to that building id
   if (
-    !userData.hasViewerAccess(userId, "room", roomId) &&
-    !roomData.isPublic(roomId)
+    !(await userData.hasViewerAccess(userId, "room", roomId)) &&
+    !(await roomData.isPublic(roomId))
   )
-    return res.status(403).json({ error: "403: Forbidden" });
+    return res.status(403).render("error", { code: 403, error: e });
 
   // todo: get room data and create html render
   let thisRoomData = await roomData.createExport(roomId);
@@ -53,7 +53,7 @@ router.route("/:roomId").get(async (req, res) => {
     canEdit: canEdit,
     canDelete: canDelete,
     id: roomId,
-    sER: sER
+    sER: sER,
   });
 });
 

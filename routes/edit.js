@@ -15,20 +15,21 @@ router.route("/building/:buildingId").get(async (req, res) => {
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid building id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "building", buildingId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this building" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this building",
+    });
 
   let l = {
     buildingId: buildingId,
@@ -48,20 +49,21 @@ router.route("/building/:buildingId").post(async (req, res) => {
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invald building id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "building", buildingId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this building" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this building",
+    });
 
   let name = req.body.buildingNameInput;
   let description = req.body.buildingDescriptionInput;
@@ -160,20 +162,21 @@ router.route("/room/:roomId").get(async (req, res) => {
   try {
     roomId = validator.checkId(roomId, "room id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid room id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let room;
   try {
     room = await roomData.get(roomId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "room", roomId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this room" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this room",
+    });
 
   let l = {
     roomId: roomId,
@@ -190,20 +193,21 @@ router.route("/room/:roomId").post(async (req, res) => {
   try {
     roomId = validator.checkId(roomId, "room id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid room id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let room;
   try {
     room = await roomData.get(roomId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "room", roomId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this room" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this room",
+    });
 
   let name = req.body.roomNameInput;
   let description = req.body.roomDescriptionInput;
@@ -236,7 +240,7 @@ router.route("/room/:roomId").post(async (req, res) => {
   let updatedRoom;
   try {
     updatedRoom = await roomData.updateRoomProperty(roomId, {
-      name:name,
+      name: name,
       description: description,
     });
   } catch (e) {
@@ -260,20 +264,21 @@ router.route("/container/:containerId").get(async (req, res) => {
   try {
     containerId = validator.checkId(containerId, "container id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid container id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let container;
   try {
     container = await containerData.get(containerId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "container", containerId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this container" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this container",
+    });
 
   let l = {
     containerId: containerId,
@@ -290,20 +295,21 @@ router.route("/container/:containerId").post(async (req, res) => {
   try {
     containerId = validator.checkId(containerId, "container id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid container id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let container;
   try {
     container = await containerData.get(containerId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "container", containerId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this container" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this container",
+    });
 
   let name = req.body.containerNameInput;
   let description = req.body.containerDescriptionInput;
@@ -335,10 +341,13 @@ router.route("/container/:containerId").post(async (req, res) => {
 
   let updatedContainer;
   try {
-    updatedContainer = await containerData.updateContainerProperties(containerId, {
-      name:name,
-      description: description,
-    });
+    updatedContainer = await containerData.updateContainerProperties(
+      containerId,
+      {
+        name: name,
+        description: description,
+      }
+    );
   } catch (e) {
     // USER ERROR
     errors.push(e);
@@ -360,20 +369,21 @@ router.route("/item/:itemId").get(async (req, res) => {
   try {
     itemId = validator.checkId(itemId, "item id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid item id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let item;
   try {
     item = await itemData.get(itemId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "item", itemId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this item" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this item",
+    });
 
   let l = {
     itemId: itemId,
@@ -392,20 +402,21 @@ router.route("/item/:itemId").post(async (req, res) => {
   try {
     itemId = validator.checkId(itemId, "item id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid item id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let item;
   try {
     item = await itemData.get(itemId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "item", itemId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this item" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this item",
+    });
 
   let name = req.body.itemNameInput;
   let description = req.body.itemDescriptionInput;
@@ -438,7 +449,7 @@ router.route("/item/:itemId").post(async (req, res) => {
   let updatedItem;
   try {
     updatedItem = await itemData.updateItemProperties(itemId, {
-      name:name,
+      name: name,
       description: description,
     });
   } catch (e) {
@@ -462,20 +473,23 @@ router.route("/item/setcount/:itemId").post(async (req, res) => {
   try {
     itemId = validator.checkId(itemId, "item id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid item id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let item;
   try {
     item = await itemData.get(itemId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "item", itemId);
   if (!access)
     return res
       .status(403)
-      .json({ error: "you do not have edit access to this item" });
+      .render("error", {
+        code: 403,
+        error: "you do not have edit access to this item",
+      });
 
   let l = {
     itemId: itemId,
@@ -517,20 +531,18 @@ router.route("/item/setvalue/:itemId").post(async (req, res) => {
   try {
     itemId = validator.checkId(itemId, "item id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid item id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let _id = req.session.user._id;
   let item;
   try {
     item = await itemData.get(itemId);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasEditAccess(_id, "item", itemId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have edit access to this item" });
+  return res.status(403).render("error", { code: 403, error: "you do not have edit access to this item" });
 
   let l = {
     itemId: itemId,

@@ -11,20 +11,20 @@ router.route("/:itemId").get(async (req, res) => {
     userId = validator.checkId(userId, "userId");
     await userData.get(userId);
   } catch (e) {
-    res.status(401).json({ error: e });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let itemId;
   try {
     itemId = req.params.itemId;
     itemId = validator.checkId(itemId, "itemId");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let item;
   try {
     item = await itemData.get(itemId);
   } catch (e) {
-    return res.status(404).json({ error: "no item with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
 
   // check if user exists and if they have access to item (is owner, manager, viewer, or building is public)
@@ -34,7 +34,7 @@ router.route("/:itemId").get(async (req, res) => {
   )
     return res
       .status(403)
-      .json({ error: "you do not have access to this item" });
+      .render("error", { code: 403, error: "you cannot access this item" });
 
   let canEdit = false;
   let canDelete = false;
@@ -129,7 +129,7 @@ router
     try {
       item = await itemData.get(itemId);
     } catch (e) {
-      return res.status(404).json({ error: "no item with that id" });
+      return res.status(404).render("error", { code: 404, error: e });
     }
 
     let canEdit = false;
@@ -140,6 +140,9 @@ router
     } else if (await userData.hasEditAccess(userId, "item", itemId)) {
       canEdit = true;
     }
+
+    if (!canEdit)
+      return res.status(403).render("error", { code: 403, error: "you cannot add an image" });
 
     // get item stats
     let countStats = {

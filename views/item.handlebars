@@ -1,7 +1,5 @@
 <link href="/public/css/building.css" rel="stylesheet">
-<header>
-   {{> navbar}}
-</header>
+{{> navbar}}
 <main>
   <div id="item">
     <div id="itemInfoDiv">
@@ -10,32 +8,29 @@
       <p class="subheader">{{itemDescription}}</p>
     </div>
   </div>
+  {{#if canEdit}}
   <div id="itemPictures">
     <form method="post" action="/item/{{id}}" enctype="multipart/form-data">
       <label for="image">Upload photos:</label><br>
       <input type="file" id="image" name="image" multiple /><br><br>
-      <input
-        type="submit"
-        name="addPicture"
-        id="addPicture"
-        value="Add"
-      />
+      <input type="submit" name="addPicture" id="addPicture" value="Add" />
       <br>
       <br>
     </form>
+    {{/if}}
 
     {{#if imagePathList}}
     {{#each imagePathList}}
-    <img src ="{{this}}" />
+    <img src="{{this}}" />
     {{/each}}
     {{/if}}
   </div>
   <div id="itemOptions">
     {{#if canEdit}}
-      <a class="submit-button" href="/edit/item/{{id}}">Edit This Item</a>
+    <a class="submit-button" href="/edit/item/{{id}}">Edit This Item</a>
     {{/if}}
     {{#if canDelete}}
-      <a class="submit-button" href="/delete/item/{{id}}">Delete This Item</a>
+    <a class="submit-button" href="/delete/item/{{id}}">Delete This Item</a>
     {{/if}}
   </div>
 
@@ -48,7 +43,7 @@
       <h2 class="subheader">Average: {{avgCount}} | Low: {{lowCount}} | High: {{highCount}}</h2>
       <ul class="historyList" id="countHistoryList">
         {{#each countHistory}}
-          <li class="historyEntry">{{this}}</li>
+        <li class="historyEntry">{{this}}</li>
         {{/each}}
       </ul>
     </div>
@@ -57,7 +52,7 @@
       <h2 class="subheader">Average: {{avgValue}} | Low: {{lowValue}} | High: {{highValue}}</h2>
       <ul class="historyList" id="valueHistoryList">
         {{#each valueHistory}}
-          <li class="historyEntry">{{this}}</li>
+        <li class="historyEntry">{{this}}</li>
         {{/each}}
       </ul>
     </div>

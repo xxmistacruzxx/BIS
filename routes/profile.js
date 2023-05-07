@@ -11,9 +11,7 @@ router.route("/").get(async (req, res) => {
   try {
     user = await userData.get(_id);
   } catch (e) {
-    return res
-      .status(500)
-      .json({ error: "Internal server error. Please try again." });
+    return res.status(500).render("error", { code: 500, error: e });
   }
   let owned = user.buildingOwnership;
   for (let i = 0; i < owned.length; i++) {
@@ -68,13 +66,13 @@ router.route("/:userName").get(async (req, res) => {
     userName = req.params.userName;
     userName = validator.checkUserName(userName, "id");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let user;
   try {
     user = await userData.getByUserName(userName);
   } catch (e) {
-    return res.status(404).json({ error: "User not found" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let l = {
     userName: user.userName,
@@ -94,7 +92,7 @@ router
     try {
       user = await userData.get(_id);
     } catch (e) {
-      return res.status(404).json({ error: e });
+      return res.status(404).render("error", { code: 404, error: e });
     }
 
     let owned = user.buildingOwnership;
@@ -253,10 +251,10 @@ router
 
       // basic error checks
       try {
-        if (!req.file) throw 'Please choose a file to upload.';
+        if (!req.file) throw "Please choose a file to upload.";
         console.log(req.file.size);
-        if (req.file.size > 1 * 512 * 512) throw 'File size limit exceeded.';
-      } catch(e) {
+        if (req.file.size > 1 * 512 * 512) throw "File size limit exceeded.";
+      } catch (e) {
         return res.status(400).render("myProfile", {
           alerts: [e],
           profilePicture: user.profilePicture,

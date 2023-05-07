@@ -10,13 +10,13 @@ router.route("/").get(async (req, res) => {
   try {
     buildings = await buildingData.getPublicBuildings(skip);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
 
   for (let i = 0; i < buildings.length; i++) {
     buildings[
       i
-    ] = `<li><a href="/building/${buildings[i]._id}">${buildings[i].name} | ${buildings[i].description}</a><input type="submit" class="favoriteButton" id="${buildings[i]._id}"/></li>`;
+    ] = `<li><a href="/building/${buildings[i]._id}">${buildings[i].name} | ${buildings[i].description}</a></li>`;
   }
 
   let l = {
@@ -34,12 +34,12 @@ router.route("/:skip").get(async (req, res) => {
     skip = validator.checkInt(Number(skip), "skip");
     if (skip < 0) return res.redirect("/browse");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   try {
     buildings = await buildingData.getPublicBuildings(skip);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
   if (buildings.length === 0) return res.redirect("/browse");
 
@@ -51,9 +51,14 @@ router.route("/:skip").get(async (req, res) => {
   let prev = 0;
   if (skip >= 20) prev = skip - 20;
   let next = skip + 20;
-  let nextBuildings = await buildingData.getPublicBuildings(skip + 20)
-  if (nextBuildings.length === 0)
-    next = skip;
+  let nextBuildings;
+  try {
+    nextBuildings = await buildingData.getPublicBuildings(skip + 20);
+  } catch (e) {
+    return res.status(500).render("error", { code: 500, error: e });
+  }
+
+  if (nextBuildings.length === 0) next = skip;
 
   let l = {
     buildings: buildings,

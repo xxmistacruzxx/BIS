@@ -8,27 +8,36 @@ router.route("/:buildingId").get(async (req, res) => {
   try {
     _id = validator.checkId(_id, "user id");
   } catch (e) {
-    return res.status(401).json({ error: "failed to authenticate user" });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let buildingId = req.params.buildingId;
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasOwnerAccess(_id, "building", buildingId);
   if (!access)
-    return res.status(403).json({ error: "you do not own this building" });
+    return res
+      .status(403)
+      .render("error", { code: 403, error: "you don't own this building" });
   if (building.publicBuilding === true)
-    return res.status(400).json({ error: "this building is already public" });
+    return res
+      .status(400)
+      .render("error", { code: 400, error: "this building is already public" });
+  let managePerm;
+  try {
+    managePerm = await buildingData.manageList(buildingId);
+  } catch (e) {
+    return res.status(500).render("error", { code: 500, error: e });
+  }
 
-  let managePerm = await buildingData.manageList(buildingId);
   for (let i = 0; i < managePerm.length; i++) {
     managePerm[
       i
@@ -55,19 +64,19 @@ router.route("/:buildingId").post(async (req, res) => {
   try {
     _id = validator.checkId(_id, "user id");
   } catch (e) {
-    return res.status(401).json({ error: "failed to authenticate user" });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let buildingId = req.params.buildingId;
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let managePerm = await buildingData.manageList(buildingId);
   for (let i = 0; i < managePerm.length; i++) {
@@ -91,7 +100,10 @@ router.route("/:buildingId").post(async (req, res) => {
   let shareType = req.body.shareType.trim();
   let userName = req.body.userNameInput;
   if (shareType !== "manage" && shareType !== "view")
-    return res.status(400).json({ error: "shareType must be manage or view" });
+    return res.status(400).render("error", {
+      code: 400,
+      error: "shareType must be manage or view",
+    });
   try {
     userName = validator.checkUserName(userName, "userName");
   } catch (e) {
@@ -132,41 +144,41 @@ router.route("/:buildingId/removemanage/:userName").get(async (req, res) => {
   try {
     _id = validator.checkId(_id, "user id");
   } catch (e) {
-    return res.status(401).json({ error: "failed to authenticate user" });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let buildingId = req.params.buildingId;
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let userNameToAdd = req.params.userName;
   try {
     userNameToAdd = validator.checkUserName(userNameToAdd, "username");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let userToAdd;
   try {
     userToAdd = await userData.getByUserName(userNameToAdd);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasOwnerAccess(_id, "building", buildingId);
-  if (!access)
-    return res.status(403).json({ error: "you do not own this building" });
+  if (!access) return res.status(403).render("error", { code: 403, error: e });
   if (building.publicBuilding === true)
-    return res.status(400).json({ error: "this building is already public" });
+    return res.status(400).render("error", { code: 400, error: e });
   if (!userToAdd.buildingManageAccess.includes(buildingId))
-    return res
-      .status(400)
-      .json({ error: `user ${user.name} has no manage access to remove` });
+    return res.status(500).render("error", {
+      code: 500,
+      error: `user ${user.name} has no manage access to remove`,
+    });
 
   try {
     await userData.removeBuildingRelation(
@@ -175,7 +187,8 @@ router.route("/:buildingId/removemanage/:userName").get(async (req, res) => {
       buildingId
     );
   } catch (e) {
-    return res.status(500).json({
+    return res.status(500).render("error", {
+      code: 500,
       error: e.toString(),
     });
   }
@@ -188,41 +201,49 @@ router.route("/:buildingId/removeview/:userName").get(async (req, res) => {
   try {
     _id = validator.checkId(_id, "user id");
   } catch (e) {
-    return res.status(401).json({ error: "failed to authenticate user" });
+    return res.status(401).render("error", {
+      code: 401,
+      error: e,
+    });
   }
   let buildingId = req.params.buildingId;
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let userNameToAdd = req.params.userName;
   try {
     userNameToAdd = validator.checkUserName(userNameToAdd, "username");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let userToAdd;
   try {
     userToAdd = await userData.getByUserName(userNameToAdd);
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.status(404).render("error", { code: 404, error: e });
   }
   let access = await userData.hasOwnerAccess(_id, "building", buildingId);
   if (!access)
-    return res.status(403).json({ error: "you do not own this building" });
+    return res
+      .status(403)
+      .render("error", { code: 403, error: "you do not own this building" });
   if (building.publicBuilding === true)
-    return res.status(400).json({ error: "this building is already public" });
-  if (!userToAdd.buildingViewAccess.includes(buildingId))
     return res
       .status(400)
-      .json({ error: `user ${user.name} has no manage access to remove` });
+      .render("error", { code: 400, error: "this building is already punlic" });
+  if (!userToAdd.buildingViewAccess.includes(buildingId))
+    return res.status(400).render("error", {
+      code: 400,
+      error: `user ${user.name} has no manage access to remove`,
+    });
 
   try {
     await userData.removeBuildingRelation(
@@ -231,7 +252,8 @@ router.route("/:buildingId/removeview/:userName").get(async (req, res) => {
       buildingId
     );
   } catch (e) {
-    return res.status(500).json({
+    return res.status(500).render("error", {
+      code: 500,
       error: e.toString(),
     });
   }

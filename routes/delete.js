@@ -14,21 +14,22 @@ router.route("/building/:buildingId").get(async (req, res) => {
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete building
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "building", buildingId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this building" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have access to this building",
+    });
   // get building
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
   // render page
   return res.render("delete", {
@@ -44,20 +45,22 @@ router.route("/building/:buildingId").post(async (req, res) => {
   try {
     buildingId = validator.checkId(buildingId, "building id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete building
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "building", buildingId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this building" });
+    return res.status(400).render("error", {
+      code: 403,
+      error: "you do not have owner access to this building",
+    });
+
   //delete building
   try {
     await buildingData.remove(buildingId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
 
   return res.redirect("/");
@@ -75,15 +78,16 @@ router.route("/room/:roomId").get(async (req, res) => {
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "room", roomId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this room" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have owner access to this room",
+    });
   // get room
   let room;
   try {
     room = await roomData.get(roomId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
   // render page
   return res.render("delete", {
@@ -99,20 +103,21 @@ router.route("/room/:roomId").post(async (req, res) => {
   try {
     roomId = validator.checkId(roomId, "room id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete room
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "room", roomId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this room" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have owner access to this room",
+    });
   //delete room
   try {
     await roomData.remove(roomId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
 
   return res.redirect("/");
@@ -124,21 +129,22 @@ router.route("/container/:containerId").get(async (req, res) => {
   try {
     containerId = validator.checkId(containerId, "container id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete container
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "container", containerId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this container" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have owner access to this container",
+    });
   // get container
   let container;
   try {
     container = await containerData.get(containerId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
   // render page
   return res.render("delete", {
@@ -154,20 +160,21 @@ router.route("/container/:containerId").post(async (req, res) => {
   try {
     containerId = validator.checkId(containerId, "container id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete container
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "container", containerId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this container" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have owner access to this room",
+    });
   //delete container
   try {
     await containerData.remove(containerId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
 
   return res.redirect("/");
@@ -179,21 +186,22 @@ router.route("/item/:itemId").get(async (req, res) => {
   try {
     itemId = validator.checkId(itemId, "item id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete item
   let _id = req.session.user._id;
   let access = await userData.hasOwnerAccess(_id, "item", itemId);
   if (!access)
-    return res
-      .status(403)
-      .json({ error: "you do not have owner access to this item" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have owner access to this item",
+    });
   // get item
   let item;
   try {
     item = await itemData.get(itemId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
   // render page
   return res.render("delete", {
@@ -209,7 +217,7 @@ router.route("/item/:itemId").post(async (req, res) => {
   try {
     itemId = validator.checkId(itemId, "item id");
   } catch (e) {
-    return res.status(400).json({ error: "invalid id" });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   // check if user can delete item
   let _id = req.session.user._id;
@@ -217,12 +225,15 @@ router.route("/item/:itemId").post(async (req, res) => {
   if (!access)
     return res
       .status(403)
-      .json({ error: "you do not have owner access to this item" });
+      .render("error", {
+        code: 403,
+        error: "you do not have owner access to this item",
+      });
   //delete item
   try {
     await itemData.remove(itemId);
   } catch (e) {
-    return res.status(500).json({ error: e });
+    return res.status(500).render("error", { code: 500, error: e });
   }
 
   return res.redirect("/");

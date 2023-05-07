@@ -16,26 +16,29 @@ router.route("/:id").get(async (req, res) => {
     userId = validator.checkId(userId, "userId");
     await userData.get(userId);
   } catch (e) {
-    res.status(401).json({ error: e });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let buildingId;
   try {
     buildingId = req.params.id;
     buildingId = validator.checkId(buildingId, "buildingId");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
 
   // check if user exists and if they have access to building id (is owner, manager, viewer, or building is public)
   let access = await userData.hasViewerAccess(userId, "building", buildingId);
   if (!access && !building.publicBuilding)
-    return res.status(403).json({ error: "403: Forbidden" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "You cannot access this building.",
+    });
 
   // get building data and create html render
   let thisBuildingData = await buildingData.createExport(buildingId);
@@ -44,7 +47,7 @@ router.route("/:id").get(async (req, res) => {
   let sER = await buildingData.createSubEntriesHtmlRender(buildingId);
   let canEdit = false;
   let canDelete = false;
-  let user = await userData.get(userId)
+  let user = await userData.get(userId);
   let favorited = user.buildingFavorites.includes(buildingId);
   if (await userData.hasOwnerAccess(userId, "building", buildingId)) {
     canEdit = true;
@@ -75,26 +78,26 @@ router.route("/:id/download").get(async (req, res) => {
     userId = validator.checkId(userId, "userId");
     await userData.get(userId);
   } catch (e) {
-    res.status(401).json({ error: e });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let buildingId;
   try {
     buildingId = req.params.id;
     buildingId = validator.checkId(buildingId, "buildingId");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
 
   // check if user exists and if they have access to building id (is owner, manager, viewer, or building is public)
   let access = await userData.hasViewerAccess(userId, "building", buildingId);
   if (!access && !building.publicBuilding)
-    return res.status(403).json({ error: "403: Forbidden" });
+    return res.status(403).render("error", { code: 403, error: e });
 
   // get building data
   let thisBuildingData = await buildingData.createExport(buildingId);

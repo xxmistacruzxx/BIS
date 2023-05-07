@@ -10,26 +10,27 @@ router.route("/:buildingId").get(async (req, res) => {
     userId = validator.checkId(userId, "userId");
     await userData.get(userId);
   } catch (e) {
-    res.status(401).json({ error: e });
+    return res.status(401).render("error", { code: 401, error: e });
   }
   let buildingId;
   try {
     buildingId = req.params.buildingId;
     buildingId = validator.checkId(buildingId, "buildingId");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render("error", { code: 400, error: e });
   }
   let building;
   try {
     building = await buildingData.get(buildingId);
   } catch (e) {
-    return res.status(404).json({ error: "no building with that id" });
+    return res.status(404).render("error", { code: 404, error: e });
   }
 
   if (!building.publicBuilding)
-    return res
-      .status(400)
-      .json({ error: "you cannot favorite a private building" });
+    return res.status(400).render("error", {
+      code: 400,
+      error: "you cannot favorite private buildings",
+    });
 
   let user = await userData.get(userId);
   if (!user.buildingFavorites.includes(buildingId))
@@ -40,7 +41,7 @@ router.route("/:buildingId").get(async (req, res) => {
         buildingId
       );
     } catch (e) {
-      return res.status(500).json({ error: e });
+      return res.status(500).render("error", { code: 500, error: e });
     }
   else
     try {
@@ -50,7 +51,7 @@ router.route("/:buildingId").get(async (req, res) => {
         buildingId
       );
     } catch (e) {
-      return res.status(500).json({ error: e });
+      return res.status(500).render("error", { code: 500, error: e });
     }
 
   return res.redirect(`/building/${building._id}`);
