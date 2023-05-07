@@ -55,17 +55,6 @@ function checkPassword(password, varName) {
     return password;
 }
 
-/* function checkconfirmPassword(password, varName) {
-    confirmPassword = this.checkPassword(password, varName);
-    if(confirmPassword !== password)
-    if (password.length < 8) throw `${varName} must be 8 characters or longer`;
-    if (!password.match(/[A-Z]/)) throw `${varName} must have a capital letter`;
-    if (!password.match(/[0-9]/)) throw `${varName} must have a number`;
-    if (!password.match(/[\W_]/))
-      throw `${varName} must have a special character`;
-    return password;
-} */
-
 function renderAlerts(listOfAlerts) {
   let accum = "";
   for (i of listOfAlerts) {
