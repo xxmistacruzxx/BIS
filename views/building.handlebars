@@ -23,6 +23,13 @@
                <a class="submit-button" href="/share/{{id}}">Share This Building</a>
                {{/if}}
             {{/if}}
+            {{#unless private}}
+               {{#if favorited}}
+               <a class="submit-button" href="/favorite/{{id}}">Unfavorite this building</a>
+               {{else}}
+               <a class="submit-button" href="/favorite/{{id}}">Favorite this building</a>
+               {{/if}}
+            {{/unless}}
             <a class="submit-button" href="/building/{{id}}/download">Download JSON</a>
          </div>
       </div>

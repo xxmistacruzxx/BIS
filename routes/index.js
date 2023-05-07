@@ -12,6 +12,7 @@ import roomRoutes from "./room.js";
 import containerRoutes from "./container.js";
 import itemRoutes from "./item.js";
 import browseRoutes from "./browse.js"
+import favoriteRoutes from "./favorite.js"
 
 const constructorMethod = (app) => {
   app.use("/login", loginRoutes);
@@ -28,6 +29,7 @@ const constructorMethod = (app) => {
   app.use("/container", containerRoutes);
   app.use("/item", itemRoutes);
   app.use("/browse", browseRoutes)
+  app.use("/favorite", favoriteRoutes)
 
   app.use("*", (req, res) => {
     return res.redirect("/");

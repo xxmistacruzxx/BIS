@@ -16,7 +16,7 @@ router.route("/").get(async (req, res) => {
   for (let i = 0; i < buildings.length; i++) {
     buildings[
       i
-    ] = `<li><a href="/building/${buildings[i]._id}">${buildings[i].name} | ${buildings[i].description}</a></li>`;
+    ] = `<li><a href="/building/${buildings[i]._id}">${buildings[i].name} | ${buildings[i].description}</a><input type="submit" class="favoriteButton" id="${buildings[i]._id}"/></li>`;
   }
 
   let l = {
