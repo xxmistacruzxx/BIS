@@ -188,11 +188,13 @@
       <br>
       <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit" hidden>Submit</button><br><br>
 
-      {{#if alerts}}
+      <div id="alerts">
+        {{#if alerts}}
         {{#each alerts}}
           <p class="error-message">{{this}}</p>
         {{/each}}
       {{/if}}
+      </div>
 
     </form>
     <script src="public/js/add.js"></script>
