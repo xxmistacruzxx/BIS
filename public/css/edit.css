@@ -99,3 +99,15 @@ body {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+.text-bar {
+  padding: 6px;
+  border-radius: 12px;
+  width: 55%;
+  font-size: 16px;
+}
+
+.share-list{
+  list-style: none;
+  margin-right: 35px;
+}

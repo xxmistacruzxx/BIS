@@ -1,17 +1,22 @@
-{{> navbar}}
+<link href="/public/css/browse.css" rel="stylesheet">
+<header>
+   {{> navbar}}
+</header>
 <main>
-    <h1>
+    <h1 class="header">
         Browse Public Buildings
     </h1>
     <div id="publicBuildingsDiv">
-        <ul id="publicBuildingsList">
+        <ul class="listings" id="publicBuildingsList">
             {{#each buildings}}
                 {{{this}}}
             {{/each}}
         </ul>
     </div>
+    <br>
     <div>
-        <a href="/browse/{{prev}}">Previous</a> | 
-        <a href="/browse/{{next}}">Next</a>
+        <a class="subheader" href="/browse/{{prev}}">Previous</a>
+        <a class="subheader"> | </a> 
+        <a class="subheader" href="/browse/{{next}}">Next</a>
     </div>
 </main>

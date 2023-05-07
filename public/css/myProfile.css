@@ -87,8 +87,9 @@ body {
 }
 
 .header {
+  /* font is weirdly upscaled? usually 50px but made it 36px to compensate */
   text-align: center;
-  font-size: 50px;
+  font-size: 36px;
   font-weight: bold;
 }
 
@@ -108,7 +109,6 @@ body {
 }
 
 .listings {
-  text-decoration: none;
   width: 20%;
   list-style-type: none;
   font-weight: bold;
@@ -117,7 +117,53 @@ body {
 .listings li {
   background-color: #ffd800;
   border-radius: 12px;
-  color: black;
   margin: 10px 0;
   padding: 4px 6px 4px 6px;
+}
+
+.listings a{
+  text-decoration: none;
+  color: black;
+}
+
+.listings li:hover{
+  background-color: #ffea00;
+}
+
+.text-bar {
+  padding: 6px;
+  border-radius: 12px;
+  width: 60%;
+  margin: 8px 0;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.user-submit-button {
+  background-color: #ffd800;
+  color: black;
+  padding: 6px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: bold;
+  width: 60%;
+  border: none;
+}
+
+.user-submit-button:hover {
+  background-color: #ffea00;
+  cursor: pointer;
+}
+
+.image-button {
+  background-color: #ffd800;
+  color: black;
+  padding: 6px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: bold;
+  width: 60%;
+  border: none;
 }
