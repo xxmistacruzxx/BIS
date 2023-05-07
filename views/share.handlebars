@@ -7,29 +7,29 @@
   <div class="form-container" id="shareContainer">
     <div class="shareDiv" id="manageDiv">
       <h2 class="shareHeader" id="manageHeader">Manage Permission</h2>
-      <ul class="shareList" id="manageList">
+      <ul class="share-list" id="manageList">
         {{#each managePerm}}
           <li>{{{this}}}</li>
         {{/each}}
       </ul>
       <form method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="manage" />
-        <label for="userNameInput">Username</label>
-        <input type="text" id="userNameInput" name="userNameInput" /><br><br>
+        <label for="userNameInput">Username: </label>
+        <input class="text-bar" type="text" id="userNameInput" name="userNameInput" /><br><br>
         <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Confirm Manage Permissions</button><br>
       </form>
     </div>
     <div class="shareDiv" id="viewDiv">
       <h2 class="shareHeader" id="viewHeader">View Permission</h2>
-      <ul class="shareList" id="viewList">
+      <ul class="share-list" id="viewList">
         {{#each viewPerm}}
           <li>{{{this}}}</li>
         {{/each}}
       </ul>
       <form method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="view" />
-        <label for="userNameInput">Username</label>
-        <input type="text" id="userNameInput" name="userNameInput" /><br><br>
+        <label for="userNameInput">Username: </label>
+        <input class="text-bar" type="text" id="userNameInput" name="userNameInput" /><br><br>
         <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Confirm View Permissions</button><br>
       </form>
     </div>
