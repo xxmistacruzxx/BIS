@@ -1,11 +1,12 @@
 <link rel="stylesheet" href="/public/css/myProfile.css">
+<script src="/public/js/validator.js" type="module"></script>
+<script src="/public/js/profile.js" type="module"></script>
 {{> navbar}}
-
 <main>
   <h1 class="header">Welcome back to the Inventory System!</h1>
   <div class="parent-container" id="profileForms">
     <div class="form-container">
-      <form method="POST" action="/profile" enctype="multipart/form-data">
+      <form id="pictureForm" method="POST" action="/profile" enctype="multipart/form-data">
         <input type="hidden" name="formType" value="profilePicture" />
         <img src="{{profilePicture}}" class="profilePicture"/><br /><br />
         <label for="pictureUpload">Select Profile Picture</label><br />
@@ -23,7 +24,7 @@
     </div>
 
     <div class="form-container">
-      <form method="POST" action="/profile">
+      <form id="infoForm" method="POST" action="/profile">
         <input type="hidden" name="formType" value="userInfo" /><br />
         <label for="firstNameInput">First Name</label><br />
         <input
@@ -72,7 +73,7 @@
     </div>
 
     <div class="form-container">
-      <form method="POST" action="/profile">
+      <form id="passwordForm" method="POST" action="/profile">
         <input type="hidden" name="formType" value="password" />
         <label for="passwordInput">Password</label><br />
         <input
