@@ -65,14 +65,43 @@ body {
   border-radius: 12px;
   text-decoration: none;
   margin-left: 10px;
+  font-weight: bold;
 }
 
 .submit-button:hover {
   background-color: #ffea00;
+  cursor: pointer;
+}
+
+.search-button {
+  background-color: #ffd800;
+  border: none;
+  width: auto;
+  padding: 7px;
+  border-radius: 12px;
+  margin: 8px 0;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.search-button:hover {
+  background-color: #ffea00;
+  cursor: pointer;
+}
+
+.search-bar {
+  padding: 6px;
+  border-radius: 12px;
+  width: 15%;
+  margin: 8px 0;
+  font-size: 16px;
+  margin-left: 10px;
 }
 
 .layers {
   list-style-type: none;
+  font-weight: bold;
 }
 
 .layers a {
