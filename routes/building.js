@@ -44,7 +44,7 @@ router.route("/:id").get(async (req, res) => {
   // get building data and create html render
   let thisBuildingData = await buildingData.createExport(buildingId);
   let buildingLocation = `${thisBuildingData.address}, ${thisBuildingData.city} ${thisBuildingData.state}, ${thisBuildingData.zip}`;
-  let mapLocation = buildingLocation.replace(" ", "+");
+  let mapLocation = buildingLocation.replaceAll(" ", "+");
   let sER = await buildingData.createSubEntriesHtmlRender(buildingId);
   let canEdit = false;
   let canDelete = false;

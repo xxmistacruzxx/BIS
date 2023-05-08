@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validator from "../validator.js";
 import { buildingData, userData } from "../data/index.js";
-import xss from "xss"
+import xss from "xss";
 const router = Router();
 
 router.route("/:buildingId").get(async (req, res) => {
@@ -102,17 +102,18 @@ router.route("/:buildingId").post(async (req, res) => {
   let userName;
   try {
     shareType = xss(req.body.shareType).trim();
-    userName = xss(req.body.userNameInput);
+    if (shareType !== "manage" && shareType !== "view")
+      return res.status(400).render("error", {
+        code: 400,
+        error: "shareType must be manage or view",
+      });
+    if (shareType === "manage") userName = xss(req.body.userNameInput);
+    else userName = xss(req.body.userNameInput1);
   } catch (e) {
     l.alerts.push(e);
     return res.status(400).render("share", l);
   }
 
-  if (shareType !== "manage" && shareType !== "view")
-    return res.status(400).render("error", {
-      code: 400,
-      error: "shareType must be manage or view",
-    });
   try {
     userName = validator.checkUserName(userName, "userName");
   } catch (e) {
