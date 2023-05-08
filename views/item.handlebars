@@ -1,62 +1,65 @@
 <link href="/public/css/building.css" rel="stylesheet">
 {{> navbar}}
 <main>
-  <div id="item">
-    <div id="itemInfoDiv">
-      <h1 class="header">{{itemName}} (Item)</h1>
-      <h2 class="subheader">Created: {{itemCreationDate}}</h2>
-      <p class="subheader">{{itemDescription}}</p>
-    </div>
-  </div>
-  {{#if canEdit}}
-  <div id="itemPictures">
-    <form method="post" action="/item/{{id}}" enctype="multipart/form-data">
-      <label for="image">Select (up to 6) photos to display:</label><br>
-      <input type="file" id="image" name="image" multiple /><br><br>
-      <input type="submit" name="addPicture" id="addPicture" value="Set" />
-      <input type="submit" name="removeAll" id="removeAll" value="Remove All Photos" />
-      <br>
-      <br>
-    </form>
-    {{/if}}
+   <div id="item">
+      <div id="itemInfoDiv">
+         <h1 class="header">{{itemName}} (Item)</h1>
+         <h2 class="subheader">Created: {{itemCreationDate}}</h2>
+         <p class="subheader">{{itemDescription}}</p>
+      </div>
+   </div>
+   <div id="itemOptions">
+      {{#if canEdit}}
+      <a class="submit-button" href="/edit/item/{{id}}">Edit This Item</a>
+      {{/if}}
+      {{#if canDelete}}
+      <a class="submit-button" href="/delete/item/{{id}}">Delete This Item</a>
+      {{/if}}
+   </div>
 
-    {{#if images}}
-    {{#each images}}
-    <img src="{{this}}" />
-    {{/each}}
-    {{/if}}
-  </div>
-  <div id="itemOptions">
-    {{#if canEdit}}
-    <a class="submit-button" href="/edit/item/{{id}}">Edit This Item</a>
-    {{/if}}
-    {{#if canDelete}}
-    <a class="submit-button" href="/delete/item/{{id}}">Delete This Item</a>
-    {{/if}}
-  </div>
+   <br><br>
+   <hr class="divider">
+   <br><br>
 
-  <br><br>
-  <hr class="divider">
+   {{#if canEdit}}
+   <div id="itemPictures">
+      <form method="post" action="/item/{{id}}" enctype="multipart/form-data">
+         <label class="move-right" for="image">Select (up to 6) photos to display:</label><br>
+         <input class="move-right" type="file" id="image" name="image" multiple /><br><br>
+         <input class="submit-button" type="submit" name="addPicture" id="addPicture" value="Set" />
+         <input class="submit-button" type="submit" name="removeAll" id="removeAll" value="Remove All Photos" />
+         <br>
+         <br>
+      </form>
+      {{/if}}
+      {{#if images}}
+      {{#each images}}
+      <img class="move-right" src="{{this}}" />
+      {{/each}}
+      {{/if}}
+   </div>
 
-  <div id="itemHistory">
-    <div id="countHistory">
-      <h2 class="subheader" id="countHistoryHeader">Count History</h2>
-      <h2 class="subheader">Average: {{avgCount}} | Low: {{lowCount}} | High: {{highCount}}</h2>
-      <ul class="historyList" id="countHistoryList">
-        {{#each countHistory}}
-        <li class="historyEntry">{{this}}</li>
-        {{/each}}
-      </ul>
-    </div>
-    <div id="valueHistory">
-      <h2 class="subheader" id="valueHistoryHeader">Value History</h2>
-      <h2 class="subheader">Average: {{avgValue}} | Low: {{lowValue}} | High: {{highValue}}</h2>
-      <ul class="historyList" id="valueHistoryList">
-        {{#each valueHistory}}
-        <li class="historyEntry">{{this}}</li>
-        {{/each}}
-      </ul>
-    </div>
-  </div>
+   <br><br>
+   <hr class="divider">
 
+   <div id="itemHistory">
+      <div id="countHistory">
+         <h2 class="subheader" id="countHistoryHeader">Count History</h2>
+         <h2 class="subheader">Average: {{avgCount}} | Low: {{lowCount}} | High: {{highCount}}</h2>
+         <ul class="historyList" id="countHistoryList">
+            {{#each countHistory}}
+            <li class="historyEntry">{{this}}</li>
+            {{/each}}
+         </ul>
+      </div>
+      <div id="valueHistory">
+         <h2 class="subheader" id="valueHistoryHeader">Value History</h2>
+         <h2 class="subheader">Average: {{avgValue}} | Low: {{lowValue}} | High: {{highValue}}</h2>
+         <ul class="historyList" id="valueHistoryList">
+            {{#each valueHistory}}
+            <li class="historyEntry">{{this}}</li>
+            {{/each}}
+         </ul>
+      </div>
+   </div>
 </main>
