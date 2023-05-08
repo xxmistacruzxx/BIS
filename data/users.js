@@ -217,7 +217,7 @@ export async function updateUserProperties(userId, propertiesAndValues) {
           propertiesAndValues[keys[i]],
           keys[i]
         );
-        await emailUnique(keys[i]);
+        await emailUnique(propertiesAndValues[keys[i]]);
         break;
       case "firstName":
         propertiesAndValues[keys[i]] = validator.checkName(
