@@ -29,6 +29,12 @@
          <input class="submit-button" type="submit" name="addPicture" id="addPicture" value="Set" />
          <input class="submit-button" type="submit" name="removeAll" id="removeAll" value="Remove All Photos" />
          <br>
+         <ul class="error-message" id="alerts">
+         {{#if error}}
+            <p class="error-message">{{error}}</p>
+         {{/if}}
+         </ul>
+         <br>
          <br>
       </form>
       {{/if}}

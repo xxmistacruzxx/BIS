@@ -5,6 +5,7 @@ import xss from "xss"
 const router = Router();
 import middleware from "../middleware.js";
 import { itemImages } from "../config/mongoCollections.js";
+import fs from "fs";
 
 router.route("/:itemId").get(async (req, res) => {
   // basic error checks
@@ -245,9 +246,19 @@ router
       const files = Object.values(req.files);
       if (files.length > 6) throw "You can upload up to 6 files.";
       for (const file of files) {
-        if (file.size > 1 * 512 * 512) throw "File size limit exceeded.";
+        if (file.size > 1 * 1024 * 1024) {
+          for (const file of req.files) {
+            fs.unlinkSync(file.path);
+          }
+          throw "File size limit exceeded."; 
+        }
         const allowedTypes = ['image/jpeg', 'image/png', 'image/tiff'];
-        if (!allowedTypes.includes(file.mimetype)) throw "Invalid file type. Only jpg, jpeg, png, and tiff files are allowed.";
+        if (!allowedTypes.includes(file.mimetype)) {
+          for (const file of req.files) {
+            fs.unlinkSync(file.path);
+          }
+          throw "Invalid file type. Only jpg, jpeg, png, and tiff files are allowed.";
+        }
       }
     } catch (e) {
       return res.status(400).render("item", {
