@@ -180,13 +180,14 @@ function addBuilding() {
   } catch (e) {
     errors.push(e);
   }
+  let buildingZipInput;
   try {
-    let buildingZipInput = document.querySelector("#addBuildingZipInput").value;
+    buildingZipInput = document.querySelector("#addBuildingZipInput").value;
     buildingZipInput = checkString(buildingZipInput, "Building Zip");
   } catch (e) {
     if (
       e ===
-      `${buildingZipInput.trim()} is not a valid value for zip as it only contains digits`
+      `${buildingZipInput.trim()} is not a valid value for Building Zip as it only contains digits`
     )
       zip = zip.trim();
     else errors.push(e);

@@ -104,6 +104,10 @@ body {
   font-weight: bold;
 }
 
+.layers ul li {
+  margin-top: 20px;
+}
+
 .layers a {
   background-color: #ffd800;
   color: black;
