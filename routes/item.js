@@ -147,7 +147,7 @@ router.route("/:itemId").get(async (req, res) => {
 
 router
   .route("/:itemId")
-  .post(middleware.itemUpload.array("image", 6), async (req, res) => {
+  .post(middleware.itemUpload.array("image", 7), async (req, res) => {
     let itemId; 
     let userId = req.session.user._id;
     let item;
@@ -230,7 +230,8 @@ router
     try {
       if (!req.files || Object.keys(req.files).length === 0)
         throw "Please choose files to upload.";
-      const files = xss(req.files);
+      const files = Object.values(req.files);
+      if (files.length > 6) throw "You can upload up to 6 files.";
       for (const file of files) {
         if (file.size > 1 * 512 * 512) throw "File size limit exceeded.";
       }

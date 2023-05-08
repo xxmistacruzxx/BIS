@@ -261,11 +261,12 @@ export async function createItemImages(itemId, pathList) {
   if (!Array.isArray(pathList)) throw 'pathList must be an array';
 
   // check if theres already an item in the collection with a matching itemId
-  let existingItem = await itemImages.findOne({ itemId: itemId });
+  let itemImagesCollection = await itemImages();
+  let existingItem = await itemImagesCollection.findOne({ itemId: itemId });
 
   // if there is, then delete it
   if (existingItem) {
-    await itemImages.deleteOne({ itemId: itemId });
+    await itemImagesCollection.deleteOne({ itemId: itemId });
   }
 
   // add image paths to itemImages collection
