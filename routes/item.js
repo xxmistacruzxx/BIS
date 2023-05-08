@@ -147,7 +147,7 @@ router.route("/:itemId").get(async (req, res) => {
 
 router
   .route("/:itemId")
-  .post(middleware.itemUpload.array("image", 7), async (req, res) => {
+  .post(middleware.itemUpload.array("image", undefined), async (req, res) => {
     let itemId; 
     let userId = req.session.user._id;
     let item;
@@ -156,6 +156,18 @@ router
       item = await itemData.get(itemId);
     } catch (e) {
       return res.status(404).render("error", { code: 404, error: e });
+    }
+
+    if (req.body.removeAll) {
+      // check if theres an item in the collection with a matching itemId
+      let itemImagesCollection = await itemImages();
+      let existingItem = await itemImagesCollection.findOne({ itemId: itemId });
+
+      // if there is, then delete it
+      if (existingItem) {
+        await itemImagesCollection.deleteOne({ itemId: itemId });
+      }
+      return res.redirect(`/item/${itemId}`);
     }
 
     let canEdit = false;
@@ -234,6 +246,8 @@ router
       if (files.length > 6) throw "You can upload up to 6 files.";
       for (const file of files) {
         if (file.size > 1 * 512 * 512) throw "File size limit exceeded.";
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/tiff'];
+        if (!allowedTypes.includes(file.mimetype)) throw "Invalid file type. Only jpg, jpeg, png, and tiff files are allowed.";
       }
     } catch (e) {
       return res.status(400).render("item", {
