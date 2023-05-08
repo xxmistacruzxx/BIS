@@ -1,6 +1,6 @@
 <link href="/public/css/edit.css" rel="stylesheet">
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <h1 class="header">Share {{buildingName}}</h1>
@@ -9,13 +9,13 @@
       <h2 class="shareHeader" id="manageHeader">Manage Permission</h2>
       <ul class="share-list" id="manageList">
         {{#each managePerm}}
-          <li>{{{this}}}</li>
+        <li>{{{this}}}</li>
         {{/each}}
       </ul>
       <form method="POST" action="/share/{{buildingId}}">
-        <input type="hidden" name="shareType" value="manage" />
+        <input type="hidden" name="shareType" value="manage">
         <label for="userNameInput">Username: </label>
-        <input class="text-bar" type="text" id="userNameInput" name="userNameInput" /><br><br>
+        <input class="text-bar" type="text" id="userNameInput" name="userNameInput"><br><br>
         <button class="confirm-button" name="submit" type="submit" value="Submit">Confirm Manage Permissions</button><br>
       </form>
     </div>
@@ -23,20 +23,19 @@
       <h2 class="shareHeader" id="viewHeader">View Permission</h2>
       <ul class="share-list" id="viewList">
         {{#each viewPerm}}
-          <li>{{{this}}}</li>
+        <li>{{{this}}}</li>
         {{/each}}
       </ul>
       <form method="POST" action="/share/{{buildingId}}">
-        <input type="hidden" name="shareType" value="view" />
+        <input type="hidden" name="shareType" value="view">
         <label for="userNameInput1">Username: </label>
-        <input class="text-bar" type="text" id="userNameInput1" name="userNameInput1" /><br><br>
+        <input class="text-bar" type="text" id="userNameInput1" name="userNameInput1"><br><br>
         <button class="confirm-button" name="submit" type="submit" value="Submit">Confirm View Permissions</button><br>
       </form>
     </div>
-
     <ul class="error-message" id="alerts">
       {{#each alerts}}
-        <li>{{this}}</li>
+      <li>{{this}}</li>
       {{/each}}
     </ul>
   </div>

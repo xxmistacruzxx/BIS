@@ -15,34 +15,34 @@
           <option value="container">Container</option>
           <option value="item">Item</option>
         </select>
-      </div><br>
-
+      </div>
+      <br>
       {{! BUILDING SELECTOR }}
       <div id="buildingSelectorDiv" hidden>
         <label for="buildingInput">Which building are you adding to?
         </label>
         <select id="buildingInput" name="buildingInput">
           <option value="" disabled selected>Select your option...</option>
-        </select><br><br>
+        </select>
+        <br><br>
       </div>
-
       {{! ROOM SELECTOR }}
       <div id="roomSelectorDiv" hidden>
         <label for="roomInput">Which room are you adding to? </label>
         <select id="roomInput" name="roomInput">
           <option value="" disabled selected>Select your option...</option>
-        </select><br><br>
+        </select>
+        <br><br>
       </div>
-
       {{! CONTAINER SELECTOR }}
       <div id="containerSelectorDiv" hidden>
         <label for="containerInput">Which container are you adding to?
         </label>
         <select id="containerInput" name="containerInput">
           <option value="" selected>N/A</option>
-        </select><br><br>
+        </select>
+        <br><br>
       </div>
-
       {{! ADD BUILDING INPUTS }}
       <div id="addBuildingDiv" hidden>
         {{! building name }}
@@ -52,7 +52,7 @@
           name="addBuildingNameInput"
           id="addBuildingNameInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! building description }}
         <label for="addBuildingDescriptionInput">Building Description:
         </label>
@@ -61,7 +61,7 @@
           name="addBuildingDescriptionInput"
           id="addBuildingDescriptionInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! buidling address }}
         <label for="addBuildingAddressInput">Building Address: </label>
         <input
@@ -69,7 +69,7 @@
           name="addBuildingAddressInput"
           id="addBuildingAddressInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! building city }}
         <label for="addBuildingCityInput">Building City: </label>
         <input
@@ -77,7 +77,7 @@
           name="addBuildingCityInput"
           id="addBuildingCityInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! building state }}
         <label for="addBuildingStateInput">Building State: </label>
         <input
@@ -85,7 +85,7 @@
           name="addBuildingStateInput"
           id="addBuildingStateInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! building zipcode }}
         <label for="addBuildingZipInput">Building Zipcode: </label>
         <input
@@ -93,19 +93,19 @@
           name="addBuildingZipInput"
           id="addBuildingZipInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! building publicity }}
         <label for="addBuildingPublicInput">Do you want your building to be
-          public?</label>
+        public?</label>
         <select
           id="addBuildingPublicInput"
           name="addBuildingPublicInput"
-        >
+          >
           <option value="false">No</option>
           <option value="true">Yes</option>
-        </select><br><br>
+        </select>
+        <br><br>
       </div>
-
       {{! ADD ROOM INPUTS }}
       <div id="addRoomDiv" hidden>
         {{! room name }}
@@ -115,7 +115,7 @@
           name="addRoomNameInput"
           id="addRoomNameInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! rrom description }}
         <label for="addRoomDescriptionInput">Room Description: </label>
         <input
@@ -123,9 +123,8 @@
           name="addRoomDescriptionInput"
           id="addRoomDescriptionInput"
           type="text"
-        >
+          >
       </div>
-
       {{! ADD CONTAINER INPUTS }}
       <div id="addContainerDiv" hidden>
         {{! container name }}
@@ -135,7 +134,7 @@
           name="addContainerNameInput"
           id="addContainerNameInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! container description }}
         <label for="addContainerDescriptionInput">Container Description:
         </label>
@@ -144,9 +143,8 @@
           name="addContainerDescriptionInput"
           id="addContainerDescriptionInput"
           type="text"
-        >
+          >
       </div>
-
       {{! ADD ITEM INPUTS }}
       <div id="addItemDiv" hidden>
         {{! item name }}
@@ -156,7 +154,7 @@
           name="addItemNameInput"
           id="addItemNameInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! item description }}
         <label for="addItemDescriptionInput">Item Description: </label>
         <input
@@ -164,7 +162,7 @@
           name="addItemDescriptionInput"
           id="addItemDescriptionInput"
           type="text"
-        ><br><br>
+          ><br><br>
         {{! item count }}
         <label for="addItemCountInput">Item Count: </label>
         <input
@@ -172,7 +170,7 @@
           name="addItemCountInput"
           id="addItemCountInput"
           type="number"
-        ><br><br>
+          ><br><br>
         {{! item value }}
         <label for="addItemValueInput">Item Value: </label>
         <input
@@ -180,23 +178,21 @@
           name="addItemValueInput"
           id="addItemValueInput"
           type="number"
-        >
+          >
       </div>
-
       <br>
       <hr id="dividerDiv" class="divider" hidden>
       <br>
       <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit" hidden>Submit</button><br><br>
-
       <div id="alerts">
         {{#if alerts}}
         {{#each alerts}}
-          <p class="error-message">{{this}}</p>
+        <p class="error-message">{{this}}</p>
         {{/each}}
-      {{/if}}
+        {{/if}}
       </div>
-
     </form>
     <script src="public/js/add.js"></script>
   </div>
+  <br><br>
 </main>
