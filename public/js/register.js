@@ -58,7 +58,7 @@ function checkPassword(password, varName) {
 function renderAlerts(listOfAlerts) {
   let accum = "";
   for (i of listOfAlerts) {
-    accum = accum + `<li>${i}</li>`;
+    accum = accum + `<p class="error-message">${i}</p>`;
   }
   return accum;
 }
