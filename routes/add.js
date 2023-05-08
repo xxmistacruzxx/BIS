@@ -7,6 +7,7 @@ import {
   itemData,
 } from "../data/index.js";
 import validator from "../validator.js";
+import xss from "xss"
 const router = Router();
 
 router.route("/").get(async (req, res) => {
@@ -18,9 +19,14 @@ router.route("/").get(async (req, res) => {
 
 router.route("/").post(async (req, res) => {
   let thingToAdd = req.body.thingToAddInput;
+  let errors = [];
+  try {
+    thingToAdd = xss(thingToAdd);
+  } catch (e) {
+    errors.push(e)
+  }
   let uid = req.session.user._id;
   let id;
-  let errors = [];
   switch (thingToAdd) {
     // ADD BUILDING
     case "building":
@@ -33,13 +39,13 @@ router.route("/").post(async (req, res) => {
         buildingZip = req.body.addBuildingZipInput,
         buildingPublic = req.body.addBuildingPublicInput.trim().toLowerCase();
       try {
-        buildingName = validator.checkString(buildingName, "buildingName");
+        buildingName = validator.checkString(xss(buildingName), "buildingName");
       } catch (e) {
         errors.push(e);
       }
       try {
         buildingDescription = validator.checkString(
-          buildingDescription,
+          xss(buildingDescription),
           "buildingDescription"
         );
       } catch (e) {
@@ -47,24 +53,24 @@ router.route("/").post(async (req, res) => {
       }
       try {
         buildingAddress = validator.checkString(
-          buildingAddress,
+          xss(buildingAddress),
           "buildingAddress"
         );
       } catch (e) {
         errors.push(e);
       }
       try {
-        buildingCity = validator.checkString(buildingCity, "buildingCity");
+        buildingCity = validator.checkString(xss(buildingCity), "buildingCity");
       } catch (e) {
         errors.push(e);
       }
       try {
-        buildingState = validator.checkString(buildingState, "buildingState");
+        buildingState = validator.checkString(xss(buildingState), "buildingState");
       } catch (e) {
         errors.push(e);
       }
       try {
-        buildingZip = validator.checkString(buildingZip, "buildingZip");
+        buildingZip = validator.checkString(xss(buildingZip), "buildingZip");
       } catch (e) {
         if (
           e ===
@@ -116,18 +122,18 @@ router.route("/").post(async (req, res) => {
         roomName = req.body.addRoomNameInput,
         roomDescription = req.body.addRoomDescriptionInput;
       try {
-        buildingId = validator.checkId(buildingId, "buildingId");
+        buildingId = validator.checkId(xss(buildingId), "buildingId");
       } catch (e) {
         errors.push(e);
       }
       try {
-        roomName = validator.checkString(roomName, "roomName");
+        roomName = validator.checkString(xss(roomName), "roomName");
       } catch (e) {
         errors.push(e);
       }
       try {
         roomDescription = validator.checkString(
-          roomDescription,
+          xss(roomDescription),
           "roomDescription"
         );
       } catch (e) {
@@ -159,18 +165,18 @@ router.route("/").post(async (req, res) => {
         containerName = req.body.addContainerNameInput,
         containerDescription = req.body.addContainerDescriptionInput;
       try {
-        roomId = validator.checkId(roomId, "roomId");
+        roomId = validator.checkId(xss(roomId), "roomId");
       } catch (e) {
         errors.push(e);
       }
       try {
-        containerName = validator.checkString(containerName, "containerName");
+        containerName = validator.checkString(xss(containerName), "containerName");
       } catch (e) {
         errors.push(e);
       }
       try {
         containerDescription = validator.checkString(
-          containerDescription,
+          xss(containerDescription),
           "containerDescription"
         );
       } catch (e) {
@@ -212,13 +218,13 @@ router.route("/").post(async (req, res) => {
       let whereToAdd;
       let id;
       try {
-        roomId2 = validator.checkId(roomId2, "roomId");
+        roomId2 = validator.checkId(xss(roomId2), "roomId");
       } catch (e) {
         errors.push(e);
       }
       try {
         if (containerId.trim() !== "") {
-          containerId = validator.checkId(containerId, "containerId");
+          containerId = validator.checkId(xss(containerId), "containerId");
           whereToAdd = "container";
           id = containerId;
         } else {
@@ -229,26 +235,26 @@ router.route("/").post(async (req, res) => {
         errors.push(e);
       }
       try {
-        itemName = validator.checkString(itemName, "itemName");
+        itemName = validator.checkString(xss(itemName), "itemName");
       } catch (e) {
         errors.push(e);
       }
       try {
         itemDescription = validator.checkString(
-          itemDescription,
+          xss(itemDescription),
           "itemDescription"
         );
       } catch (e) {
         errors.push(e);
       }
       try {
-        itemCount = parseInt(itemCount, 10);
+        itemCount = parseInt(xss(itemCount), 10);
         itemCount = validator.checkInt(itemCount, "itemCount");
       } catch (e) {
         errors.push(e);
       }
       try {
-        itemValue = Number(itemValue);
+        itemValue = Number(xss(itemValue));
         itemValue = validator.checkInt(itemValue, "itemValue");
       } catch (e) {
         errors.push(e);

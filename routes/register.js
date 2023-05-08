@@ -1,6 +1,7 @@
 import { Router } from "express";
 import validator from "../validator.js";
 import { userData } from "../data/index.js";
+import xss from "xss"
 const router = Router();
 
 router.route("/").get(async (req, res) => {
@@ -25,31 +26,31 @@ router.route("/").post(async (req, res) => {
 
   let errors = [];
   try {
-    firstName = validator.checkName(firstName, "firstName");
+    firstName = validator.checkName(xss(firstName), "firstName");
   } catch (e) {
     firstName = "";
     errors.push(e);
   }
   try {
-    lastName = validator.checkName(lastName, "lastName");
+    lastName = validator.checkName(xss(lastName), "lastName");
   } catch (e) {
     lastName = "";
     errors.push(e);
   }
   try {
-    userName = validator.checkUserName(userName, "userName");
+    userName = validator.checkUserName(xss(userName), "userName");
   } catch (e) {
     userName = "";
     errors.push(e);
   }
   try {
-    emailAddress = validator.checkEmail(emailAddress, "emailAddress");
+    emailAddress = validator.checkEmail(xss(emailAddress), "emailAddress");
   } catch (e) {
     emailAddress = "";
     errors.push(e);
   }
   try {
-    password = validator.checkPassword(password, "password");
+    password = validator.checkPassword(xss(password), "password");
   } catch (e) {
     password = "";
     errors.push(e);

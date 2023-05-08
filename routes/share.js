@@ -1,6 +1,7 @@
 import { Router } from "express";
 import validator from "../validator.js";
 import { buildingData, userData } from "../data/index.js";
+import xss from "xss"
 const router = Router();
 
 router.route("/:buildingId").get(async (req, res) => {
@@ -12,7 +13,7 @@ router.route("/:buildingId").get(async (req, res) => {
   }
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -68,7 +69,7 @@ router.route("/:buildingId").post(async (req, res) => {
   }
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -97,8 +98,16 @@ router.route("/:buildingId").post(async (req, res) => {
     managePerm: managePerm,
     viewPerm: viewPerm,
   };
-  let shareType = req.body.shareType.trim();
-  let userName = req.body.userNameInput;
+  let shareType;
+  let userName;
+  try {
+    shareType = xss(req.body.shareType).trim();
+    userName = xss(req.body.userNameInput);
+  } catch (e) {
+    l.alerts.push(e);
+    return res.status(400).render("share", l);
+  }
+
   if (shareType !== "manage" && shareType !== "view")
     return res.status(400).render("error", {
       code: 400,
@@ -148,7 +157,7 @@ router.route("/:buildingId/removemanage/:userName").get(async (req, res) => {
   }
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -160,7 +169,7 @@ router.route("/:buildingId/removemanage/:userName").get(async (req, res) => {
   }
   let userNameToAdd = req.params.userName;
   try {
-    userNameToAdd = validator.checkUserName(userNameToAdd, "username");
+    userNameToAdd = validator.checkUserName(xss(userNameToAdd), "username");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -208,7 +217,7 @@ router.route("/:buildingId/removeview/:userName").get(async (req, res) => {
   }
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -220,7 +229,7 @@ router.route("/:buildingId/removeview/:userName").get(async (req, res) => {
   }
   let userNameToAdd = req.params.userName;
   try {
-    userNameToAdd = validator.checkUserName(userNameToAdd, "username");
+    userNameToAdd = validator.checkUserName(xss(userNameToAdd), "username");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }

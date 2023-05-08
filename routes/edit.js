@@ -7,13 +7,14 @@ import {
   itemData,
 } from "../data/index.js";
 import validator from "../validator.js";
+import xss from "xss"
 const router = Router();
 
 router.route("/building/:buildingId").get(async (req, res) => {
   // basic error check
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -47,7 +48,7 @@ router.route("/building/:buildingId").get(async (req, res) => {
 router.route("/building/:buildingId").post(async (req, res) => {
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -74,37 +75,37 @@ router.route("/building/:buildingId").post(async (req, res) => {
 
   let errors = [];
   try {
-    name = validator.checkString(name, "building name");
+    name = validator.checkString(xss(name), "building name");
   } catch (e) {
     name = building.name;
     errors.push(e);
   }
   try {
-    description = validator.checkString(description, "building description");
+    description = validator.checkString(xss(description), "building description");
   } catch (e) {
     description = building.description;
     errors.push(e);
   }
   try {
-    address = validator.checkString(address, "building address");
+    address = validator.checkString(xss(address), "building address");
   } catch (e) {
     address = building.address;
     errors.push(e);
   }
   try {
-    city = validator.checkString(city, "building city");
+    city = validator.checkString(xss(city), "building city");
   } catch (e) {
     city = building.city;
     errors.push(e);
   }
   try {
-    state = validator.checkString(state, "building state");
+    state = validator.checkString(xss(state), "building state");
   } catch (e) {
     state = building.state;
     errors.push(e);
   }
   try {
-    zip = validator.checkString(zip, "building zip");
+    zip = validator.checkString(xss(zip), "building zip");
   } catch (e) {
     if (
       e ===
@@ -160,7 +161,7 @@ router.route("/room/:roomId").get(async (req, res) => {
   // basic error check
   let roomId = req.params.roomId;
   try {
-    roomId = validator.checkId(roomId, "room id");
+    roomId = validator.checkId(xss(roomId), "room id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -191,7 +192,7 @@ router.route("/room/:roomId").post(async (req, res) => {
   // basic error check
   let roomId = req.params.roomId;
   try {
-    roomId = validator.checkId(roomId, "room id");
+    roomId = validator.checkId(xss(roomId), "room id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -220,13 +221,13 @@ router.route("/room/:roomId").post(async (req, res) => {
   };
   let errors = [];
   try {
-    name = validator.checkString(name, "name");
+    name = validator.checkString(xss(name), "name");
   } catch (e) {
     l.roomName = room.name;
     errors.push(e);
   }
   try {
-    description = validator.checkString(description, "description");
+    description = validator.checkString(xss(description), "description");
   } catch (e) {
     l.roomDescription = room.description;
     errors.push(e);
@@ -262,7 +263,7 @@ router.route("/container/:containerId").get(async (req, res) => {
   // basic error check
   let containerId = req.params.containerId;
   try {
-    containerId = validator.checkId(containerId, "container id");
+    containerId = validator.checkId(xss(containerId), "container id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -293,7 +294,7 @@ router.route("/container/:containerId").post(async (req, res) => {
   // basic error check
   let containerId = req.params.containerId;
   try {
-    containerId = validator.checkId(containerId, "container id");
+    containerId = validator.checkId(xss(containerId), "container id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -322,13 +323,13 @@ router.route("/container/:containerId").post(async (req, res) => {
   };
   let errors = [];
   try {
-    name = validator.checkString(name, "name");
+    name = validator.checkString(xss(name), "name");
   } catch (e) {
     l.containerName = container.name;
     errors.push(e);
   }
   try {
-    description = validator.checkString(description, "description");
+    description = validator.checkString(xss(description), "description");
   } catch (e) {
     l.containerDescription = container.description;
     errors.push(e);
@@ -367,7 +368,7 @@ router.route("/item/:itemId").get(async (req, res) => {
   // basic error check
   let itemId = req.params.itemId;
   try {
-    itemId = validator.checkId(itemId, "item id");
+    itemId = validator.checkId(xss(itemId), "item id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -429,13 +430,13 @@ router.route("/item/:itemId").post(async (req, res) => {
   };
   let errors = [];
   try {
-    name = validator.checkString(name, "name");
+    name = validator.checkString(xss(name), "name");
   } catch (e) {
     l.itemName = item.name;
     errors.push(e);
   }
   try {
-    description = validator.checkString(description, "description");
+    description = validator.checkString(xss(description), "description");
   } catch (e) {
     l.itemDescription = item.description;
     errors.push(e);
@@ -471,7 +472,7 @@ router.route("/item/setcount/:itemId").post(async (req, res) => {
   // basic error check
   let itemId = req.params.itemId;
   try {
-    itemId = validator.checkId(itemId, "item id");
+    itemId = validator.checkId(xss(itemId), "item id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -502,7 +503,7 @@ router.route("/item/setcount/:itemId").post(async (req, res) => {
 
   let count = req.body.itemCountInput;
   try {
-    count = Number(count);
+    count = Number(xss(count));
     count = validator.checkInt(count, "count");
   } catch (e) {
     l.itemCount = "";
@@ -529,7 +530,7 @@ router.route("/item/setvalue/:itemId").post(async (req, res) => {
   // basic error check
   let itemId = req.params.itemId;
   try {
-    itemId = validator.checkId(itemId, "item id");
+    itemId = validator.checkId(xss(itemId), "item id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -555,7 +556,7 @@ router.route("/item/setvalue/:itemId").post(async (req, res) => {
 
   let value = req.body.itemValueInput;
   try {
-    value = Number(value);
+    value = Number(xss(value));
     value = validator.checkNum(value, "value");
   } catch (e) {
     l.itemValue = "";

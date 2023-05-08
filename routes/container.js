@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { containerData, userData } from "../data/index.js";
 import validator from "../validator.js"
+import xss from "xss"
 const router = Router();
 
 router.route("/:containerId").get(async (req, res) => {
@@ -14,7 +15,7 @@ router.route("/:containerId").get(async (req, res) => {
   }
   let containerId;
   try {
-    containerId = req.params.containerId;
+    containerId = xss(req.params.containerId);
     containerId = validator.checkId(containerId, "containerId");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });

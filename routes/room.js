@@ -1,6 +1,7 @@
 import { Router } from "express";
 import validator from "../validator.js";
 import { roomData, buildingData, userData } from "../data/index.js";
+import xss from "xss"
 const router = Router();
 
 router.route("/:roomId").get(async (req, res) => {
@@ -14,7 +15,7 @@ router.route("/:roomId").get(async (req, res) => {
   }
   let roomId;
   try {
-    roomId = req.params.roomId;
+    roomId = xss(req.params.roomId);
     roomId = validator.checkId(roomId, "roomId");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
@@ -33,7 +34,6 @@ router.route("/:roomId").get(async (req, res) => {
   )
     return res.status(403).render("error", { code: 403, error: e });
 
-  // todo: get room data and create html render
   let thisRoomData = await roomData.createExport(roomId);
   let canEdit = false;
   let canDelete = false;

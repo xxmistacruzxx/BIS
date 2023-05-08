@@ -4,6 +4,7 @@ import { buildingData, userData } from "../data/index.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import xss from "xss"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -21,7 +22,7 @@ router.route("/:id").get(async (req, res) => {
   let buildingId;
   try {
     buildingId = req.params.id;
-    buildingId = validator.checkId(buildingId, "buildingId");
+    buildingId = validator.checkId(xss(buildingId), "buildingId");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -83,7 +84,7 @@ router.route("/:id/download").get(async (req, res) => {
   let buildingId;
   try {
     buildingId = req.params.id;
-    buildingId = validator.checkId(buildingId, "buildingId");
+    buildingId = validator.checkId(xss(buildingId), "buildingId");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }

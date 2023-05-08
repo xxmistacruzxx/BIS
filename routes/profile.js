@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { buildingData, userData } from "../data/index.js";
 import validator from "../validator.js";
+import xss from "xss"
 const router = Router();
 import middleware from "../middleware.js";
 
@@ -63,7 +64,7 @@ router.route("/").get(async (req, res) => {
 router.route("/:userName").get(async (req, res) => {
   let userName;
   try {
-    userName = req.params.userName;
+    userName = xss(req.params.userName);
     userName = validator.checkUserName(userName, "id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
@@ -86,7 +87,12 @@ router.route("/:userName").get(async (req, res) => {
 router
   .route("/")
   .post(middleware.upload.single("pictureUpload"), async (req, res) => {
-    const formType = req.body.formType;
+    let formType;
+    try {
+      formType = xss(req.body.formType);
+    } catch (e) {
+      return res.status(400).render("error", { code: 400, error: e });
+    }
     let _id = req.session.user._id;
     let user;
     try {
@@ -146,7 +152,7 @@ router
       // basic error checks
       let password = req.body.passwordInput;
       try {
-        password = validator.checkPassword(password, "password");
+        password = validator.checkPassword(xss(password), "password");
       } catch (e) {
         errors.push(e);
       }
@@ -185,25 +191,25 @@ router
       };
       // basic error checks
       try {
-        l.firstName = validator.checkName(l.firstName, "first name");
+        l.firstName = validator.checkName(xss(l.firstName), "first name");
       } catch (e) {
         errors.push(e);
         l.firstName = user.firstName;
       }
       try {
-        l.lastName = validator.checkName(l.lastName, "first name");
+        l.lastName = validator.checkName(xss(l.lastName), "first name");
       } catch (e) {
         errors.push(e);
         l.lastName = user.lastName;
       }
       try {
-        l.userName = validator.checkUserName(l.userName, "username");
+        l.userName = validator.checkUserName(xss(l.userName), "username");
       } catch (e) {
         errors.push(e);
         l.userName = user.userName;
       }
       try {
-        l.emailAddress = validator.checkEmail(l.emailAddress, "email");
+        l.emailAddress = validator.checkEmail(xss(l.emailAddress), "email");
       } catch (e) {
         errors.push(e);
         l.emailAddress = user.email;
@@ -252,7 +258,6 @@ router
       // basic error checks
       try {
         if (!req.file) throw "Please choose a file to upload.";
-        console.log(req.file.size);
         if (req.file.size > 1 * 512 * 512) throw "File size limit exceeded.";
       } catch (e) {
         return res.status(400).render("myProfile", {
@@ -262,6 +267,10 @@ router
           lastName: user.lastName,
           userName: user.userName,
           emailAddress: user.email,
+          owned: owned,
+          managed: managed,
+          view: view,
+          favorites: favorites,
         });
       }
 

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { itemData, userData } from "../data/index.js";
 import validator from "../validator.js";
+import xss from "xss"
 const router = Router();
 import middleware from "../middleware.js";
 
@@ -15,7 +16,7 @@ router.route("/:itemId").get(async (req, res) => {
   }
   let itemId;
   try {
-    itemId = req.params.itemId;
+    itemId = xss(req.params.itemId);
     itemId = validator.checkId(itemId, "itemId");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
@@ -123,10 +124,11 @@ router.route("/:itemId").get(async (req, res) => {
 router
   .route("/:itemId")
   .post(middleware.itemUpload.array("image", 6), async (req, res) => {
-    let itemId = req.params.itemId;
+    let itemId; 
     let userId = req.session.user._id;
     let item;
     try {
+      itemId = xss(req.params.itemId);
       item = await itemData.get(itemId);
     } catch (e) {
       return res.status(404).render("error", { code: 404, error: e });
@@ -204,7 +206,7 @@ router
     try {
       if (!req.files || Object.keys(req.files).length === 0)
         throw "Please choose files to upload.";
-      const files = req.files;
+      const files = xss(req.files);
       for (const file of files) {
         if (file.size > 1 * 512 * 512) throw "File size limit exceeded.";
       }

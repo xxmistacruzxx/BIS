@@ -6,13 +6,14 @@ import {
   containerData,
 } from "../data/index.js";
 import validator from "../validator.js";
+import xss from "xss"
 const router = Router();
 
 router.route("/building/:buildingId").get(async (req, res) => {
   // basic error checks
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -43,7 +44,7 @@ router.route("/building/:buildingId").post(async (req, res) => {
   // basic error checks
   let buildingId = req.params.buildingId;
   try {
-    buildingId = validator.checkId(buildingId, "building id");
+    buildingId = validator.checkId(xss(buildingId), "building id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -70,7 +71,7 @@ router.route("/room/:roomId").get(async (req, res) => {
   // basic error checks
   let roomId = req.params.roomId;
   try {
-    roomId = validator.checkId(roomId, "room id");
+    roomId = validator.checkId(xss(roomId), "room id");
   } catch (e) {
     return res.status(400).json({ error: "invalid id" });
   }
@@ -101,7 +102,7 @@ router.route("/room/:roomId").post(async (req, res) => {
   // basic error checks
   let roomId = req.params.roomId;
   try {
-    roomId = validator.checkId(roomId, "room id");
+    roomId = validator.checkId(xss(roomId), "room id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -127,7 +128,7 @@ router.route("/container/:containerId").get(async (req, res) => {
   // basic error checks
   let containerId = req.params.containerId;
   try {
-    containerId = validator.checkId(containerId, "container id");
+    containerId = validator.checkId(xss(containerId), "container id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -158,7 +159,7 @@ router.route("/container/:containerId").post(async (req, res) => {
   // basic error checks
   let containerId = req.params.containerId;
   try {
-    containerId = validator.checkId(containerId, "container id");
+    containerId = validator.checkId(xss(containerId), "container id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -184,7 +185,7 @@ router.route("/item/:itemId").get(async (req, res) => {
   // basic error checks
   let itemId = req.params.itemId;
   try {
-    itemId = validator.checkId(itemId, "item id");
+    itemId = validator.checkId(xss(itemId), "item id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
@@ -215,7 +216,7 @@ router.route("/item/:itemId").post(async (req, res) => {
   // basic error checks
   let itemId = req.params.itemId;
   try {
-    itemId = validator.checkId(itemId, "item id");
+    itemId = validator.checkId(xss(itemId), "item id");
   } catch (e) {
     return res.status(400).render("error", { code: 400, error: e });
   }
