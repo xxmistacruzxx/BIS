@@ -12,22 +12,22 @@ function checkString(strVal, varName) {
 }
 
 function checkUserName(userName, varName) {
-    userName = this.checkString(userName, varName);
-    if (userName.length < 3 || userName.length > 25)
-      throw `${varName} must be between 3 and 25 characters (inclusive)`;
-    if (userName.match(/[^\w-\_]/))
-      throw `${varName} can only include letters, numbers, hyphens, and underscores.`;
-    return userName.toLowerCase();
+  userName = this.checkString(userName, varName);
+  if (userName.length < 3 || userName.length > 25)
+    throw `${varName} must be between 3 and 25 characters (inclusive)`;
+  if (userName.match(/[^\w-\_]/))
+    throw `${varName} can only include letters, numbers, hyphens, and underscores.`;
+  return userName.toLowerCase();
 }
 
 function checkPassword(password, varName) {
-    password = this.checkString(password, varName);
-    if (password.length < 8) throw `${varName} must be 8 characters or longer`;
-    if (!password.match(/[A-Z]/)) throw `${varName} must have a capital letter`;
-    if (!password.match(/[0-9]/)) throw `${varName} must have a number`;
-    if (!password.match(/[\W_]/))
-      throw `${varName} must have a special character`;
-    return password;
+  password = this.checkString(password, varName);
+  if (password.length < 8) throw `${varName} must be 8 characters or longer`;
+  if (!password.match(/[A-Z]/)) throw `${varName} must have a capital letter`;
+  if (!password.match(/[0-9]/)) throw `${varName} must have a number`;
+  if (!password.match(/[\W_]/))
+    throw `${varName} must have a special character`;
+  return password;
 }
 
 function renderAlerts(listOfAlerts) {
@@ -44,23 +44,16 @@ function setAlerts(listOfAlerts) {
 
 function inputChecker() {
   let errors = [];
-  
+
   try {
-    let userNameInput = document.querySelector(
-      "#userNameInput"
-    ).value;
+    let userNameInput = document.querySelector("#userNameInput").value;
     userNameInput = checkUserName(userNameInput, "UserName");
   } catch (e) {
     errors.push(e);
   }
   try {
-    let passwordInput = document.querySelector(
-      "#passwordInput"
-    ).value;
-    passwordInput = checkPassword(
-      passwordInput,
-      "Password"
-    );
+    let passwordInput = document.querySelector("#passwordInput").value;
+    passwordInput = checkPassword(passwordInput, "Password");
   } catch (e) {
     errors.push(e);
   }
@@ -73,29 +66,19 @@ function inputChecker() {
 }
 
 function submitButton(e) {
-	
-	let passedErrors = false;
-  	if(!inputChecker()) {
-		  passedErrors = inputChecker();
-	}
-	
-	if (!passedErrors) {
-    	e.preventDefault();
-  	}
-  	return;
+  e.preventDefault();
+  let passedErrors = false;
+  if (!inputChecker()) {
+    passedErrors = inputChecker();
+  }
+
+  if (!passedErrors) {
+    e.preventDefault();
+  }
+  return;
 }
 
 function setup() {
-  $.ajax({
-    url: "/data/myData",
-    type: "GET",
-    success: function (result) {
-      data = result;
-    },
-    error: function (error) {
-      console.log(`Error: ${error}`);
-    },
-  });
   document.querySelector("form").addEventListener("submit", submitButton);
 }
 

@@ -44,11 +44,13 @@
       <p id="registrationSuccessful">Registration successful. Please login.</p>
     {{/if}}
 
+    <ul class="error-message" id="alerts"></ul>
     {{#if alerts}}
       {{#each alerts}}
         <p class="error-message">{{this}}</p>
       {{/each}}
     {{/if}}
+    </ul>
   </div>
 
   <p class="description">Hello! This is a building inventory system designed
