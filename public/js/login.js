@@ -66,11 +66,8 @@ function inputChecker() {
 }
 
 function submitButton(e) {
-  e.preventDefault();
   let passedErrors = false;
-  if (!inputChecker()) {
-    passedErrors = inputChecker();
-  }
+  passedErrors = inputChecker();
 
   if (!passedErrors) {
     e.preventDefault();
