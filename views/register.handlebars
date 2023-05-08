@@ -4,6 +4,7 @@
   <div class="login-container">
     <form id="registration-form" action="/register" method="POST">
       <label class="register-label" for="firstNameInput">First Name</label>
+      <p id="register-requirement">must be between 3-25 characters long</p>
       <input
         class="text-container"
         name="firstNameInput"
@@ -13,6 +14,7 @@
       >
 
       <label class="register-label" for="lastNameInput">Last Name</label>
+      <p id="register-requirement">must be between 3-25 characters long</p>
       <input
         class="text-container"
         name="lastNameInput"
@@ -22,6 +24,9 @@
       >
 
       <label class="register-label" for="userNameInput">Username</label>
+      <p id="register-requirement">must be between 3-25 characters long
+      <br>
+      can only include letters, numbers, hyphens, and underscores</p>
       <input
         class="text-container"
         name="userNameInput"
@@ -31,6 +36,7 @@
       >
 
       <label class="register-label" for="emailAddressInput">Email Address</label>
+      <p id="register-requirement">can have a mix of letters, numbers, and certain special characters</p>
       <input
         class="text-container"
         name="emailAddressInput"
@@ -40,6 +46,9 @@
       >
 
       <label class="register-label" for="passwordInput">Password</label>
+      <p id="register-requirement">must be at least 8 characters long
+      <br>
+      must have at least 1 capital letter, 1 number, and 1 special character</p>
       <input
         class="text-container"
         name="passwordInput"
