@@ -275,7 +275,7 @@ router
           (file) => `../public/images/items/${file.filename}`
         );
         let itemImages = itemData.createItemImages(item._id, imagePathList);
-        console.log(imagePathList);
+        // console.log(imagePathList);
         return res.redirect(`/item/${item._id}`);
       }
     } catch (e) {
