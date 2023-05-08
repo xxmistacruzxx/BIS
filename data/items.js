@@ -254,6 +254,21 @@ export async function isPublic(itemId) {
   return await containerData.isPublic(vessel._id.toString());
 }
 
+// creates an instance in the itemImages collection, which holds itemId and an array of image paths
+export async function createItemImages(itemId, pathList) {
+  //basic error check
+  itemId = validator.checkId(id, "id");
+  if (!Array.isArray(pathList)) throw 'pathList must be an array';
+
+  // add image paths to itemImages collection
+  let newImages = {
+    itemId: itemId,
+    pathList: pathList
+  }
+  let paths = await createDoc(itemImages, newImages, "image paths");
+  return paths;
+}
+
 export default {
   create,
   get,
@@ -263,5 +278,6 @@ export default {
   setCount,
   setValue,
   createExport,
-  isPublic
+  isPublic,
+  createItemImages
 };

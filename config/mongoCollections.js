@@ -18,3 +18,4 @@ export const buildings = getCollectionFn("buildings");
 export const rooms = getCollectionFn("rooms");
 export const containers = getCollectionFn("containers");
 export const items = getCollectionFn("items");
+export const itemImages = getCollectionFn("itemImages");
