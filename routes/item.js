@@ -4,6 +4,7 @@ import validator from "../validator.js";
 import xss from "xss"
 const router = Router();
 import middleware from "../middleware.js";
+import { itemImages } from "../config/mongoCollections.js";
 
 router.route("/:itemId").get(async (req, res) => {
   // basic error checks
@@ -103,22 +104,45 @@ router.route("/:itemId").get(async (req, res) => {
     last.time
   ).toString()} | Value: ${last.value} | Change: N/A`;
 
-  return res.render("item", {
-    id: item._id,
-    itemName: item.name,
-    itemCreationDate: item.creationDate,
-    itemDescription: item.description,
-    canEdit: canEdit,
-    canDelete: canDelete,
-    countHistory: item.countHistory,
-    valueHistory: item.valueHistory,
-    avgCount: countStats.average,
-    lowCount: countStats.low,
-    highCount: countStats.high,
-    avgValue: valueStats.average,
-    lowValue: valueStats.low,
-    highValue: valueStats.high,
-  });
+  // get path of images that the item has
+  let itemImagesCollection = await itemImages();
+  let images = await itemImagesCollection.findOne({ itemId: item._id });
+  if (images) {
+    return res.render("item", {
+      id: item._id,
+      itemName: item.name,
+      itemCreationDate: item.creationDate,
+      itemDescription: item.description,
+      canEdit: canEdit,
+      canDelete: canDelete,
+      countHistory: item.countHistory,
+      valueHistory: item.valueHistory,
+      avgCount: countStats.average,
+      lowCount: countStats.low,
+      highCount: countStats.high,
+      avgValue: valueStats.average,
+      lowValue: valueStats.low,
+      highValue: valueStats.high,
+      images: images.pathList,
+    });
+  } else {
+    return res.render("item", {
+      id: item._id,
+      itemName: item.name,
+      itemCreationDate: item.creationDate,
+      itemDescription: item.description,
+      canEdit: canEdit,
+      canDelete: canDelete,
+      countHistory: item.countHistory,
+      valueHistory: item.valueHistory,
+      avgCount: countStats.average,
+      lowCount: countStats.low,
+      highCount: countStats.high,
+      avgValue: valueStats.average,
+      lowValue: valueStats.low,
+      highValue: valueStats.high,
+    });
+  }
 });
 
 router
@@ -235,6 +259,8 @@ router
         const imagePathList = req.files.map(
           (file) => `../public/images/items/${file.filename}`
         );
+        let itemImages = itemData.createItemImages(item._id, imagePathList);
+        console.log(imagePathList);
         return res.redirect(`/item/${item._id}`);
       }
     } catch (e) {

@@ -11,7 +11,7 @@
   {{#if canEdit}}
   <div id="itemPictures">
     <form method="post" action="/item/{{id}}" enctype="multipart/form-data">
-      <label for="image">Upload photos:</label><br>
+      <label for="image">Select photos to display:</label><br>
       <input type="file" id="image" name="image" multiple /><br><br>
       <input type="submit" name="addPicture" id="addPicture" value="Add" />
       <br>
@@ -19,8 +19,8 @@
     </form>
     {{/if}}
 
-    {{#if imagePathList}}
-    {{#each imagePathList}}
+    {{#if images}}
+    {{#each images}}
     <img src="{{this}}" />
     {{/each}}
     {{/if}}
