@@ -1,7 +1,7 @@
 <link href="/public/css/building.css" rel="stylesheet">
 <script src="/public/js/search.js"></script>
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <div id="container">
@@ -13,30 +13,28 @@
   </div>
   <div id="containerOptions">
     {{#if canEdit}}
-      <a class="submit-button" href="/edit/container/{{id}}">Edit This Container</a>
+    <a class="submit-button" href="/edit/container/{{id}}">Edit This Container</a>
     {{/if}}
     {{#if canDelete}}
-      <a class="submit-button" href="/delete/container/{{id}}">Delete This
-        Container</a>
+    <a class="submit-button" href="/delete/container/{{id}}">Delete This
+    Container</a>
     {{/if}}
   </div>
-
   <br><br>
   <hr class="divider">
-
   <form id="searchDiv">
-      <label class="header" for="searchInput">Search Terms:</label>
-      <br>
-      <input class="search-bar" placeholder="Searched Terms Will Be Highlighted." type="text" id="searchInput" name="searchInput"/>
-      <button class="search-button" type="submit" id="search" name="search">Submit</button>
+    <label class="header" for="searchInput">Search Terms:</label>
+    <br>
+    <input class="search-bar" placeholder="Searched Terms Will Be Highlighted." type="text" id="searchInput" name="searchInput">
+    <button class="search-button" type="submit" id="search" name="search">Submit</button>
   </form>
   <div id="subEntitiesRender">
     <p class="header">{{buildingName}} Rooms:</p>
     {{#if sER}}
-      <div class="layers">{{{sER}}}</div>
+    <div class="layers">{{{sER}}}</div>
     {{else}}
-      <p class="subheader">No Rooms Found</p>
+    <p class="subheader">No Rooms Found</p>
     {{/if}}
   </div>
-
+  <br><br>
 </main>

@@ -1,6 +1,6 @@
-<link href="/public/css/edit.css" rel="stylesheet" />
+<link href="/public/css/edit.css" rel="stylesheet">
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <form method="POST" action="/edit/room/{{roomId}}">
@@ -13,7 +13,7 @@
         id="roomNameInput"
         name="roomNameInput"
         value="{{roomName}}"
-      /><br><br>
+        ><br><br>
       <label for="roomDescriptionInput">Room Description: </label>
       <input
         class="text-bar"
@@ -21,16 +21,15 @@
         id="roomDescriptionInput"
         name="roomDescriptionInput"
         value="{{roomDescription}}"
-      /><br><br>
+        ><br><br>
       <hr class="divider">
       <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Submit Changes</button><br>
-
-      {{! TODO }}
       <ul class="error-message" id="alerts">
         {{#each alerts}}
-          <li>{{this}}</li>
+        <li>{{this}}</li>
         {{/each}}
       </ul>
     </div>
   </form>
+  <br><br>
 </main>
