@@ -41,6 +41,8 @@ router.route("/").post(async (req, res) => {
         buildingPublic = req.body.addBuildingPublicInput.trim().toLowerCase();
       try {
         buildingName = validator.checkString(xss(buildingName), "buildingName");
+        if (buildingName.includes("-"))
+          throw `cannot have a '-' symbol in the name`;
       } catch (e) {
         errors.push(e);
       }
@@ -170,6 +172,8 @@ router.route("/").post(async (req, res) => {
       }
       try {
         roomName = validator.checkString(xss(roomName), "roomName");
+        if (roomName.includes("-"))
+          throw `cannot have a '-' symbol in the name`;
       } catch (e) {
         errors.push(e);
       }
@@ -216,6 +220,8 @@ router.route("/").post(async (req, res) => {
           xss(containerName),
           "containerName"
         );
+        if (containerName.includes("-"))
+          throw `cannot have a '-' symbol in the name`;
       } catch (e) {
         errors.push(e);
       }
@@ -281,6 +287,8 @@ router.route("/").post(async (req, res) => {
       }
       try {
         itemName = validator.checkString(xss(itemName), "itemName");
+        if (itemName.includes("-"))
+          throw `cannot have a '-' symbol in the name`;
       } catch (e) {
         errors.push(e);
       }
@@ -295,16 +303,14 @@ router.route("/").post(async (req, res) => {
       try {
         itemCount = parseInt(xss(itemCount), 10);
         itemCount = validator.checkInt(itemCount, "itemCount");
-        if (count < 0)
-          throw "can't have negative count"
+        if (count < 0) throw "can't have negative count";
       } catch (e) {
         errors.push(e);
       }
       try {
         itemValue = Number(xss(itemValue));
         itemValue = validator.checkInt(itemValue, "itemValue");
-        if (itemValue < 0)
-          throw "can't have a negative value"
+        if (itemValue < 0) throw "can't have a negative value";
       } catch (e) {
         errors.push(e);
       }

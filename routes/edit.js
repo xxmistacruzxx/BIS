@@ -7,7 +7,7 @@ import {
   itemData,
 } from "../data/index.js";
 import validator from "../validator.js";
-import xss from "xss"
+import xss from "xss";
 import axios from "axios";
 const router = Router();
 
@@ -77,12 +77,16 @@ router.route("/building/:buildingId").post(async (req, res) => {
   let errors = [];
   try {
     name = validator.checkString(xss(name), "building name");
+    if (name.includes("-")) throw `cannot have a '-' symbol in the name`;
   } catch (e) {
     name = building.name;
     errors.push(e);
   }
   try {
-    description = validator.checkString(xss(description), "building description");
+    description = validator.checkString(
+      xss(description),
+      "building description"
+    );
   } catch (e) {
     description = building.description;
     errors.push(e);
@@ -271,6 +275,7 @@ router.route("/room/:roomId").post(async (req, res) => {
   let errors = [];
   try {
     name = validator.checkString(xss(name), "name");
+    if (name.includes("-")) throw `cannot have a '-' symbol in the name`;
   } catch (e) {
     l.roomName = room.name;
     errors.push(e);
@@ -373,6 +378,7 @@ router.route("/container/:containerId").post(async (req, res) => {
   let errors = [];
   try {
     name = validator.checkString(xss(name), "name");
+    if (name.includes("-")) throw `cannot have a '-' symbol in the name`;
   } catch (e) {
     l.containerName = container.name;
     errors.push(e);
@@ -480,6 +486,7 @@ router.route("/item/:itemId").post(async (req, res) => {
   let errors = [];
   try {
     name = validator.checkString(xss(name), "name");
+    if (name.includes("-")) throw `cannot have a '-' symbol in the name`;
   } catch (e) {
     l.itemName = item.name;
     errors.push(e);
@@ -534,12 +541,10 @@ router.route("/item/setcount/:itemId").post(async (req, res) => {
   }
   let access = await userData.hasEditAccess(_id, "item", itemId);
   if (!access)
-    return res
-      .status(403)
-      .render("error", {
-        code: 403,
-        error: "you do not have edit access to this item",
-      });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this item",
+    });
 
   let l = {
     itemId: itemId,
@@ -554,8 +559,7 @@ router.route("/item/setcount/:itemId").post(async (req, res) => {
   try {
     count = Number(xss(count));
     count = validator.checkInt(count, "count");
-    if (count < 0)
-      throw `can't have negative count`
+    if (count < 0) throw `can't have negative count`;
   } catch (e) {
     l.itemCount = "";
     errors.push(e);
@@ -594,7 +598,10 @@ router.route("/item/setvalue/:itemId").post(async (req, res) => {
   }
   let access = await userData.hasEditAccess(_id, "item", itemId);
   if (!access)
-  return res.status(403).render("error", { code: 403, error: "you do not have edit access to this item" });
+    return res.status(403).render("error", {
+      code: 403,
+      error: "you do not have edit access to this item",
+    });
 
   let l = {
     itemId: itemId,
@@ -609,8 +616,7 @@ router.route("/item/setvalue/:itemId").post(async (req, res) => {
   try {
     value = Number(xss(value));
     value = validator.checkNum(value, "value");
-    if (value < 0)
-      throw "can't have a negative value"
+    if (value < 0) throw "can't have a negative value";
   } catch (e) {
     l.itemValue = "";
     errors.push(e);
