@@ -26,7 +26,7 @@ function onSubmitManage(event) {
     let errors = [];
     let userName = userNameInput.value;
     try {
-        userName = validator.checkUserName(userName, "username");
+        userName = checkUserName(userName, "username");
     } catch(e) {
         errors.push(e);
     }
@@ -41,7 +41,7 @@ function onSubmitView(event) {
     let errors = [];
     let userName1 = userNameInput1.value;
     try {
-        userName1 = validator.checkUserName(userName1, "username");
+        userName1 = checkUserName(userName1, "username");
     } catch(e) {
         errors.push(e);
     }
