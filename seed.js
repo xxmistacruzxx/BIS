@@ -32,6 +32,14 @@ const cruzUser = await users.create(
   "Cruz"
 );
 
+const fillerUser = await users.create(
+    "filler4",
+    "Password!123",
+    "filler@stevens.edu",
+    "Filler",
+    "User"
+);
+
 console.log("Users created.");
 
 const howeBuilding = await buildings.create(
@@ -101,6 +109,217 @@ const hudsonBuilding = await buildings.create(
 );
 
 console.log("Buildings created.");
+
+const fillerBuilding1 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 1",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding2 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 2",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding3 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 3",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding4 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 4",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding5 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 5",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding6 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 6",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding7 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 7",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding8 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 8",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding9 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 9",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding10 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 10",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding11 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 11",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding12 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 12",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding13 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 13",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding14 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 14",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding15 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 15",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding16 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 16",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding17 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 17",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding18 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 18",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+const fillerBuilding19 = await buildings.create(
+    fillerUser._id,
+    "Filler Building 19",
+    "This is a filler building.",
+    "1 Castle Point Terrace",
+    "Hoboken",
+    "NJ",
+    "07030",
+    true
+);
+
+console.log("Filler buildings created.");
 
 const bissingerRoom = await rooms.create(
   howeBuilding._id,
