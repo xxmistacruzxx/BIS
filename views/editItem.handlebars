@@ -1,6 +1,6 @@
-<link href="/public/css/edit.css" rel="stylesheet" />
+<link href="/public/css/edit.css" rel="stylesheet">
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <h1 class="header">Editing Item</h1>
@@ -13,7 +13,7 @@
         id="itemNameInput"
         name="itemNameInput"
         value="{{itemName}}"
-      /><br /><br />
+        ><br><br>
       <label for="itemDescriptionInput">Item Description: </label>
       <input
         class="text-bar"
@@ -21,17 +21,15 @@
         id="itemDescriptionInput"
         name="itemDescriptionInput"
         value="{{itemDescription}}"
-      /><br /><br />
+        ><br><br>
       <button
         class="item-confirm-button"
         name="submit"
         type="submit"
         value="Submit"
-      >Submit Changes</button><br />
+        >Submit Changes</button><br>
     </form>
-
-    <hr class="divider" />
-
+    <hr class="divider">
     <form method="POST" action="/edit/item/setcount/{{itemId}}">
       <label for="itemCountInput">Item Count: </label>
       <input
@@ -40,17 +38,15 @@
         id="itemCountInput"
         name="itemCountInput"
         value="{{itemCount}}"
-      /><br /><br />
+        ><br><br>
       <button
         class="item-confirm-button"
         name="submit"
         type="submit"
         value="Submit"
-      >Set Count</button><br />
+        >Set Count</button><br>
     </form>
-
-    <hr class="divider" />
-
+    <hr class="divider">
     <form method="POST" action="/edit/item/setvalue/{{itemId}}">
       <label for="itemValueInput">Item Value: </label>
       <input
@@ -60,19 +56,19 @@
         id="itemValueInput"
         name="itemValueInput"
         value="{{itemValue}}"
-      /><br /><br />
+        ><br><br>
       <button
         class="item-confirm-button"
         name="submit"
         type="submit"
         value="Submit"
-      >Set Value</button><br />
+        >Set Value</button><br>
     </form>
-
     <ul class="error-message" id="alerts">
       {{#each alerts}}
-        <li>{{this}}</li>
+      <li>{{this}}</li>
       {{/each}}
     </ul>
   </div>
+  <br><br>
 </main>

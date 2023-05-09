@@ -1,57 +1,56 @@
 <link href="/public/css/building.css" rel="stylesheet">
 <script src="/public/js/search.js"></script>
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
-   <div id="building">
-      <div id="buildingInfoDiv">
-         <h1 class="header">{{buildingName}} (Building)</h1>
-         <h2 class="subheader">Created: {{buildingCreationDate}}</h2>
-         <h2 class="subheader">Location: {{buildingLocation}}</h2>
-         <p class="subheader">{{buildingDescription}}</p>
-         <div class="subheader" id="buildingMapDiv">
-            {{> map}}
-         </div><br>
-         <div id="buildingOptions">
-            {{#if canEdit}}
-            <a class="submit-button" href="/edit/building/{{id}}">Edit This Building</a>
-            {{/if}}
-            {{#if canDelete}}
-            <a class="submit-button" href="/delete/building/{{id}}">Delete This Building</a>
-               {{#if private}}
-               <a class="submit-button" href="/share/{{id}}">Share This Building</a>
-               {{/if}}
-            {{/if}}
-            {{#unless private}}
-               {{#if favorited}}
-               <a class="submit-button" href="/favorite/{{id}}">Unfavorite this building</a>
-               {{else}}
-               <a class="submit-button" href="/favorite/{{id}}">Favorite this building</a>
-               {{/if}}
-            {{/unless}}
-            <a class="submit-button" href="/building/{{id}}/download">Download JSON</a>
-         </div>
+  <div id="building">
+    <div id="buildingInfoDiv">
+      <h1 class="header">{{buildingName}} (Building)</h1>
+      <h2 class="subheader">Created: {{buildingCreationDate}}</h2>
+      <h2 class="subheader">Location: {{buildingLocation}}</h2>
+      <p class="subheader">{{buildingDescription}}</p>
+      <div class="subheader" id="buildingMapDiv">
+        {{> map}}
       </div>
-
-      <br><br>
-      <hr class="divider">
-      <br><br>
-
-   <form id="searchDiv">
+      <br>
+      <div id="buildingOptions">
+        {{#if canEdit}}
+        <a class="submit-button" href="/edit/building/{{id}}">Edit This Building</a>
+        {{/if}}
+        {{#if canDelete}}
+        <a class="submit-button" href="/delete/building/{{id}}">Delete This Building</a>
+        {{#if private}}
+        <a class="submit-button" href="/share/{{id}}">Share This Building</a>
+        {{/if}}
+        {{/if}}
+        {{#unless private}}
+        {{#if favorited}}
+        <a class="submit-button" href="/favorite/{{id}}">Unfavorite this building</a>
+        {{else}}
+        <a class="submit-button" href="/favorite/{{id}}">Favorite this building</a>
+        {{/if}}
+        {{/unless}}
+        <a class="submit-button" href="/building/{{id}}/download">Download JSON</a>
+      </div>
+    </div>
+    <br><br>
+    <hr class="divider">
+    <br><br>
+    <form id="searchDiv">
       <label class="header" for="searchInput">Search Terms:</label>
       <br>
-      <input class="search-bar" placeholder="Searched Terms Will Be Highlighted." type="text" id="searchInput" name="searchInput"/>
+      <input class="search-bar" placeholder="Searched Terms Will Be Highlighted." type="text" id="searchInput" name="searchInput">
       <button class="search-button" type="submit" id="search" name="search">Submit</button>
-   </form>
-   </div>
-   <div id="subEntitiesRender">
-      <p class="header">{{buildingName}} Rooms:</p>
-      {{#if sER}}
-            <div class="layers">{{{sER}}}</div>
-      {{else}}
-            <p class="subheader">No Rooms Found</p>
-      {{/if}}
-   </div>
-
+    </form>
+  </div>
+  <div id="subEntitiesRender">
+    <p class="header">{{buildingName}} Rooms:</p>
+    {{#if sER}}
+    <div class="layers">{{{sER}}}</div>
+    {{else}}
+    <p class="subheader">No Rooms Found</p>
+    {{/if}}
+  </div>
+  <br><br>
 </main>

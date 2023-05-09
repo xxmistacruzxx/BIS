@@ -1,6 +1,6 @@
-<link href="/public/css/edit.css" rel="stylesheet" />
+<link href="/public/css/edit.css" rel="stylesheet">
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <form method="POST" action="/edit/container/{{containerId}}">
@@ -13,7 +13,7 @@
         id="containerNameInput"
         name="containerNameInput"
         value="{{containerName}}"
-      ><br><br>
+        ><br><br>
       <label for="containerDescriptionInput">Container Description: </label>
       <input
         class="text-bar"
@@ -21,22 +21,21 @@
         id="containerDescriptionInput"
         name="containerDescriptionInput"
         value="{{containerDescription}}"
-      ><br><br>
-
-      <hr class="divider" />
+        ><br><br>
+      <hr class="divider">
       <button
         class="confirm-button"
         id="submitButtonDiv"
         name="submit"
         type="submit"
         value="Submit"
-      >Submit Changes</button><br>
-
+        >Submit Changes</button><br>
       <ul class="error-message" id="alerts">
         {{#each alerts}}
-          <li>{{this}}</li>
+        <li>{{this}}</li>
         {{/each}}
       </ul>
     </div>
   </form>
+  <br><br>
 </main>

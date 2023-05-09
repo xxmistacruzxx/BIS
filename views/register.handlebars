@@ -10,8 +10,7 @@
         id="firstNameInput"
         type="text"
         value="{{firstName}}"
-      >
-
+        >
       <label class="register-label" for="lastNameInput">Last Name</label>
       <input
         class="text-container"
@@ -19,8 +18,7 @@
         id="lastNameInput"
         type="text"
         value="{{lastName}}"
-      >
-
+        >
       <label class="register-label" for="userNameInput">Username</label>
       <input
         class="text-container"
@@ -28,8 +26,7 @@
         id="userNameInput"
         type="text"
         value="{{userName}}"
-      >
-
+        >
       <label class="register-label" for="emailAddressInput">Email Address</label>
       <input
         class="text-container"
@@ -37,8 +34,7 @@
         id="emailAddressInput"
         type="email"
         value="{{emailAddress}}"
-      >
-
+        >
       <label class="register-label" for="passwordInput">Password</label>
       <input
         class="text-container"
@@ -46,35 +42,32 @@
         id="passwordInput"
         type="password"
         value="{{password}}"
-      >
-
+        >
       <label class="register-label" for="confirmPasswordInput">Confirm Password</label>
       <input
         class="text-container"
         name="confirmPasswordInput"
         id="confirmPasswordInput"
         type="password"
-      >
-
+        >
       <input
         class="confirm-button"
         type="submit"
         name="submit"
         id="submit"
         value="Submit"
-      >
+        >
     </form>
-
     <hr class="divider">
     <form action="/login">
       <button class="redirect-button">Already have an account? Login!</button>
     </form>
-
     <ul class="error-message" id="alerts">
-    {{#each alerts}}
+      {{#each alerts}}
       <li>{{this}}</li>
-    {{/each}}
+      {{/each}}
     </ul>
     <script src="public/js/register.js"></script>
   </div>
+  <br><br>
 </main>

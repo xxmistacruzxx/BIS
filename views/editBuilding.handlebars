@@ -1,6 +1,6 @@
 <link href="/public/css/edit.css" rel="stylesheet">
 <header>
-   {{> navbar}}
+  {{> navbar}}
 </header>
 <main>
   <form method="POST" action="/edit/building/{{buildingId}}">
@@ -13,7 +13,7 @@
         id="buildingNameInput"
         name="buildingNameInput"
         value="{{buildingName}}"
-      ><br><br>
+        ><br><br>
       <label for="buildingDescriptionInput">Building Description: </label>
       <input
         class="text-bar"
@@ -21,7 +21,7 @@
         id="buildingDescriptionInput"
         name="buildingDescriptionInput"
         value="{{buildingDescription}}"
-      ><br><br>
+        ><br><br>
       <label for="buildingAddressInput">Building Street Address: </label>
       <input
         class="text-bar"
@@ -29,7 +29,7 @@
         id="buildingAddressInput"
         name="buildingAddressInput"
         value="{{buildingAddress}}"
-      ><br><br>
+        ><br><br>
       <label for="buildingCityInput">Building City: </label>
       <input
         class="text-bar"
@@ -37,7 +37,7 @@
         id="buildingCityInput"
         name="buildingCityInput"
         value="{{buildingCity}}"
-      ><br><br>
+        ><br><br>
       <label for="buildingStateInput">Building State: </label>
       <input
         class="text-bar"
@@ -45,7 +45,7 @@
         id="buildingStateInput"
         name="buildingStateInput"
         value="{{buildingState}}"
-      ><br><br>
+        ><br><br>
       <label for="buildingZipInput">Building Zip: </label>
       <input
         class="text-bar"
@@ -53,16 +53,15 @@
         id="buildingZipInput"
         name="buildingZipInput"
         value="{{buildingZip}}"
-      ><br><br>
-
+        ><br><br>
       <hr class="divider">
       <button class="confirm-button" id="submitButtonDiv" name="submit" type="submit" value="Submit">Submit Changes</button><br>
-
       <ul class="error-message" id="alerts">
         {{#each alerts}}
-          <li>{{this}}</li>
+        <li>{{this}}</li>
         {{/each}}
       </ul>
     </div>
   </form>
+  <br><br>
 </main>
