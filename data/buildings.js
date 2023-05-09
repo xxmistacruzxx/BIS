@@ -21,7 +21,7 @@ import {
   deleteDocById,
   replaceDocById,
   getAllDocsByParam,
-  getAllDocsByParamSkipLimit
+  getAllDocsByParamSkipLimit,
 } from "./databaseHelpers.js";
 import userDataFunctions from "./users.js";
 import validator from "../validator.js";
@@ -101,22 +101,17 @@ export async function create(
     data: sentData,
   };
 
-  try {
-    let response = await axios(config);
-    let addressData = response.data;
-    if ("error" in addressData)
-      throw `failed to validate address. make sure address is correct and try again`;
-    if (addressData.result.verdict.hasUnconfirmedComponents === true)
-      throw `failed to validate address. make sure address is correct and try again`;
-    addressData = addressData.result.address.postalAddress;
-    address = addressData.addressLines[0];
-    city = addressData.locality;
-    state = addressData.administrativeArea;
-    zip = addressData.postalCode;
-  } catch (e) {
-    errors.push(e);
-    return res.status(400).render("add", { alerts: errors });
-  }
+  let response = await axios(config);
+  let addressData = response.data;
+  if ("error" in addressData)
+    throw `failed to validate address. make sure address is correct and try again`;
+  if (addressData.result.verdict.hasUnconfirmedComponents === true)
+    throw `failed to validate address. make sure address is correct and try again`;
+  addressData = addressData.result.address.postalAddress;
+  address = addressData.addressLines[0];
+  city = addressData.locality;
+  state = addressData.administrativeArea;
+  zip = addressData.postalCode;
 
   // add building to collection
   let newBuilding = {
@@ -423,7 +418,14 @@ export async function viewList(buildingId) {
 export async function getPublicBuildings(skip) {
   // basic error check
   skip = validator.checkInt(skip, "skip");
-  let fetchedBuildings = await getAllDocsByParamSkipLimit(buildings, "publicBuilding", true, "building", skip, 20);
+  let fetchedBuildings = await getAllDocsByParamSkipLimit(
+    buildings,
+    "publicBuilding",
+    true,
+    "building",
+    skip,
+    20
+  );
   return fetchedBuildings;
 }
 

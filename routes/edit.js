@@ -138,6 +138,16 @@ router.route("/building/:buildingId").post(async (req, res) => {
     data: sentData,
   };
 
+  let l = {
+    buildingId: buildingId,
+    buildingName: name,
+    buildingDescription: description,
+    buildingAddress: address,
+    buildingCity: city,
+    buildingState: state,
+    buildingZip: zip,
+  };
+
   try {
     let response = await axios(config);
     let addressData = response.data;
@@ -152,10 +162,16 @@ router.route("/building/:buildingId").post(async (req, res) => {
     zip = addressData.postalCode;
   } catch (e) {
     errors.push(e);
-    return res.status(400).render("add", { alerts: errors });
+    l.alerts = errors;
+    return res.status(400).render("editBuilding", l);
   }
 
-  let l = {
+  if (errors.length > 0) {
+    l.alerts = errors;
+    return res.status(400).render("editBuilding", l);
+  }
+
+  l = {
     buildingId: buildingId,
     buildingName: name,
     buildingDescription: description,
@@ -164,10 +180,6 @@ router.route("/building/:buildingId").post(async (req, res) => {
     buildingState: state,
     buildingZip: zip,
   };
-  if (errors.length > 0) {
-    l.alerts = errors;
-    return res.status(400).render("editBuilding", l);
-  }
 
   let updatedBuilding;
   try {
