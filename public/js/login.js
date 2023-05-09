@@ -1,5 +1,3 @@
-let data;
-
 function checkString(strVal, varName) {
   if (!strVal) throw `You must supply a ${varName}!`;
   if (typeof strVal !== "string") throw `${varName} must be a string!`;
