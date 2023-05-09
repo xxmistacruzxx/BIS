@@ -1,5 +1,3 @@
-let data;
-
 const email = document.querySelector("#emailAddressInput").value;
 const password = document.querySelector("#passwordInput").value;
 const confirmPassword = document.querySelector("#confirmPasswordInput").value;
