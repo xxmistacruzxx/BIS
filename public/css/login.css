@@ -86,7 +86,7 @@ body {
   text-align: center;
 }
 
-#register-requirement {
+.register-requirement {
 	color: gray;
 	font-size: 12px;
 	margin: 5px;
