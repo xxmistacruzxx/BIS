@@ -12,7 +12,7 @@
         <li>{{{this}}}</li>
         {{/each}}
       </ul>
-      <form method="POST" action="/share/{{buildingId}}">
+      <form id="manageForm"method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="manage">
         <label for="userNameInput">Username: </label>
         <input class="text-bar" type="text" id="userNameInput" name="userNameInput"><br><br>
@@ -26,7 +26,7 @@
         <li>{{{this}}}</li>
         {{/each}}
       </ul>
-      <form method="POST" action="/share/{{buildingId}}">
+      <form id="viewForm" method="POST" action="/share/{{buildingId}}">
         <input type="hidden" name="shareType" value="view">
         <label for="userNameInput1">Username: </label>
         <input class="text-bar" type="text" id="userNameInput1" name="userNameInput1"><br><br>
@@ -39,4 +39,5 @@
       {{/each}}
     </ul>
   </div>
+  <script src="public/js/share.js"></script>
 </main>
