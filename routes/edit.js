@@ -554,6 +554,8 @@ router.route("/item/setcount/:itemId").post(async (req, res) => {
   try {
     count = Number(xss(count));
     count = validator.checkInt(count, "count");
+    if (count < 0)
+      throw `can't have negative count`
   } catch (e) {
     l.itemCount = "";
     errors.push(e);
@@ -607,6 +609,8 @@ router.route("/item/setvalue/:itemId").post(async (req, res) => {
   try {
     value = Number(xss(value));
     value = validator.checkNum(value, "value");
+    if (value < 0)
+      throw "can't have a negative value"
   } catch (e) {
     l.itemValue = "";
     errors.push(e);

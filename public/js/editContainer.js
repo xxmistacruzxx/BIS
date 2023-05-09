@@ -1,13 +1,11 @@
 import * as validator from './validator.js';
 
-let containerNameInput = document.getElementById("containerNameInput").value;
-let containerDescriptionInput = document.getElementById("containerDescriptionInput").value;
-
-let data;
+let containerNameInput;
+let containerDescriptionInput;
 
 function renderAlerts(listOfAlerts) {
   let accum = "";
-  for (i of listOfAlerts) {
+  for (let i of listOfAlerts) {
     accum = accum + `<p class="error-message">${i}</p>`;
   }
   return accum;
@@ -21,12 +19,12 @@ function validateInputs() {
   let errors = [];
 
   try {
-    containerNameInput = validator.checkString(containerNameInput, "Container Name");
+    validator.checkString(containerNameInput.value, "Container Name");
   } catch (e) {
     errors.push(e);
   }
   try {
-    containerDescriptionInput = validator.checkString(containerDescriptionInput, "Container Description");
+    validator.checkString(containerDescriptionInput.value, "Container Description");
   } catch (e) {
     errors.push(e);
   }
@@ -49,6 +47,8 @@ function submitButton(e) {
 }
 
 function setup() {
+  containerNameInput = document.getElementById("containerNameInput");
+  containerDescriptionInput = document.getElementById("containerDescriptionInput");
   document.querySelector("form").addEventListener("submit", submitButton);
 }
 

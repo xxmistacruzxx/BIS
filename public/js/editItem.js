@@ -1,15 +1,13 @@
-import * as validator from './validator.js';
+import * as validator from "./validator.js";
 
-let itemNameInput = document.getElementById("itemNameInput").value;
-let itemDescriptionInput = document.getElementById("itemDescriptionInput").value;
-let itemCountInput = document.getElementById("itemCountInput").value;
-let itemValueInput = document.getElementById("itemValueInput").value;
-
-let data;
+let itemNameInput;
+let itemDescriptionInput;
+let itemCountInput;
+let itemValueInput;
 
 function renderAlerts(listOfAlerts) {
   let accum = "";
-  for (i of listOfAlerts) {
+  for (let i of listOfAlerts) {
     accum = accum + `<p class="error-message">${i}</p>`;
   }
   return accum;
@@ -23,26 +21,48 @@ function validateInputs() {
   let errors = [];
 
   try {
-    itemNameInput = validator.checkString(itemNameInput, "Item Name");
+    validator.checkString(itemNameInput.value, "Item Name");
   } catch (e) {
     errors.push(e);
   }
   try {
-    itemDescriptionInput = validator.checkString(itemDescriptionInput, "Item Description");
-  } catch (e) {
-    errors.push(e);
-  }
-  try {
-    itemCountInput = validator.checkInt(itemCountInput, "Item Count");
-  } catch (e) {
-    errors.push(e);
-  }
-  try {
-    itemValueInput = validator.checkNum(itemValueInput, "Item Description");
+    validator.checkString(itemDescriptionInput.value, "Item Description");
   } catch (e) {
     errors.push(e);
   }
 
+  if (errors.length > 0) {
+    setAlerts(errors);
+    return false;
+  }
+  return true;
+}
+
+function validateInputs2() {
+  let errors = [];
+  try {
+    let count = Number(itemCountInput.value);
+    count = validator.checkInt(count, "count");
+    if (count < 0) throw `can't have negative count`;
+  } catch (e) {
+    errors.push(e);
+  }
+  if (errors.length > 0) {
+    setAlerts(errors);
+    return false;
+  }
+  return true;
+}
+
+function validateInputs3() {
+  let errors = [];
+  try {
+    let value = Number(itemValueInput.value);
+    value = validator.checkNum(value, "count");
+    if (value < 0) throw `can't have negative count`;
+  } catch (e) {
+    errors.push(e);
+  }
   if (errors.length > 0) {
     setAlerts(errors);
     return false;
@@ -60,8 +80,40 @@ function submitButton(e) {
   return;
 }
 
-function setup() {
-  document.querySelector("form").addEventListener("submit", submitButton);
+function submitButton2(e) {
+  let passedErrors = false;
+  passedErrors = validateInputs2();
+
+  if (!passedErrors) {
+    e.preventDefault();
+  }
+  return;
 }
 
-document.addEventListener("DOMContentLoaded", setup);import * as validator from './validator.js';
+function submitButton3(e) {
+  let passedErrors = false;
+  passedErrors = validateInputs3();
+
+  if (!passedErrors) {
+    e.preventDefault();
+  }
+  return;
+}
+
+function setup() {
+  itemNameInput = document.getElementById("itemNameInput");
+  itemDescriptionInput = document.getElementById("itemDescriptionInput");
+  itemCountInput = document.getElementById("itemCountInput");
+  itemValueInput = document.getElementById("itemValueInput");
+  document
+    .querySelector("#editInfoForm")
+    .addEventListener("submit", submitButton);
+  document
+    .querySelector("#editCountForm")
+    .addEventListener("submit", submitButton2);
+  document
+    .querySelector("#editValueForm")
+    .addEventListener("submit", submitButton3);
+}
+
+document.addEventListener("DOMContentLoaded", setup);

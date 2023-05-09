@@ -1,24 +1,11 @@
-import * as validator from './validator.js';
+import * as validator from "./validator.js";
 
-let buildingNameInput = document.getElementById("buildingNameInput").value;
-let buildingDescriptionInput = document.getElementById("buildingDescriptionInput").value;
-let buildingAddressInput = document.getElementById("buildingAddressInput").value;
-let buildingCityInput = document.getElementById("buildingCityInput").value;
-let buildingStateInput = document.getElementById("buildingStateInput").value;
-let buildingZipInput = document.getElementById("buildingZipInput").value;
-
-let data;
-
-function validateBuildingandAddress(buildingName, varName) {
-	if (!buildingName) throw `You must supply a ${varName}!`;
-  	if (typeof buildingName !== "string") throw `${varName} must be a string!`;
-  	buildingName = buildingName.trim();
-  	if (buildingName.length === 0)
-    	throw `${varName} cannot be an empty string or string with just spaces`;
-	if(buildingName.match(/[A-Za-z0-9]/)) 
-		throw `${varName} can only include letters and numbers`;
-  	return buildingName;
-}
+let buildingNameInput;
+let buildingDescriptionInput;
+let buildingAddressInput;
+let buildingCityInput;
+let buildingStateInput;
+let buildingZipInput;
 
 function validateCityandState(buildingState, varName) {
   if (!buildingState) throw `You must supply a ${varName}!`;
@@ -27,13 +14,13 @@ function validateCityandState(buildingState, varName) {
   if (buildingState.length === 0)
     throw `${varName} cannot be an empty string or string with just spaces`;
   if (buildingState.match(/[0-9]/))
-    throw `${strVal} is not a valid value for ${varName} as it contains digits`;
-  return strVal;
+    throw `${buildingState} is not a valid value for ${varName} as it contains digits`;
+  return buildingState;
 }
 
 function renderAlerts(listOfAlerts) {
   let accum = "";
-  for (i of listOfAlerts) {
+  for (let i of listOfAlerts) {
     accum = accum + `<p class="error-message">${i}</p>`;
   }
   return accum;
@@ -47,32 +34,38 @@ function validateInputs() {
   let errors = [];
 
   try {
-    buildingNameInput = validateBuildingandAddress(buildingNameInput, "Building Name");
+    validator.checkString(buildingNameInput.value, "Building Name");
   } catch (e) {
     errors.push(e);
   }
   try {
-    buildingDescriptionInput = validator.checkString(buildingDescriptionInput, "Building Description");
+    validator.checkString(
+      buildingDescriptionInput.value,
+      "Building Description"
+    );
   } catch (e) {
     errors.push(e);
   }
   try {
-    buildingAddressInput = validateBuildingandAddress(buildingAddressInput, "Building Street Address");
+    validator.checkString(
+      buildingAddressInput.value,
+      "Building Street Address"
+    );
   } catch (e) {
     errors.push(e);
   }
   try {
-    buildingCityInput = validateCityandState(buildingCityInput, "Building City");
+    validateCityandState(buildingCityInput.value, "Building City");
   } catch (e) {
     errors.push(e);
   }
   try {
-    buildingStateInput = validateCityandState(buildingStateInput, "Building State");
+    validateCityandState(buildingStateInput.value, "Building State");
   } catch (e) {
     errors.push(e);
   }
   try {
-    buildingZipInput = validator.checkNum(buildingZipInput, "Building Zip");
+    validator.checkString(buildingZipInput.value, "Building Zip");
   } catch (e) {
     errors.push(e);
   }
@@ -81,6 +74,7 @@ function validateInputs() {
     setAlerts(errors);
     return false;
   }
+
   return true;
 }
 
@@ -95,6 +89,15 @@ function submitButton(e) {
 }
 
 function setup() {
+  buildingNameInput = document.getElementById("buildingNameInput");
+  buildingDescriptionInput = document.getElementById(
+    "buildingDescriptionInput"
+  );
+  buildingAddressInput = document.getElementById("buildingAddressInput");
+  buildingCityInput = document.getElementById("buildingCityInput");
+  buildingStateInput = document.getElementById("buildingStateInput");
+  buildingZipInput = document.getElementById("buildingZipInput");
+
   document.querySelector("form").addEventListener("submit", submitButton);
 }
 

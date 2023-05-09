@@ -295,12 +295,16 @@ router.route("/").post(async (req, res) => {
       try {
         itemCount = parseInt(xss(itemCount), 10);
         itemCount = validator.checkInt(itemCount, "itemCount");
+        if (count < 0)
+          throw "can't have negative count"
       } catch (e) {
         errors.push(e);
       }
       try {
         itemValue = Number(xss(itemValue));
         itemValue = validator.checkInt(itemValue, "itemValue");
+        if (itemValue < 0)
+          throw "can't have a negative value"
       } catch (e) {
         errors.push(e);
       }

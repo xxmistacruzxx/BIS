@@ -1,11 +1,13 @@
 <link href="/public/css/edit.css" rel="stylesheet">
+<script src="/public/js/validator.js" type="module"></script>
+<script src="/public/js/editItem.js" type="module"></script>
 <header>
   {{> navbar}}
 </header>
 <main>
   <h1 class="header">Editing Item</h1>
   <div class="form-container">
-    <form method="POST" action="/edit/item/{{itemId}}">
+    <form method="POST" action="/edit/item/{{itemId}}" id="editInfoForm">
       <label for="itemNameInput">Item Name: </label>
       <input
         class="text-bar"
@@ -30,7 +32,7 @@
         >Submit Changes</button><br>
     </form>
     <hr class="divider">
-    <form method="POST" action="/edit/item/setcount/{{itemId}}">
+    <form method="POST" action="/edit/item/setcount/{{itemId}}" id="editCountForm">
       <label for="itemCountInput">Item Count: </label>
       <input
         class="text-bar"
@@ -47,7 +49,7 @@
         >Set Count</button><br>
     </form>
     <hr class="divider">
-    <form method="POST" action="/edit/item/setvalue/{{itemId}}">
+    <form method="POST" action="/edit/item/setvalue/{{itemId}}" id="editValueForm">
       <label for="itemValueInput">Item Value: </label>
       <input
         class="text-bar"

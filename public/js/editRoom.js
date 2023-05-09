@@ -1,13 +1,13 @@
-import * as validator from './validator.js';
+import * as validator from "./validator.js";
 
-let roomNameInput = document.getElementById("roomNameInput").value;
-let roomDescriptionInput = document.getElementById("roomDescriptionInput").value;
+let roomNameInput;
+let roomDescriptionInput;
 
 let data;
 
 function renderAlerts(listOfAlerts) {
   let accum = "";
-  for (i of listOfAlerts) {
+  for (let i of listOfAlerts) {
     accum = accum + `<p class="error-message">${i}</p>`;
   }
   return accum;
@@ -21,12 +21,15 @@ function validateInputs() {
   let errors = [];
 
   try {
-    roomNameInput = validator.checkString(roomNameInput, "Room Name");
+    validator.checkString(roomNameInput.value, "Room Name");
   } catch (e) {
     errors.push(e);
   }
   try {
-    roomDescriptionInput = validator.checkString(roomDescriptionInput, "Room Description");
+    validator.checkString(
+      roomDescriptionInput.value,
+      "Room Description"
+    );
   } catch (e) {
     errors.push(e);
   }
@@ -49,6 +52,8 @@ function submitButton(e) {
 }
 
 function setup() {
+  roomNameInput = document.getElementById("roomNameInput");
+  roomDescriptionInput = document.getElementById("roomDescriptionInput");
   document.querySelector("form").addEventListener("submit", submitButton);
 }
 
