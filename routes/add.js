@@ -7,7 +7,8 @@ import {
   itemData,
 } from "../data/index.js";
 import validator from "../validator.js";
-import xss from "xss"
+import xss from "xss";
+import axios from "axios";
 const router = Router();
 
 router.route("/").get(async (req, res) => {
@@ -23,7 +24,7 @@ router.route("/").post(async (req, res) => {
   try {
     thingToAdd = xss(thingToAdd);
   } catch (e) {
-    errors.push(e)
+    errors.push(e);
   }
   let uid = req.session.user._id;
   let id;
@@ -65,7 +66,10 @@ router.route("/").post(async (req, res) => {
         errors.push(e);
       }
       try {
-        buildingState = validator.checkString(xss(buildingState), "buildingState");
+        buildingState = validator.checkString(
+          xss(buildingState),
+          "buildingState"
+        );
       } catch (e) {
         errors.push(e);
       }
@@ -90,6 +94,44 @@ router.route("/").post(async (req, res) => {
       if (errors.length > 0) {
         return res.status(400).render("add", { alerts: errors });
       }
+
+      // validate address
+      let sentData = JSON.stringify({
+        address: {
+          regionCode: "US",
+          locality: buildingCity,
+          administrativeArea: buildingState,
+          postalCode: buildingZip,
+          addressLines: [buildingAddress],
+        },
+      });
+
+      let config = {
+        method: "post",
+        url: "https://addressvalidation.googleapis.com/v1:validateAddress?key=AIzaSyCCerSnoXnxZZb2OLMjUz4pbRvDGcTjBig",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: sentData,
+      };
+
+      try {
+        let response = await axios(config);
+        let addressData = response.data;
+        if ("error" in addressData)
+          throw `failed to validate address. make sure address is correct and try again`;
+        if (addressData.result.verdict.hasUnconfirmedComponents === true)
+          throw `failed to validate address. make sure address is correct and try again`;
+        addressData = addressData.result.address.postalAddress;
+        buildingAddress = addressData.addressLines[0];
+        buildingCity = addressData.locality;
+        buildingState = addressData.administrativeArea;
+        buildingZip = addressData.postalCode;
+      } catch (e) {
+        errors.push(e);
+        return res.status(400).render("add", { alerts: errors });
+      }
+
       // CREATE NEW BUILDING
       let newBuilding;
       try {
@@ -170,7 +212,10 @@ router.route("/").post(async (req, res) => {
         errors.push(e);
       }
       try {
-        containerName = validator.checkString(xss(containerName), "containerName");
+        containerName = validator.checkString(
+          xss(containerName),
+          "containerName"
+        );
       } catch (e) {
         errors.push(e);
       }

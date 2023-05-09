@@ -26,6 +26,7 @@ import {
 import userDataFunctions from "./users.js";
 import validator from "../validator.js";
 import { roomData } from "./index.js";
+import axios from "axios";
 const buildingProperties = [
   "name",
   "description",
@@ -80,6 +81,42 @@ export async function create(
   if (typeof publicBuilding !== "boolean")
     throw `publicBuilding must be a boolean`;
   let user = await userDataFunctions.get(userId);
+
+  let sentData = JSON.stringify({
+    address: {
+      regionCode: "US",
+      locality: city,
+      administrativeArea: state,
+      postalCode: zip,
+      addressLines: [address],
+    },
+  });
+
+  let config = {
+    method: "post",
+    url: "https://addressvalidation.googleapis.com/v1:validateAddress?key=AIzaSyCCerSnoXnxZZb2OLMjUz4pbRvDGcTjBig",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: sentData,
+  };
+
+  try {
+    let response = await axios(config);
+    let addressData = response.data;
+    if ("error" in addressData)
+      throw `failed to validate address. make sure address is correct and try again`;
+    if (addressData.result.verdict.hasUnconfirmedComponents === true)
+      throw `failed to validate address. make sure address is correct and try again`;
+    addressData = addressData.result.address.postalAddress;
+    address = addressData.addressLines[0];
+    city = addressData.locality;
+    state = addressData.administrativeArea;
+    zip = addressData.postalCode;
+  } catch (e) {
+    errors.push(e);
+    return res.status(400).render("add", { alerts: errors });
+  }
 
   // add building to collection
   let newBuilding = {

@@ -8,6 +8,7 @@ import {
 } from "../data/index.js";
 import validator from "../validator.js";
 import xss from "xss"
+import axios from "axios";
 const router = Router();
 
 router.route("/building/:buildingId").get(async (req, res) => {
@@ -116,6 +117,42 @@ router.route("/building/:buildingId").post(async (req, res) => {
       zip = building.zip;
       errors.push(e);
     }
+  }
+
+  let sentData = JSON.stringify({
+    address: {
+      regionCode: "US",
+      locality: city,
+      administrativeArea: state,
+      postalCode: zip,
+      addressLines: [address],
+    },
+  });
+
+  let config = {
+    method: "post",
+    url: "https://addressvalidation.googleapis.com/v1:validateAddress?key=AIzaSyCCerSnoXnxZZb2OLMjUz4pbRvDGcTjBig",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: sentData,
+  };
+
+  try {
+    let response = await axios(config);
+    let addressData = response.data;
+    if ("error" in addressData)
+      throw `failed to validate address. make sure address is correct and try again`;
+    if (addressData.result.verdict.hasUnconfirmedComponents === true)
+      throw `failed to validate address. make sure address is correct and try again`;
+    addressData = addressData.result.address.postalAddress;
+    address = addressData.addressLines[0];
+    city = addressData.locality;
+    state = addressData.administrativeArea;
+    zip = addressData.postalCode;
+  } catch (e) {
+    errors.push(e);
+    return res.status(400).render("add", { alerts: errors });
   }
 
   let l = {
