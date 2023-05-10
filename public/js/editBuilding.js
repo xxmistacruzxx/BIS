@@ -18,6 +18,19 @@ function validateCityandState(buildingState, varName) {
   return buildingState;
 }
 
+function validateZip(buildingZip, varName) {
+  if (!buildingZip) throw `You must supply a ${varName}!`;
+  if (typeof buildingZip !== "string") throw `${varName} must be a string!`;
+  buildingZip = buildingZip.trim();
+  if (buildingZip.length === 0)
+    throw `${varName} cannot be an empty string or string with just spaces`;
+  if (buildingZip < 0)
+    throw `${varName} cannot be a negative number`;
+  if (buildingZip.match(/[^0-9]/))
+    throw `${varName} is invalid as there are non numbers`;
+  return buildingZip;
+}
+
 function renderAlerts(listOfAlerts) {
   let accum = "";
   for (let i of listOfAlerts) {
@@ -65,7 +78,7 @@ function validateInputs() {
     errors.push(e);
   }
   try {
-    validator.checkString(buildingZipInput.value, "Building Zip");
+    validateZip(buildingZipInput.value, "Building Zip");
   } catch (e) {
     errors.push(e);
   }
