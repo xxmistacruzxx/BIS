@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validator from "../validator.js";
 import { userData } from "../data/index.js";
-import xss from "xss"
+import xss from "xss";
 const router = Router();
 
 router.route("/").get(async (req, res) => {
@@ -75,7 +75,7 @@ router.route("/").post(async (req, res) => {
       lastName
     );
   } catch (e) {
-    if (e.includes("username")) l.userName = "";
+    if (e.toString().includes("username")) l.userName = "";
     else l.emailAddress = "";
     l.alerts.push(e);
     return res.status(400).render("register", l);

@@ -1,4 +1,8 @@
+import dotenv from "dotenv-flow";
+
+dotenv.config();
+console.log(process.env);
 export const mongoConfig = {
-  serverUrl: 'mongodb://127.0.0.1:27017/',
-  database: 'cs-546-final-project'
+  serverUrl: `${process.env.MONGO_ADDRESS}/`,
+  database: `${process.env.MONGO_DATABASE}`,
 };
