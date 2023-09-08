@@ -110,7 +110,7 @@ router.route("/").post(async (req, res) => {
 
       let config = {
         method: "post",
-        url: "https://addressvalidation.googleapis.com/v1:validateAddress?key=AIzaSyCCerSnoXnxZZb2OLMjUz4pbRvDGcTjBig",
+        url: `https://addressvalidation.googleapis.com/v1:validateAddress?key=${process.env.GOOGLE_API}`,
         headers: {
           "Content-Type": "application/json",
         },

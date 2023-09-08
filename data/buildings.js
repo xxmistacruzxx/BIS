@@ -94,7 +94,7 @@ export async function create(
 
   let config = {
     method: "post",
-    url: "https://addressvalidation.googleapis.com/v1:validateAddress?key=AIzaSyCCerSnoXnxZZb2OLMjUz4pbRvDGcTjBig",
+    url: `https://addressvalidation.googleapis.com/v1:validateAddress?key=${process.env.GOOGLE_API}`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -102,6 +102,7 @@ export async function create(
   };
 
   let response = await axios(config);
+  console.log(response);
   let addressData = response.data;
   if ("error" in addressData)
     throw `failed to validate address. make sure address is correct and try again`;

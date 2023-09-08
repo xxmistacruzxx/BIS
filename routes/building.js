@@ -4,7 +4,7 @@ import { buildingData, userData } from "../data/index.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import xss from "xss"
+import xss from "xss";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -69,6 +69,7 @@ router.route("/:id").get(async (req, res) => {
     private: !building.publicBuilding,
     id: buildingId,
     favorited: favorited,
+    key: process.env.GOOGLE_API,
   });
 });
 
