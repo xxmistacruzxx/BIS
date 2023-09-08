@@ -1,62 +1,49 @@
 # Building Inventory System
 
-## Team Members
+# Features
 
+## Building, Room, Container, and Item Nesting
+BIS allows users to create buildings, rooms, containers, and items which are nested inside each other to allow for easy navigation and logical storage.
+
+## Item Statistics and Tracking
+BIS allows users to see an items price and quantity history, as well as basic statistics of each, giving an easy to  understand representation of items over time. 
+
+## Sharing and Collaboration
+BIS allows users to share buildings with other users with either view or manager permissions, allowing others to either view or edit buildings and their nested objects, respectively.
+
+## Browse Page
+BIS allows users to browse through a list of public pages, allowing public buildings to be discovered by users of the site.
+
+# The Developers
+BIS was developed for S23-CS546-WS: Web Programming I for Professor Patrick Hill at Stevens Institute of Technology.<br>
+The students who developed BIS are...<br>
 - [David Cruz](https://github.com/xxmistacruzxx)
 - [Eric Park](https://github.com/ericpark25)
 - [Kimberly Tsang](https://github.com/kimberlytsang)
 - [Thomas Wang](https://github.com/twang1905)
 
-## Description
+# APIs, Tools, & Libraries Used
 
-A web interface inventory service that allows users to collaborate to keep track of their belongings in buildings.
+## Development Libraries
 
-## Quick Start
+BIS is built using...<br>
+• [express](https://expressjs.com/)<br>
+• [express-session](https://www.npmjs.com/package/express-session)<br>
+• [handlebars](https://handlebarsjs.com/)<br>
+• [mongodb](https://www.mongodb.com/)<br>
+• [bcrypt](https://www.npmjs.com/package/bcrypt)<br>
+• [multer](https://www.npmjs.com/package/multer)<br>
+• [dotenv-flow](https://www.npmjs.com/package/dotenv-flow)<br>
+• [xss](https://www.npmjs.com/package/xss)<br>
 
-### Installing Packages
-```
-npm install
-```
+## Deployment Tools
 
-### Running the Server
-```
-npm start
-```
+BIS is deployed using...<br>
+• [Google Cloud Run](https://cloud.google.com/run)<br>
+• [Docker](https://www.docker.com/)<br>
+• [MongoDB Atlas](https://www.mongodb.com/atlas/database)<br>
 
-### Seeding the Database
-```
-npm run seed
-```
+# Docker Image
 
-## Core Features
-
-- Landing Page
-    - Homepage that explains the purpose of our service.
-
-- User Profile Page
-    - Page where user can manage their username, password, profile picture, and buildings.
-
-- Building Page
-    - Page that shows the contents and details of an individual building.
-
-- Room Page
-    - Page that shows the contents and details of an individual room.
-
-- Container Page
-    - Page that shows the contents and details of an individual container.
-
-- Item Page
-    - Page that shows the details of an item.
-
-- Search for Objects
-    - Users will be able to search for an object (room, container, item) by name, within the scope of a page.
-
-- Collaboration
-    - Users can give each other roles that will either allow them to view or manage a building.
-
-- Browse Buildings Page
-    - Users will be able to view their own buildings, buildings that they manage and public buildings.
-
-- Statistics
-    - Users will be able to view the statistics on a building.
+BIS is deployed using Docker, who's [Docker Image can be found here](https://hub.docker.com/r/xxmistacruzxx/bis).
 
