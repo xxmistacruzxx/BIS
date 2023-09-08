@@ -43,6 +43,11 @@ BIS is deployed using...<br>
 • [Docker](https://www.docker.com/)<br>
 • [MongoDB Atlas](https://www.mongodb.com/atlas/database)<br>
 
+## APIs
+BIS uses the following APIs...
+• [Google Map Embed API](https://developers.google.com/maps/documentation/embed/get-started)<br>
+• [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview)<br>
+
 # Docker Image
 
 BIS is deployed using Docker, who's [Docker Image can be found here](https://hub.docker.com/r/xxmistacruzxx/bis).
