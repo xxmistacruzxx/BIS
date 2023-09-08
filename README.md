@@ -44,7 +44,7 @@ BIS is deployed using...<br>
 • [MongoDB Atlas](https://www.mongodb.com/atlas/database)<br>
 
 ## APIs
-BIS uses the following APIs...
+BIS uses the following APIs...<br>
 • [Google Map Embed API](https://developers.google.com/maps/documentation/embed/get-started)<br>
 • [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview)<br>
 
